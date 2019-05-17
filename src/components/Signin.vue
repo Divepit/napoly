@@ -5,11 +5,11 @@
       <form @submit.prevent="signin">
         <div v-if="error">{{ error }}</div>
 
-        <div>
+        <div v-if="!signedIn()">
           <label for="email" >E-mail Address</label>
           <input type="" v-model="email" id="email" placeholder="andy@web-crunch.com">
           <label for="password">Password</label>
-          <input type="" v-model="password" id="password" placeholder="Password">
+          <input type="password" v-model="password" id="password" placeholder="Password">
         </div>
         <button type="submit">Sign In</button>
 
@@ -36,6 +36,9 @@ export default {
     this.checkSignedIn()
   },
   methods: {
+    signedIn () {
+      return localStorage.signedIn
+    },
     signin () {
       this.$http.plain.post('/signin', { email: this.email, password: this.password })
         .then(response => this.signinSuccessful(response))
@@ -49,7 +52,7 @@ export default {
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
       this.error = ''
-      this.$router.replace('/records')
+      this.$router.replace('/')
     },
     signinFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || ''
@@ -58,7 +61,7 @@ export default {
     },
     checkSignedIn () {
       if (localStorage.signedIn) {
-        this.$router.replace('/records')
+        this.$router.replace('/')
       }
     }
   }

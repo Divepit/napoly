@@ -9,19 +9,19 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/signin',
       name: 'Signin',
+      component: Signin
+    },
+    {
+      path: '/links',
+      name: 'Links',
       component: Links
     },
     {
       path: '/signup',
       name: 'Signup',
       component: Signup
-    },
-    {
-      path: '/links',
-      name: 'Links',
-      component: Links
     }
   ]
 })

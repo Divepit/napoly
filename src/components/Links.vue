@@ -8,8 +8,13 @@
       <div class="mb-6">
         <input class="input"
           autofocus autocomplete="off"
-          placeholder="Type an arist name"
+          placeholder="Link URL"
           v-model="newLink.linkUrl" />
+        <input class="input"
+          autofocus autocomplete="off"
+          placeholder="Link Week"
+          v-model="newLink.subject_id" />
+
       </div>
       <input type="submit" value="Add Link" class="font-sans font-bold px-4 rounded cursor-pointer no-underline bg-green hover:bg-green-dark block w-full py-4 text-white items-center justify-center" />
     </form>
@@ -56,13 +61,9 @@ export default {
     }
   },
   created () {
-    if (!localStorage.signedIn) {
-      this.$router.replace('/')
-    } else {
-      this.$http.secured.get('/api/v1/links')
-        .then(response => { this.links = response.data })
-        .catch(error => this.setError(error, 'Something went wrong'))
-    }
+    this.$http.secured.get('/api/v1/links')
+      .then(response => { this.links = response.data })
+      .catch(error => this.setError(error, 'Something went wrong'))
   },
   methods: {
     setError (error, text) {
@@ -73,7 +74,7 @@ export default {
       if (!value) {
         return
       }
-      this.$http.secured.post('/api/v1/links/', { link: { name: this.newLink.linkUrl } })
+      this.$http.secured.post('/api/v1/links/', { link: { linkUrl: this.newLink.linkUrl, subject_id: this.newLink.subject_id } })
 
         .then(response => {
           this.links.push(response.data)
@@ -93,7 +94,7 @@ export default {
     },
     updateLink (link) {
       this.editedLink = ''
-      this.$http.secured.patch(`/api/v1/links/${link.id}`, { link: { title: link.linkUrl } })
+      this.$http.secured.patch(`/api/v1/links/${link.id}`, { link: { linkUrl: link.linkUrl } })
         .catch(error => this.setError(error, 'Cannot update link'))
     }
   }
