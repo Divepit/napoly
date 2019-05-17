@@ -10,9 +10,6 @@
           placeholder="Link URL"
           v-model="newLink.linkUrl" />
         <input autofocus autocomplete="off"
-          placeholder="Link Week"
-          v-model="newLink.linkWeek" />
-        <input autofocus autocomplete="off"
           placeholder="Subject ID"
           v-model="newLink.subject_id" />
         <input autofocus autocomplete="off"
@@ -24,40 +21,25 @@
       </div>
       <input type="submit" value="Add Link" />
     </form>
-
-    <table>
-      <tr>
-        <th> Week </th>
-        <th v-for="type in types"> {{type}} </th>
-      </tr>
-      <td>
-        <tr v-for="week in weeks">{{week}}</tr>
-      </td>
-      <td v-for="type in types">
-        <tr v-for="link in links" @click="editLink(link)">{{link.linkUrl}}</tr>
-      </td>
-      <tr>
-
-      </tr>
-    </table>
-    <table>
-      <tr v-for="link in links" :key="link.id" :link="link">
-        <!-- <div v-if="link!=editedLink">
-          <p @click="editLink(link)"> {{ link.linkUrl }} </p>
+    <hr>
+    <ul>
+      <li v-for="link in links" :key="link.id" :link="link">
+        <div>
+          <p> {{ link.linkUrl }} </p>
+          <button @click="editLink(link)">Edit</button>
           <button @click="removeLink(link)">Delete</button>
-        </div> -->
+        </div>
 
         <div v-if="link == editedLink">
           <form action="" @submit.prevent="updateLink(link)">
             <div>
               <input v-model="link.linkUrl" />
-
               <input type="submit" value="Update" >
             </div>
           </form>
         </div>
-      </tr>
-    </table>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -69,9 +51,7 @@ export default {
       links: [],
       newLink: [],
       error: '',
-      editedLink: '',
-      weeks: [1, 2, 3, 4, 5],
-      types: ['Theorie', 'Übung', 'Lösung']
+      editedLink: ''
     }
   },
   created () {
@@ -93,8 +73,7 @@ export default {
           linkUrl: this.newLink.linkUrl,
           subject_id: this.newLink.subject_id,
           semester_id: this.newLink.semester_id,
-          field_id: this.newLink.field_id,
-          linkWeek: this.newLink.linkWeek
+          field_id: this.newLink.field_id
         }
       })
 
@@ -116,15 +95,7 @@ export default {
     },
     updateLink (link) {
       this.editedLink = ''
-      this.$http.secured.patch(`/api/v1/links/${link.id}`, {
-        link: {
-          linkUrl: link.linkUrl,
-          subject_id: link.subject_id,
-          semester_id: link.semester_id,
-          field_id: link.field_id,
-          linkWeek: link.linkWeek
-        }
-      })
+      this.$http.secured.patch(`/api/v1/links/${link.id}`, { link: { linkUrl: link.linkUrl } })
         .catch(error => this.setError(error, 'Cannot update link'))
     }
   }
