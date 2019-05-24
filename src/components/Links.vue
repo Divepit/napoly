@@ -3,53 +3,26 @@
 <template>
   <div>
     <div v-if="error">{{ error }}</div>
-    <h3>Add a new link</h3>
-    <!-- <form @submit.prevent="addLink">
-      <div>
-        <input autofocus autocomplete="off"
-          placeholder="Link URL"
-          v-model="newLink.linkUrl" />
-        <input autofocus autocomplete="off"
-          placeholder="Link Week"
-          v-model="newLink.linkWeek" />
-        <input autofocus autocomplete="off"
-          placeholder="Subject ID"
-          v-model="newLink.subject_id" />
-        <input autofocus autocomplete="off"
-          placeholder="Semester ID"
-          v-model="newLink.semester_id" />
-        <input autofocus autocomplete="off"
-          placeholder="Field ID"
-          v-model="newLink.field_id" />
-        <input autofocus autocomplete="off"
-          placeholder="Type ID"
-          v-model="newLink.type_id" />
-      </div>
-      <input type="submit" value="Add Link" />
-    </form> -->
+    Semester: {{semester}} - Subject: {{subject}}
 
+    <h3>Add a new link</h3>
     <table  class="bordered">
       <tr  class="bordered">
         <th  class="bordered"> Week </th>
-        <th   class="bordered"v-for="type in types"> {{type.typeName}} </th>
+        <th   class="bordered" v-for="type in types"> {{type.typeName}} </th>
       </tr>
-      <tr  class="bordered" v-for="week in weeks">
-        <td  class="bordered">{{week}}</td>
+      <tr  class="bordered" v-for="(week,index) in weekCount">
+        <td  class="bordered">{{index + 1}}</td>
         <td  class="bordered" v-for="type in types" @click="specLink(week,type,true)">{{ specLink(week,type,false) }}</td>
       </tr>
     </table>
-    <table>
+    <button type="button" name="button" @click="addWeek()">Add Week</button>
+    <button type="button" name="button" @click="removeWeek()">Remove Week</button>
       <tr v-for="link in links" :key="link.id" :link="link">
-        <!-- <div v-if="link!=editedLink">
-          <p @click="editLink(link)"> {{ link.linkUrl }} </p>
-          <button @click="removeLink(link)">Delete</button>
-        </div> -->
-
         <div v-if="link == editedLink">
           <form action="" @submit.prevent="updateLink(link)">
             <div>
               <input v-model="link.linkUrl" />
-
               <input type="submit" value="Update" >
             </div>
           </form>
@@ -63,30 +36,27 @@
           </div>
         </form>
       </div>
-    </table>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex'
 export default {
   name: 'Links',
+  props: ['subject', 'semester', 'weekCount'],
   data () {
     return {
-      subject: 1,
-      semester: 1,
+      // subject: 2,
       field: 1,
       links: [],
       newLink: [],
       error: '',
       editedLink: '',
-      weeks: [1, 2, 3, 4, 5],
       types: [],
       adding: false
     }
   },
   created () {
-    this.$http.secured.get('/api/v1/links')
+    this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.semester)
       .then(response => { this.links = response.data })
       .catch(error => this.setError(error, 'Something went wrong with Links'))
     this.$http.secured.get('/api/v1/types')
@@ -97,9 +67,25 @@ export default {
 
   },
   methods: {
+    addWeek () {
+      this.weekCount += 1
+      this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
+        subject: {
+          weekCount: this.weekCount
+        }
+      })
+    },
+    removeWeek () {
+      this.weekCount -= 1
+      this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
+        subject: {
+          weekCount: this.weekCount
+        }
+      })
+    },
     specLink (week, type, editor) {
       var answer = this.$data.links.find(function (link) {
-        var speclink = link.linkWeek == week && link.type_id == type.id
+        var speclink = link.linkWeek === week && link.type_id === type.id
         return speclink
       })
       if (editor) {
@@ -124,7 +110,8 @@ export default {
     },
     addLink () {
       const value = this.newLink
-      if (!value) {
+      if (!this.newLink.linkUrl) {
+        console.log('No Link given')
         return
       }
       this.$http.secured.post('/api/v1/links/', {
@@ -156,6 +143,9 @@ export default {
     },
     updateLink (link) {
       this.editedLink = ''
+      if (!link.linkUrl) {
+        this.removeLink(link)
+      }
       this.$http.secured.patch(`/api/v1/links/${link.id}`, {
         link: {
           linkUrl: link.linkUrl,
