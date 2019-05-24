@@ -36,6 +36,9 @@
           </div>
         </form>
       </div>
+      <br>
+      <hr>
+      <br>
   </div>
 </template>
 
