@@ -5,14 +5,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     globalTypes: [],
-    dispError: ''
+    dispError: '',
+    semester: '1',
+    field: '',
+    year: ''
   },
   mutations: {
     signedIn () {
       return localStorage.signedIn
-    },
-    updateLinks (state, link) {
-      state.links.push(link)
     }
   },
   actions: {

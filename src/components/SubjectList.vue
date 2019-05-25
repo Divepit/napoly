@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="">
-      <Links  v-for="subject in subjects" v-bind:subject="subject.id" v-bind:semester="semester" v-bind:weekCount="subject.weekCount"></Links>
+      <Links  v-for="(subject, index) in subjects" :key="index" v-bind:subject="subject.id" v-bind:semester="semester" v-bind:weekCount="subject.weekCount"></Links>
   </div>
 
 </template>
@@ -14,9 +14,9 @@ export default {
   created () {
     this.checkSubjects()
   },
+  props: ['semester'],
   data () {
     return {
-      semester: '2',
       subjects: [],
       error: ''
     }
@@ -25,7 +25,6 @@ export default {
     checkSubjects () {
       this.$http.secured.get('/api/v1/subjects/?semester_id=' + this.semester)
         .then(response => { this.subjects = response.data })
-        .catch(error => { this.error = 'Something went wrong' })
     }
   }
 }

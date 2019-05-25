@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Signin from '@/components/Signin'
 import Signup from '@/components/Signup'
-import Links from '@/components/Links'
-import SubjectList from '@/components/SubjectList'
 import FilterComponent from '@/components/FilterComponent'
 
 Vue.use(Router)

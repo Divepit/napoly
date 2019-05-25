@@ -6,7 +6,10 @@ import router from './router'
 import store from './store'
 import VueAxios from 'vue-axios'
 import { securedAxiosInstance, plainAxiosInstance } from './backend/axios'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
+Vue.use(Vuetify)
 Vue.config.productionTip = false
 Vue.use(VueAxios, {
   secured: securedAxiosInstance,

@@ -9,15 +9,19 @@
     <table  class="bordered">
       <tr  class="bordered">
         <th  class="bordered"> Week </th>
-        <th   class="bordered" v-for="type in types"> {{type.typeName}} </th>
+        <th   class="bordered" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
       </tr>
-      <tr  class="bordered" v-for="(week,index) in weekCount">
+      <tr  class="bordered" v-for="(week,index) in weekCount" :key="index">
         <td  class="bordered">{{index + 1}}</td>
-        <td  class="bordered" v-for="type in types" @click="specLink(week,type,true)">{{ specLink(week,type,false) }}</td>
+        <td  class="bordered" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayLink(week,type) }}</td>
       </tr>
     </table>
-    <button type="button" name="button" @click="addWeek()">Add Week</button>
-    <button type="button" name="button" @click="removeWeek()">Remove Week</button>
+    <div v-if="signedIn()">
+      <button type="button" name="button" @click="addWeek()">Add Week</button>
+      <button type="button" name="button" @click="removeWeek()">Remove Week</button>
+      <button type="button" name="button" @click="seeAllTypes()">See All Types</button>
+    </div>
+
       <tr v-for="link in links" :key="link.id" :link="link">
         <div v-if="link == editedLink">
           <form action="" @submit.prevent="updateLink(link)">
@@ -59,49 +63,81 @@ export default {
     }
   },
   created () {
-    this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.semester)
-      .then(response => { this.links = response.data })
-      .catch(error => this.setError(error, 'Something went wrong with Links'))
-    this.$http.secured.get('/api/v1/types')
-      .then(response => { this.types = response.data })
-      .catch(error => this.setError(error, 'Something went wrong with Types'))
-  },
-  computed: {
-
+    this.getLinks()
   },
   methods: {
+    signedIn () {
+      return localStorage.signedIn
+    },
+    getTypes () {
+      this.$http.secured.get('/api/v1/types')
+        .then(response => {
+          this.types = response.data
+          this.reduceTypes()
+        })
+        .catch(error => this.setError(error, 'Something went wrong with Types'))
+    },
+    seeAllTypes () {
+      this.$http.secured.get('/api/v1/types')
+        .then(response => {
+          this.types = response.data
+        })
+        .catch(error => this.setError(error, 'Something went wrong with Types'))
+    },
+    reduceTypes () {
+      var reducedTypes = []
+      var i
+      for (i = 0; i < this.links.length; i++) {
+        if (!reducedTypes.includes(this.links[i].type_id)) {
+          reducedTypes.push(this.links[i].type_id)
+        }
+      }
+      for (i = 0; i < this.types.length; i++) {
+        var currentType = this.types[i]
+        if (!reducedTypes.includes(currentType.id)) {
+          this.types.splice(i, 1)
+        }
+      }
+    },
+    getLinks () {
+      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.semester)
+        .then(response => {
+          this.links = response.data
+          this.getTypes()
+        })
+        .catch(error => this.setError(error, 'Something went wrong with Links'))
+    },
     addWeek () {
       this.weekCount += 1
       this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
-        subject: {
-          weekCount: this.weekCount
-        }
+        subject: { weekCount: this.weekCount }
       })
     },
     removeWeek () {
       this.weekCount -= 1
       this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
-        subject: {
-          weekCount: this.weekCount
-        }
+        subject: { weekCount: this.weekCount }
       })
     },
-    specLink (week, type, editor) {
+    editMode (week, type) {
+      this.adding = false
       var answer = this.$data.links.find(function (link) {
-        var speclink = link.linkWeek === week && link.type_id === type.id
+        return (link.linkWeek === week && link.type_id === type.id)
+      })
+      if (!answer) {
+        this.adding = true
+        this.newLink.subject_id = this.subject
+        this.newLink.semester_id = this.semester
+        this.newLink.field_id = this.field
+        this.newLink.linkWeek = week
+        this.newLink.type_id = type.id
+      }
+    },
+    displayLink (week, type) {
+      var answer = this.$data.links.find(function (link) {
+        var speclink = (link.linkWeek === week && link.type_id === type.id)
         return speclink
       })
-      if (editor) {
-        if (!answer) {
-          this.newLink.subject_id = this.subject
-          this.newLink.semester_id = this.semester
-          this.newLink.field_id = this.field
-          this.newLink.linkWeek = week
-          this.newLink.type_id = type.id
-          this.adding = true
-        }
-        this.editedLink = answer
-      }
       if (answer) {
         return answer.linkUrl
       } else {
@@ -111,9 +147,13 @@ export default {
     setError (error, text) {
       this.error = (error.response && error.response.data && error.response.data.error) || text
     },
+    exitAdding () {
+      this.adding = false
+      this.newLink = []
+    },
     addLink () {
-      const value = this.newLink
       if (!this.newLink.linkUrl) {
+        this.exitAdding()
         console.log('No Link given')
         return
       }
@@ -130,8 +170,9 @@ export default {
 
         .then(response => {
           this.links.push(response.data)
-          this.newLink = ''
+          this.exitAdding()
         })
+
         .catch(error => this.setError(error, 'Cannot create link'))
     },
     removeLink (link) {
@@ -143,23 +184,25 @@ export default {
     },
     editLink (link) {
       this.editedLink = link
+      this.exitAdding()
     },
     updateLink (link) {
       this.editedLink = ''
       if (!link.linkUrl) {
         this.removeLink(link)
+      } else {
+        this.$http.secured.patch(`/api/v1/links/${link.id}`, {
+          link: {
+            linkUrl: link.linkUrl,
+            subject_id: link.subject_id,
+            semester_id: link.semester_id,
+            field_id: link.field_id,
+            linkWeek: link.linkWeek,
+            type_id: link.type_id
+          }
+        })
+          .catch(error => this.setError(error, 'Cannot update link'))
       }
-      this.$http.secured.patch(`/api/v1/links/${link.id}`, {
-        link: {
-          linkUrl: link.linkUrl,
-          subject_id: link.subject_id,
-          semester_id: link.semester_id,
-          field_id: link.field_id,
-          linkWeek: link.linkWeek,
-          type_id: link.type_id
-        }
-      })
-        .catch(error => this.setError(error, 'Cannot update link'))
     }
   }
 }
