@@ -3,9 +3,8 @@
 <template>
   <div>
     <div v-if="error">{{ error }}</div>
-    Semester: {{semester}} - Subject: {{subject}}
-
-    <h3>Add a new link</h3>
+    <div v-if="info">{{ info }}</div>
+    <h3>Subject: {{subjectName}}</h3>
     <table  class="bordered">
       <tr  class="bordered">
         <th  class="bordered"> Week </th>
@@ -20,10 +19,10 @@
       <button type="button" name="button" @click="addWeek()">Add Week</button>
       <button type="button" name="button" @click="removeWeek()">Remove Week</button>
       <button type="button" name="button" @click="seeAllTypes()">See All Types</button>
+      <button type="button" name="button" @click="removeSubject()">Delete Subject</button>
     </div>
 
-      <tr v-for="link in links" :key="link.id" :link="link">
-        <div v-if="link == editedLink">
+        <div v-for="link in links" :key="link.id" :link="link" v-if="link == editedLink">
           <form action="" @submit.prevent="updateLink(link)">
             <div>
               <input v-model="link.linkUrl" />
@@ -31,7 +30,6 @@
             </div>
           </form>
         </div>
-      </tr>
       <div v-if="adding">
         <form action="" @submit.prevent="addLink()">
           <div>
@@ -59,15 +57,29 @@ export default {
       error: '',
       editedLink: '',
       types: [],
-      adding: false
+      adding: false,
+      info: '',
+      subjectName: ''
     }
   },
   created () {
     this.getLinks()
+    this.getSubjectName()
+  },
+  watch: {
+    semester: function (val) {
+      this.getLinks()
+    }
   },
   methods: {
     signedIn () {
       return localStorage.signedIn
+    },
+    getSubjectName () {
+      this.$http.secured.get('/api/v1/subjects/' + this.subject)
+        .then(response => {
+          this.subjectName = response.data.subjectName
+        })
     },
     getTypes () {
       this.$http.secured.get('/api/v1/types')
@@ -100,7 +112,7 @@ export default {
       }
     },
     getLinks () {
-      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.semester)
+      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.$store.state.semester)
         .then(response => {
           this.links = response.data
           this.getTypes()
@@ -121,16 +133,19 @@ export default {
     },
     editMode (week, type) {
       this.adding = false
+      this.editedLink = []
       var answer = this.$data.links.find(function (link) {
         return (link.linkWeek === week && link.type_id === type.id)
       })
       if (!answer) {
         this.adding = true
         this.newLink.subject_id = this.subject
-        this.newLink.semester_id = this.semester
+        this.newLink.semester_id = this.$store.state.semester
         this.newLink.field_id = this.field
         this.newLink.linkWeek = week
         this.newLink.type_id = type.id
+      } else {
+        this.editedLink = answer
       }
     },
     displayLink (week, type) {
@@ -181,6 +196,11 @@ export default {
           this.links.splice(this.links.indexOf(link), 1)
         })
         .catch(error => this.setError(error, 'Cannot delete link'))
+    },
+    removeSubject () {
+      this.$http.secured.delete(`/api/v1/subjects/${this.subject}`)
+        .then(this.info = 'Subject will be removed on reload')
+        .catch(error => this.setError(error, 'Cannot delete Subject'))
     },
     editLink (link) {
       this.editedLink = link
