@@ -7,8 +7,8 @@ export default new Vuex.Store({
     globalTypes: [],
     dispError: '',
     semester: localStorage.semester,
-    field: '',
-    year: ''
+    field: localStorage.field,
+    year: localStorage.year
   },
   mutations: {
     signedIn () {
@@ -16,6 +16,9 @@ export default new Vuex.Store({
     },
     updateSemester (state, semester) {
       state.semester = semester
+    },
+    updateField (state, field) {
+      state.field = field
     }
   },
   actions: {

@@ -24,5 +24,5 @@ new Vue({
   securedAxiosInstance,
   plainAxiosInstance,
   components: { App },
-  template: '<App/>'
+  template: '<v-app><App/></v-app>'
 })

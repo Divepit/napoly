@@ -1,14 +1,15 @@
 <template>
-  <header>
-    <div>
-      <div>
-        <router-link to="/signin" v-if="!signedIn()">Sign in</router-link>
-        <router-link to="/signup" v-if="!signedIn()">Sign Up</router-link>
-        <router-link to="/links">Links</router-link>
-        <a href="#" @click.prevent="signOut" v-if="signedIn()">Sign out</a>
-      </div>
-    </div>
-  </header>
+  <v-toolbar dark dense fixed >
+  <v-toolbar-side-icon></v-toolbar-side-icon>
+  <v-toolbar-title>Canoodle</v-toolbar-title>
+  <v-spacer></v-spacer>
+  <v-toolbar-items class="hidden-sm-and-down">
+    <v-btn flat to="/links">Links</v-btn>
+    <v-btn flat to="/signin" v-if="!signedIn()">Sign In</v-btn>
+    <v-btn flat to="/signup" v-if="!signedIn()">Sign Up</v-btn>
+    <v-btn flat @click.prevent="signOut" v-if="signedIn()">Sign Out</v-btn>
+  </v-toolbar-items>
+</v-toolbar>
 </template>
 <script>
 export default {

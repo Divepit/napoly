@@ -1,57 +1,104 @@
 <!-- recordstore-frontend/src/components/links/Links.vue -->
 
 <template>
-  <div>
-    <div v-if="error">{{ error }}</div>
-    <div v-if="info">{{ info }}</div>
-    <h3>Subject: {{subjectName}}</h3>
-    <table  class="bordered">
-      <tr  class="bordered">
-        <th  class="bordered"> Week </th>
-        <th   class="bordered" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
-      </tr>
-      <tr  class="bordered" v-for="(week,index) in weekCount" :key="index">
-        <td  class="bordered">{{index + 1}}</td>
-        <td  class="bordered" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayLink(week,type) }}</td>
-      </tr>
-    </table>
-    <div v-if="signedIn()">
-      <button type="button" name="button" @click="addWeek()">Add Week</button>
-      <button type="button" name="button" @click="removeWeek()">Remove Week</button>
-      <button type="button" name="button" @click="seeAllTypes()">See All Types</button>
-      <button type="button" name="button" @click="removeSubject()">Delete Subject</button>
+  <div class="">
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,900" rel="stylesheet">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div color="red" v-if="error">{{ error }}</div>
+            <div v-if="info">{{ info }}</div>
+            <h3>{{subjectName}}</h3>
+            <br>
+            <br>
+
+            <div v-if="signedIn()">
+
+              <v-dialog v-model="dialog" persistent max-width="600px">
+                <template v-slot:activator="{ on }">
+                  <div class="table-wrapper">
+                    <table class="fl-table">
+                      <thead>
+                        <tr class="bordered">
+                          <th class="bordered"> Week </th>
+                          <th class="bordered" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="" v-for="(week,index) in weekCount" :key="index">
+                          <td class="">{{index + 1}}</td>
+                          <td class="" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayLink(week,type) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </template>
+                <v-card v-for="(link, index) in links" :key="link.id" :link="link" v-if="link == editedLink || adding && index == 0">
+                  <v-card-title>
+                    <span class="headline">Link Form</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container grid-list-md>
+                      <v-layout wrap>
+                        <v-flex xs12>
+                          <div v-if="link == editedLink">
+                            <v-text-field label="Editing" required v-model="link.linkUrl"></v-text-field>
+                          </div>
+                          <div v-if="adding">
+                            <v-text-field label="Adding" required v-model="newLink.linkUrl"></v-text-field>
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
+                    <v-btn v-if="link == editedLink" color="blue darken-1" flat @click="updateLink(link); dialog = false">Save</v-btn>
+                    <v-btn v-if="adding" color="blue darken-1" flat @click="addLink(); dialog = false">Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-btn @click="addWeek()">Add Week</v-btn>
+              <v-btn @click="removeWeek()">Remove Week</v-btn>
+              <v-btn @click="seeAllTypes()">See All Types</v-btn>
+            </div>
+
+            <v-dialog v-model="deleting" persistent max-width="290">
+              <template v-slot:activator="{ on }">
+                <v-btn color="red" dark v-on="on">Delete Subject</v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline">Delete {{subjectName}}?</v-card-title>
+                <v-card-text>This cannot be undone</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="" flat @click="deleting = false">Cancel</v-btn>
+                  <v-btn color="red" flat @click="deleting = false; removeSubject()">Delete</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+          </div>
+        </div>
+
+      </div>
     </div>
 
-        <div v-for="link in links" :key="link.id" :link="link" v-if="link == editedLink">
-          <form action="" @submit.prevent="updateLink(link)">
-            <div>
-              <input v-model="link.linkUrl" />
-              <input type="submit" value="Update" >
-            </div>
-          </form>
-        </div>
-      <div v-if="adding">
-        <form action="" @submit.prevent="addLink()">
-          <div>
-            <input v-model="newLink.linkUrl">
-            <input type="submit" value="Update" >
-          </div>
-        </form>
-      </div>
-      <br>
-      <hr>
-      <br>
+    <br>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Links',
-  props: ['subject', 'semester', 'weekCount'],
+  props: ['subject', 'semester', 'weekCount', 'field'],
   data () {
     return {
       // subject: 2,
-      field: 1,
       links: [],
       newLink: [],
       error: '',
@@ -59,28 +106,55 @@ export default {
       types: [],
       adding: false,
       info: '',
-      subjectName: ''
+      subjectName: '',
+      deleting: false,
+      typeToggler: false,
+      dialog: false
     }
   },
   created () {
     this.getLinks()
+
     this.getSubjectName()
   },
   watch: {
     semester: function (val) {
       this.getLinks()
     }
+    // types: function (val) {
+    //   if (!this.typeToggler) {
+    //     this.getTypes()
+    //   }
+    // }
   },
   methods: {
+    // Returns true if localStorage.signedIn is true
     signedIn () {
       return localStorage.signedIn
     },
+    // Sets error variable to the given error or if no error is present text
+    setError (error, text) {
+      this.error = (error.response && error.response.data && error.response.data.error) || text
+    },
+    // Sets adding false and resets newLink
+    exitAdding () {
+      this.adding = false
+      this.newLink = []
+    },
+    // Sets subjectName to the subjectName of the current subject
     getSubjectName () {
       this.$http.secured.get('/api/v1/subjects/' + this.subject)
         .then(response => {
           this.subjectName = response.data.subjectName
         })
     },
+    // Sends delete commant to API for current subject
+    removeSubject () {
+      this.$http.secured.delete(`/api/v1/subjects/${this.subject}`)
+        .then(this.info = 'Subject will be removed on reload')
+        .catch(error => this.setError(error, 'Cannot delete Subject'))
+    },
+    // Gets all types available in API and calls reduceTypes
     getTypes () {
       this.$http.secured.get('/api/v1/types')
         .then(response => {
@@ -89,13 +163,16 @@ export default {
         })
         .catch(error => this.setError(error, 'Something went wrong with Types'))
     },
+    // Gets all types available in API (and does not call reduceTypes)
     seeAllTypes () {
+      this.typeToggler = true
       this.$http.secured.get('/api/v1/types')
         .then(response => {
           this.types = response.data
         })
         .catch(error => this.setError(error, 'Something went wrong with Types'))
     },
+    // Removes all types from types[] for which there is no Link in current links[]
     reduceTypes () {
       var reducedTypes = []
       var i
@@ -104,68 +181,46 @@ export default {
           reducedTypes.push(this.links[i].type_id)
         }
       }
+      var finalTypes = []
       for (i = 0; i < this.types.length; i++) {
-        var currentType = this.types[i]
-        if (!reducedTypes.includes(currentType.id)) {
-          this.types.splice(i, 1)
+        if (reducedTypes.includes(this.types[i].id)) {
+          finalTypes.push(this.types[i])
         }
       }
+      this.types = finalTypes
     },
-    getLinks () {
-      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.$store.state.semester)
-        .then(response => {
-          this.links = response.data
-          this.getTypes()
-        })
-        .catch(error => this.setError(error, 'Something went wrong with Links'))
-    },
+    // Increments weekCount for current subject
     addWeek () {
       this.weekCount += 1
       this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
-        subject: { weekCount: this.weekCount }
+        subject: {
+          weekCount: this.weekCount
+        }
       })
     },
+    // Decrements weekCount for current subject
     removeWeek () {
       this.weekCount -= 1
       this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
-        subject: { weekCount: this.weekCount }
+        subject: {
+          weekCount: this.weekCount
+        }
       })
     },
-    editMode (week, type) {
-      this.adding = false
-      this.editedLink = []
-      var answer = this.$data.links.find(function (link) {
-        return (link.linkWeek === week && link.type_id === type.id)
-      })
-      if (!answer) {
-        this.adding = true
-        this.newLink.subject_id = this.subject
-        this.newLink.semester_id = this.$store.state.semester
-        this.newLink.field_id = this.field
-        this.newLink.linkWeek = week
-        this.newLink.type_id = type.id
-      } else {
-        this.editedLink = answer
-      }
+    // Gets all links from API with the current subject, semester(store) and field(store)
+    // and then calls getTypes()
+    getLinks () {
+      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.semester + '&field_id=' + this.field)
+        .then(response => {
+          this.links = response.data
+          this.getTypes()
+          if (this.links.length === 0) {
+            this.links.push(1)
+          }
+        })
+        .catch(error => this.setError(error, 'Something went wrong with Links'))
     },
-    displayLink (week, type) {
-      var answer = this.$data.links.find(function (link) {
-        var speclink = (link.linkWeek === week && link.type_id === type.id)
-        return speclink
-      })
-      if (answer) {
-        return answer.linkUrl
-      } else {
-        return ' '
-      }
-    },
-    setError (error, text) {
-      this.error = (error.response && error.response.data && error.response.data.error) || text
-    },
-    exitAdding () {
-      this.adding = false
-      this.newLink = []
-    },
+    // Adds link via API if newLink is filled
     addLink () {
       if (!this.newLink.linkUrl) {
         this.exitAdding()
@@ -190,22 +245,33 @@ export default {
 
         .catch(error => this.setError(error, 'Cannot create link'))
     },
-    removeLink (link) {
-      this.$http.secured.delete(`/api/v1/links/${link.id}`)
-        .then(response => {
-          this.links.splice(this.links.indexOf(link), 1)
-        })
-        .catch(error => this.setError(error, 'Cannot delete link'))
-    },
-    removeSubject () {
-      this.$http.secured.delete(`/api/v1/subjects/${this.subject}`)
-        .then(this.info = 'Subject will be removed on reload')
-        .catch(error => this.setError(error, 'Cannot delete Subject'))
-    },
+    // Sets editedLink to provided object
     editLink (link) {
       this.editedLink = link
       this.exitAdding()
     },
+    // Checks if a link for the given week and type is present. If there is,
+    // editedLink is set to said link. If there is no link yet, it sets adding
+    // to true and fills newLink.
+    editMode (week, type) {
+      this.adding = false
+      this.editedLink = ''
+      var answer = this.$data.links.find(function (link) {
+        return (link.linkWeek === week && link.type_id === type.id)
+      })
+      if (!answer) {
+        this.adding = true
+        this.newLink.subject_id = this.subject
+        this.newLink.semester_id = this.$store.state.semester
+        this.newLink.field_id = this.$store.state.field
+        this.newLink.linkWeek = week
+        this.newLink.type_id = type.id
+      } else {
+        this.editedLink = answer
+      }
+    },
+    // If link has a linkUrl (is not empty) the link is patched with the given
+    // object. If link has no linkUrl (is empty) removeLink(link) is called.
     updateLink (link) {
       this.editedLink = ''
       if (!link.linkUrl) {
@@ -223,12 +289,219 @@ export default {
         })
           .catch(error => this.setError(error, 'Cannot update link'))
       }
+    },
+    // Deletes given link via API
+    removeLink (link) {
+      this.$http.secured.delete(`/api/v1/links/${link.id}`)
+        .then(response => {
+          this.links.splice(this.links.indexOf(link), 1)
+        })
+        .catch(error => this.setError(error, 'Cannot delete link'))
+    },
+    // Returns linkUrl of link with given week and type in links[]
+    displayLink (week, type) {
+      var answer = this.$data.links.find(function (link) {
+        var speclink = (link.linkWeek === week && link.type_id === type.id)
+        return speclink
+      })
+      if (answer) {
+        return answer.linkUrl
+      } else {
+        return ' '
+      }
     }
+
   }
 }
 </script>
 <style media="screen">
+  .theme--light.application {
+    background: transparent !important;
+    color: rgba(0, 0, 0, .87);
+  }
+
   .bordered {
-    border: solid !important;
+    background: transparent !important;
+    background-color: inherit;
+  }
+
+  /* Card Styles */
+  .card {
+    border-radius: 20px;
+    background: #fcfcfc;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+    padding: 14px 80px 18px 36px;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: scale(1.0);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+  }
+
+  .card h3 {
+    font-weight: 200;
+    font-size: 40px;
+    color: #6772e5
+  }
+
+  .card img {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    max-height: 120px;
+  }
+
+  .card-1 {
+    background-image: url(https://ionicframework.com/img/getting-started/ionic-native-card.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+  }
+
+  .card-2 {
+    background-image: url(https://ionicframework.com/img/getting-started/components-card.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+  }
+
+  .card-3 {
+    background-image: url(https://ionicframework.com/img/getting-started/theming-card.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+  }
+
+  @media(max-width: 990px) {
+    .card {
+      margin: 20px;
+    }
+  }
+
+  /* Table Styles , https://codepen.io/florantara/pen/dROvdb*/
+
+  .table-wrapper {
+    margin: 10px 70px 70px;
+    border-radius: 20px;
+
+    background: white !important;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .05), 0 4px 8px rgba(0, 0, 0, .06);
+  }
+
+  .fl-table {
+    border-radius: 20px;
+    font-size: 17px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .fl-table td,
+  .fl-table th {
+    text-align: center;
+
+    padding: 8px;
+  }
+
+  .fl-table td {
+    border-right: 1px solid #f8f8f8;
+    font-size: 15px;
+  }
+
+  .fl-table thead th {
+    border-bottom: 1px solid #f8f8f8;
+  }
+
+  /* .fl-table thead th:nth-child(odd) {
+} */
+
+  .fl-table tr:nth-child(even) {
+    background: #F8F8F8;
+  }
+
+  /* Responsive */
+
+  @media (max-width: 767px) {
+    .fl-table {
+      display: block;
+      width: 100%;
+    }
+
+    .table-wrapper:before {
+      display: block;
+      text-align: right;
+      font-size: 15px;
+      background: white;
+      padding: 0 0 10px;
+    }
+
+    .fl-table thead,
+    .fl-table tbody,
+    .fl-table thead th {
+      display: block;
+    }
+
+    .fl-table thead th:last-child {
+      border-bottom: none;
+    }
+
+    .fl-table thead {
+      float: left;
+    }
+
+    .fl-table tbody {
+      width: auto;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .fl-table td,
+    .fl-table th {
+      padding: 20px .625em .625em .625em;
+      height: 60px;
+      vertical-align: middle;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      overflow-y: auto;
+      width: 120px;
+      font-size: 15px;
+      text-overflow: ellipsis;
+    }
+
+    .fl-table thead th {
+      text-align: left;
+      border-bottom: 1px solid #f7f7f9;
+    }
+
+    .fl-table tbody tr {
+      display: table-cell;
+    }
+
+    .fl-table tbody tr:nth-child(odd) {
+      background: none;
+    }
+
+    .fl-table tr:nth-child(even) {
+      background: white;
+    }
+
+    .fl-table tr td:nth-child(odd) {
+      background: #F8F8F8;
+      border-right: 1px solid #E6E4E4;
+    }
+
+    .fl-table tr td:nth-child(even) {
+      border-right: 1px solid #E6E4E4;
+    }
+
+    .fl-table tbody td {
+      display: block;
+      text-align: center;
+    }
   }
 </style>
