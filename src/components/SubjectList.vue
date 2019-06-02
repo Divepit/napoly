@@ -2,8 +2,8 @@
   <div class="medium">
       <Links  v-for="(subject, index) in subjects" :key="index" v-bind:subject="subject.id" v-bind:semester="semester" v-bind:field="field" v-bind:weekCount="subject.weekCount"></Links>
       <v-btn v-if="!adding && signedIn()" type="button" name="button" @click="adding = !adding">Add Subject</v-btn>
-      <input v-if="adding && signedIn()" type="text" name="" value="" v-model="subjectName">
-      <v-btn v-if="adding && signedIn()" type="button" name="button" @click="addSubject()">Add Subject</v-btn>
+      <input v-if="adding && signedIn()" type="text" name="" value="" v-model="subjectName" v-on:keyup.enter="addSubject()">
+      <v-btn v-if="adding && signedIn()" type="button" name="button"  @click="addSubject()">Add Subject</v-btn>
   </div>
 
 </template>

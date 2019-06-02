@@ -45,10 +45,10 @@
                       <v-layout wrap>
                         <v-flex xs12>
                           <div v-if="link == editedLink">
-                            <v-text-field label="Editing" required v-model="link.linkUrl"></v-text-field>
+                            <v-text-field label="Editing" v-on:keyup.enter="updateLink(link); dialog = false" required v-model="link.linkUrl"></v-text-field>
                           </div>
                           <div v-if="adding">
-                            <v-text-field label="Adding" required v-model="newLink.linkUrl"></v-text-field>
+                            <v-text-field label="Adding" v-on:keyup.enter="addLink(); dialog = false" required v-model="newLink.linkUrl"></v-text-field>
                           </div>
                         </v-flex>
                       </v-layout>
@@ -57,8 +57,8 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
-                    <v-btn v-if="link == editedLink" color="blue darken-1" flat @click="updateLink(link); dialog = false">Save</v-btn>
-                    <v-btn v-if="adding" color="blue darken-1" flat @click="addLink(); dialog = false">Save</v-btn>
+                    <v-btn v-if="link == editedLink" color="blue darken-1" flat  @click="updateLink(link); dialog = false">Save</v-btn>
+                    <v-btn v-if="adding" color="blue darken-1" flat  @click="addLink(); dialog = false">Save</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -200,7 +200,9 @@ export default {
     },
     // Decrements weekCount for current subject
     removeWeek () {
-      this.weekCount -= 1
+      if (this.weekCount > 0) {
+        this.weekCount -= 1
+      }
       this.$http.secured.patch('/api/v1/subjects/' + this.subject, {
         subject: {
           weekCount: this.weekCount

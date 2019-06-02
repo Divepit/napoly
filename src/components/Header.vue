@@ -1,6 +1,8 @@
 <template>
+
   <v-toolbar dark dense fixed >
-  <v-toolbar-side-icon></v-toolbar-side-icon>
+  <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+  <SideDrawer v-bind:drawer="drawer" ></SideDrawer>
   <v-toolbar-title>Canoodle</v-toolbar-title>
   <v-spacer></v-spacer>
   <v-toolbar-items class="hidden-sm-and-down">
@@ -10,12 +12,23 @@
     <v-btn flat @click.prevent="signOut" v-if="signedIn()">Sign Out</v-btn>
   </v-toolbar-items>
 </v-toolbar>
+
 </template>
 <script>
+import SideDrawer from '@/components/SideDrawer'
+
 export default {
   name: 'Header',
   created () {
     this.signedIn()
+  },
+  data () {
+    return {
+      drawer: null
+    }
+  },
+  components: {
+    SideDrawer
   },
   methods: {
     setError (error, text) {
