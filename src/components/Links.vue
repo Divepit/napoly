@@ -3,8 +3,6 @@
 <template>
   <div class="">
 
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,900" rel="stylesheet">
-
     <div class="container">
       <div class="row">
         <div class="col-md-4">
@@ -12,13 +10,14 @@
             <div color="red" v-if="error">{{ error }}</div>
             <div v-if="info">{{ info }}</div>
             <h3>{{subjectName}}</h3>
+            <v-switch v-if="signedIn()" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
             <br>
             <br>
 
-            <div v-if="signedIn()">
+            <div>
 
               <v-dialog v-model="dialog" persistent max-width="600px">
-                <template v-slot:activator="{ on }">
+                <template v-if="signedIn() && editorMode" v-slot:activator=" {on} ">
                   <div class="table-wrapper">
                     <table class="fl-table">
                       <thead>
@@ -30,7 +29,27 @@
                       <tbody>
                         <tr class="" v-for="(week,index) in weekCount" :key="index">
                           <td class="">{{index + 1}}</td>
-                          <td class="" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayLink(week,type) }}</td>
+                          <td v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </template>
+                <template v-else v-slot:activator="{on}">
+                  <div class="table-wrapper">
+                    <table class="fl-table">
+                      <thead>
+                        <tr class="bordered">
+                          <th class="bordered"> Week </th>
+                          <th class="bordered" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="" v-for="(week,index) in weekCount" :key="index">
+                          <td class="">{{index + 1}}</td>
+                          <td class=""  v-for="type in types" :key="type.id">
+                            <a v-if="displayUrl(week,type)" target="_blank" :href="displayUrl(week,type)">{{type.typeName}} {{week}}</a>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -57,19 +76,20 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
-                    <v-btn v-if="link == editedLink" color="blue darken-1" flat  @click="updateLink(link); dialog = false">Save</v-btn>
-                    <v-btn v-if="adding" color="blue darken-1" flat  @click="addLink(); dialog = false">Save</v-btn>
+                    <v-btn v-if="link == editedLink && signedIn()" color="blue darken-1" flat  @click="updateLink(link); dialog = false">Save</v-btn>
+                    <v-btn v-if="adding && signedIn()" color="blue darken-1" flat  @click="addLink(); dialog = false">Save</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-btn @click="addWeek()">Add Week</v-btn>
-              <v-btn @click="removeWeek()">Remove Week</v-btn>
-              <v-btn @click="seeAllTypes()">See All Types</v-btn>
+
             </div>
 
-            <v-dialog v-model="deleting" persistent max-width="290">
+            <v-dialog v-if="editorMode" v-model="deleting" persistent max-width="290">
               <template v-slot:activator="{ on }">
-                <v-btn color="red" dark v-on="on">Delete Subject</v-btn>
+                <v-btn depressed color="primary"  v-if="signedIn()" @click="addWeek()">Add Week</v-btn>
+                <v-btn depressed color="primary" v-if="signedIn()" @click="removeWeek()">Remove Week</v-btn>
+                <v-btn depressed color="primary" v-if="signedIn()" @click="seeAllTypes()">See All Types</v-btn>
+                <v-btn depressed color="error" v-if="signedIn()" dark v-on="on">Delete Subject</v-btn>
               </template>
               <v-card>
                 <v-card-title class="headline">Delete {{subjectName}}?</v-card-title>
@@ -109,7 +129,8 @@ export default {
       subjectName: '',
       deleting: false,
       typeToggler: false,
-      dialog: false
+      dialog: false,
+      editorMode: false
     }
   },
   created () {
@@ -256,6 +277,9 @@ export default {
     // editedLink is set to said link. If there is no link yet, it sets adding
     // to true and fills newLink.
     editMode (week, type) {
+      if (!this.signedIn()) {
+        return
+      }
       this.adding = false
       this.editedLink = ''
       var answer = this.$data.links.find(function (link) {
@@ -301,7 +325,7 @@ export default {
         .catch(error => this.setError(error, 'Cannot delete link'))
     },
     // Returns linkUrl of link with given week and type in links[]
-    displayLink (week, type) {
+    displayUrl (week, type) {
       var answer = this.$data.links.find(function (link) {
         var speclink = (link.linkWeek === week && link.type_id === type.id)
         return speclink
@@ -309,7 +333,7 @@ export default {
       if (answer) {
         return answer.linkUrl
       } else {
-        return ' '
+
       }
     }
 
@@ -317,6 +341,7 @@ export default {
 }
 </script>
 <style media="screen">
+
   .theme--light.application {
     background: transparent !important;
     color: rgba(0, 0, 0, .87);
