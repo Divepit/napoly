@@ -1,5 +1,3 @@
-<!-- recordstore-frontend/src/components/links/Links.vue -->
-
 <template>
   <section class="" :id="subjectName">
     <div class="container">
@@ -9,6 +7,11 @@
             <div style="color: red;" v-if="error">{{ error }}</div>
             <div style="color: red;" v-if="info">{{ info }}</div>
             <h3>{{subjectName}}</h3>
+            <!-- <p class="infos" v-if="editorMode">Instructions:</p>
+            <p class="infos" v-if="editorMode">- Click an existing button to edit or delete it</p>
+            <p class="infos" v-if="editorMode">- Click a table cell (empty or filled) to edit or delete it</p>
+            <p class="infos" v-if="editorMode">- Hitting save when a link url / button url / button label is empty, will delete the corresponding button/link</p> -->
+            <SubjectButtons v-bind:subject="subject" v-bind:editorMode="editorMode"/>
             <v-switch v-if="signedIn()" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
             <br>
             <br>
@@ -16,6 +19,8 @@
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-if="signedIn() && editorMode" v-slot:activator=" {on} ">
                   <div class="table-wrapper">
+                    <v-icon class="unselectable" color="" x-large @click="addWeek()">add_circle</v-icon>
+                    <v-icon class="unselectable" color="" x-large @click="removeWeek()">remove_circle</v-icon>
                     <table class="fl-table">
                       <thead>
                         <tr class="bordered">
@@ -26,7 +31,9 @@
                       <tbody>
                         <tr class="" v-for="(week,index) in weekCount" :key="index">
                           <td class="fonted">{{index + 1}}</td>
-                          <td class="fonted hide-overflow" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}</td>
+                          <td class="fonted hide-overflow" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}
+                            <v-icon class="unselectable" v-if="!displayUrl(week,type)">add</v-icon>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -54,7 +61,8 @@
                 </template>
                 <v-card v-for="(link, index) in links" :key="link.id" :link="link" v-if="link == editedLink || adding && index == 0">
                   <v-card-title>
-                    <span class="headline">Link Form</span>
+                    <span v-if="adding" class="headline">Add Link</span>
+                    <span v-else class="headline">Edit Link</span>
                   </v-card-title>
                   <v-card-text>
                     <v-container grid-list-md>
@@ -71,6 +79,8 @@
                     </v-container>
                   </v-card-text>
                   <v-card-actions>
+
+                    <v-btn v-if="link == editedLink && signedIn()" color="error" flat  @click="removeLink(link); dialog = false">Remove Link</v-btn>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
                     <v-btn v-if="link == editedLink && signedIn()" color="blue darken-1" flat  @click="updateLink(link); dialog = false">Save</v-btn>
@@ -80,12 +90,11 @@
               </v-dialog>
 
             </div>
-            <v-dialog v-if="editorMode" v-model="deleting" persistent max-width="290">
+            <v-dialog v-if="editorMode && signedIn()" v-model="deleting" persistent max-width="290">
               <template v-slot:activator="{ on }">
-                <v-btn class="fatfonted" depressed color="primary"  v-if="signedIn()" @click="addWeek()">Add Week</v-btn>
-                <v-btn class="fatfonted" depressed color="primary" v-if="signedIn()" @click="removeWeek()">Remove Week</v-btn>
-                <v-btn class="fatfonted" depressed color="primary" v-if="signedIn()" @click="seeAllTypes()">See All Types</v-btn>
-                <v-btn class="fatfonted" depressed color="error" v-if="signedIn()" dark v-on="on">Delete Subject</v-btn>
+                <v-btn class="fatfonted" v-if="allTypes" depressed color="success" @click="getTypes()">Hide Types</v-btn>
+                <v-btn class="fatfonted" v-else depressed color="success" @click="seeAllTypes()">See All Types</v-btn>
+                <v-btn class="fatfonted" depressed color="error" dark v-on="on">Delete Subject</v-btn>
               </template>
               <v-card>
                 <v-card-title class="headline fonted" style="color: red;">Delete {{subjectName}}?</v-card-title>
@@ -106,16 +115,20 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import SubjectButtons from '@/components/SubjectButtons'
 
 export default {
   name: 'Links',
   props: ['subject'],
+  components: {
+    SubjectButtons
+  },
   data () {
     return {
       // subject: 2,
       links: [],
       newLink: [],
+      newButton: [],
       error: '',
       editedLink: '',
       types: [],
@@ -125,23 +138,13 @@ export default {
       deleting: false,
       dialog: false,
       editorMode: false,
-      weekCount: null
+      weekCount: null,
+      allTypes: false
     }
   },
   created () {
     this.getLinks()
     this.getSubjectName()
-  },
-  watch: {
-    semester: function (val) {
-      this.getLinks()
-    }
-  },
-  computed: {
-    ...mapState([
-      'semester',
-      'field'
-    ])
   },
   methods: {
     // Returns true if localStorage.signedIn is true
@@ -173,6 +176,8 @@ export default {
     },
     // Gets all types available in API and calls reduceTypes
     getTypes () {
+      this.types = []
+      this.allTypes = false
       this.$http.secured.get('/api/v1/types')
         .then(response => {
           this.types = response.data
@@ -182,6 +187,7 @@ export default {
     },
     // Gets all types available in API (and does not call reduceTypes)
     seeAllTypes () {
+      this.allTypes = true
       this.$http.secured.get('/api/v1/types')
         .then(response => {
           this.types = response.data
@@ -225,10 +231,9 @@ export default {
         }
       })
     },
-    // Gets all links from API with the current subject, semester(store) and field(store)
-    // and then calls getTypes()
+    // Gets all links from API with the current subject and then calls getTypes()
     getLinks () {
-      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject + '&semester_id=' + this.semester + '&field_id=' + this.field)
+      this.$http.secured.get('/api/v1/links?subject_id=' + this.subject)
         .then(response => {
           this.links = response.data
           this.getTypes()
@@ -249,8 +254,6 @@ export default {
         link: {
           linkUrl: this.newLink.linkUrl,
           subject_id: this.newLink.subject_id,
-          semester_id: this.newLink.semester_id,
-          field_id: this.newLink.field_id,
           linkWeek: this.newLink.linkWeek,
           type_id: this.newLink.type_id
         }
@@ -283,8 +286,6 @@ export default {
       if (!answer) {
         this.adding = true
         this.newLink.subject_id = this.subject
-        this.newLink.semester_id = this.$store.state.semester
-        this.newLink.field_id = this.$store.state.field
         this.newLink.linkWeek = week
         this.newLink.type_id = type.id
       } else {
@@ -302,8 +303,6 @@ export default {
           link: {
             linkUrl: link.linkUrl,
             subject_id: link.subject_id,
-            semester_id: link.semester_id,
-            field_id: link.field_id,
             linkWeek: link.linkWeek,
             type_id: link.type_id
           }
@@ -328,14 +327,30 @@ export default {
       if (answer) {
         return answer.linkUrl
       } else {
-
       }
     }
-
   }
 }
 </script>
 <style media="screen">
+  .infos {
+    font-size: 15px;
+    color: gray
+  }
+
+  .unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
   .fonted {
     font-family: Roboto,sans-serif !important;
     font-weight: 300;
