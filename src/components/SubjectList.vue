@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="">
       <!-- <v-btn flat color="#6772e5" :href="'#'+subject.subjectName" v-for="subject in subjects">{{subject.subjectName}}</v-btn> -->
-      <Links  v-for="subject in subjects" :key="subject.id" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></Links>
+      <SubjectTable  v-for="subject in subjects" :key="subject.id" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></SubjectTable>
       <v-btn depressed color="primary" v-if="!adding && signedIn()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
       <v-text-field  placeholder="Subject Name" v-if="adding && signedIn()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
       <v-btn depressed color="primary" v-if="adding && signedIn()" @click="addSubject()">Add Subject</v-btn>
@@ -11,10 +11,10 @@
 
 <script>
 import {mapState} from 'vuex'
-import Links from '@/components/Links'
+import SubjectTable from '@/components/SubjectTable'
 export default {
   components: {
-    Links
+    SubjectTable
   },
   created () {
     this.getSubject()

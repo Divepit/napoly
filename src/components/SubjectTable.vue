@@ -19,12 +19,12 @@
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-if="signedIn() && editorMode" v-slot:activator=" {on} ">
                   <div class="table-wrapper">
-                    <v-icon class="unselectable" color="" x-large @click="addWeek()">add_circle</v-icon>
-                    <v-icon class="unselectable" color="" x-large @click="removeWeek()">remove_circle</v-icon>
                     <table class="fl-table">
                       <thead>
                         <tr class="bordered">
-                          <th class="bordered fonted"> Week </th>
+                          <th class="bordered fonted"> Week
+                            <v-icon class="unselectable" color="" @click="addWeek()">add_circle</v-icon>
+                            <v-icon class="unselectable" color="" @click="removeWeek()">remove_circle</v-icon></th>
                           <th class="bordered fonted" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
                         </tr>
                       </thead>
@@ -32,7 +32,6 @@
                         <tr class="" v-for="(week,index) in weekCount" :key="index">
                           <td class="fonted">{{index + 1}}</td>
                           <td class="fonted hide-overflow" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}
-                            <v-icon class="unselectable" v-if="!displayUrl(week,type)">add</v-icon>
                           </td>
                         </tr>
                       </tbody>
@@ -59,6 +58,7 @@
                     </table>
                   </div>
                 </template>
+
                 <v-card v-for="(link, index) in links" :key="link.id" :link="link" v-if="link == editedLink || adding && index == 0">
                   <v-card-title>
                     <span v-if="adding" class="headline">Add Link</span>
@@ -78,6 +78,7 @@
                       </v-layout>
                     </v-container>
                   </v-card-text>
+
                   <v-card-actions>
 
                     <v-btn v-if="link == editedLink && signedIn()" color="error" flat  @click="removeLink(link); dialog = false">Remove Link</v-btn>
@@ -87,6 +88,7 @@
                     <v-btn v-if="adding && signedIn()" color="blue darken-1" flat  @click="addLink(); dialog = false">Save</v-btn>
                   </v-card-actions>
                 </v-card>
+
               </v-dialog>
 
             </div>
@@ -106,6 +108,8 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+            <SubjectInfos  v-bind:subject="subject" v-bind:editorMode="editorMode"/>
+
           </div>
         </div>
       </div>
@@ -116,12 +120,14 @@
 
 <script>
 import SubjectButtons from '@/components/SubjectButtons'
+import SubjectInfos from '@/components/SubjectInfos'
 
 export default {
   name: 'Links',
   props: ['subject'],
   components: {
-    SubjectButtons
+    SubjectButtons,
+    SubjectInfos
   },
   data () {
     return {
@@ -432,7 +438,7 @@ export default {
   /* Table Styles , https://codepen.io/florantara/pen/dROvdb*/
 
   .table-wrapper {
-    margin: 10px 70px 70px;
+    margin: 10px 70px 20px;
     border-radius: 20px;
 
     background: white !important;
@@ -477,17 +483,24 @@ export default {
   /* Responsive */
 
   @media (max-width: 767px) {
+    .card {
+      padding: 3.5px 10px 5px 10px;
+      cursor: pointer;
+    }
+
     .fl-table {
       display: block;
       width: 100%;
     }
 
-    .table-wrapper:before {
+    .table-wrapper {
+      margin: 0px 0px 0px;
+      width: auto;
       display: block;
-      text-align: right;
+      text-align: left;
       font-size: 15px;
       background: white;
-      padding: 0 0 10px;
+      padding: 0 0 0px;
     }
 
     .fl-table thead,
@@ -526,6 +539,7 @@ export default {
     .fl-table thead th {
       text-align: left;
       border-bottom: 1px solid #f7f7f9;
+      max-width: 75px;
     }
 
     .fl-table tbody tr {
