@@ -21,9 +21,14 @@
           <label for="password_confirmation">Password Confirmation</label>
           <input type="password" v-model="password_confirmation"  id="password_confirmation" placeholder="Password Confirmation">
         </div>
-        <button type="submit">Sign Up</button>
 
-        <div ><router-link to="/" >Sign In</router-link></div>
+        <div >
+          <label for="admin">Admin</label>
+          <input type="checkbox" v-model="admin"  id="admin">
+        </div>
+        <v-btn depressed color="primary" type="submit">Sign Up</v-btn>
+
+        <div ><router-link to="/links" >Sign In</router-link></div>
       </form>
     </div>
   </div>
@@ -36,6 +41,7 @@ export default {
       email: '',
       password: '',
       password_confirmation: '',
+      admin: false,
       error: ''
     }
   },
@@ -47,7 +53,7 @@ export default {
   },
   methods: {
     signup () {
-      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
+      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation, role: this.admin })
         .then(response => this.signupSuccessful(response))
         .catch(error => this.signupFailed(error))
     },
@@ -60,7 +66,7 @@ export default {
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
       this.error = ''
-      this.$router.replace('/')
+      this.$router.replace('/links')
     },
     signupFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || 'Something went wrong'
@@ -69,7 +75,7 @@ export default {
     },
     checkedSignedIn () {
       if (localStorage.signedIn) {
-        this.$router.replace('/')
+        this.$router.replace('/links')
       }
     }
   }

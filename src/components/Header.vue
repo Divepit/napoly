@@ -1,25 +1,18 @@
 <template>
   <div class="">
     <Toolbar :drawer.sync="drawer"/>
-    <v-layout
-      wrap
-      style="height: 200px;"
-    >
+    <v-layout style="margin-top: 5%;">
 
       <v-navigation-drawer
         v-model="drawer"
         absolute
-        dark
         temporary
       >
         <v-list class="pa-1">
 
           <v-list-tile avatar tag="div">
-            <v-list-tile-avatar>
-              <img src="https://api.adorable.io/avatars/85/emavt@adorable.io.png">
-            </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>Marco Trentini</v-list-tile-title>
+              <v-list-tile-title>Canoodle</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>

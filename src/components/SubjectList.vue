@@ -1,9 +1,10 @@
 <template lang="html">
   <div class="">
+      <!-- <v-btn flat color="#6772e5" :href="'#'+subject.subjectName" v-for="subject in subjects">{{subject.subjectName}}</v-btn> -->
       <Links  v-for="(subject, index) in subjects" :key="index" v-bind:subject="subject.id" v-bind:semester="semester" v-bind:field="field" v-bind:weekCount="subject.weekCount"></Links>
-      <v-btn depressed color="error" v-if="!adding && signedIn()" type="button" name="button" @click="adding = !adding">Add Subject</v-btn>
-      <input v-if="adding && signedIn()" type="text" name="" value="" v-model="subjectName" v-on:keyup.enter="addSubject()">
-      <v-btn depressed color="error" v-if="adding && signedIn()" type="button" name="button"  @click="addSubject()">Add Subject</v-btn>
+      <v-btn depressed color="primary" v-if="!adding && signedIn()" type="button" name="button" @click="adding = !adding; subjectName = ''">Add Subject</v-btn>
+      <v-text-field  placeholder="Subject Name" v-if="adding && signedIn()" type="text" name="" value="" v-model="subjectName" v-on:keyup.enter="addSubject()"></v-text-field>
+      <v-btn depressed color="primary" v-if="adding && signedIn()" type="button" name="button"  @click="addSubject()">Add Subject</v-btn>
   </div>
 
 </template>

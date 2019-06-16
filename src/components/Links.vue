@@ -1,35 +1,32 @@
 <!-- recordstore-frontend/src/components/links/Links.vue -->
 
 <template>
-  <div class="">
-
+  <section class="" :id="subjectName">
     <div class="container">
       <div class="row">
         <div class="col-md-4">
           <div class="card">
-            <div color="red" v-if="error">{{ error }}</div>
-            <div v-if="info">{{ info }}</div>
+            <div style="color: red;" v-if="error">{{ error }}</div>
+            <div style="color: red;" v-if="info">{{ info }}</div>
             <h3>{{subjectName}}</h3>
             <v-switch v-if="signedIn()" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
             <br>
             <br>
-
             <div>
-
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-if="signedIn() && editorMode" v-slot:activator=" {on} ">
                   <div class="table-wrapper">
                     <table class="fl-table">
                       <thead>
                         <tr class="bordered">
-                          <th class="bordered"> Week </th>
-                          <th class="bordered" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
+                          <th class="bordered fonted"> Week </th>
+                          <th class="bordered fonted" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr class="" v-for="(week,index) in weekCount" :key="index">
-                          <td class="">{{index + 1}}</td>
-                          <td v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}</td>
+                          <td class="fonted">{{index + 1}}</td>
+                          <td class="fonted hide-overflow" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -40,15 +37,15 @@
                     <table class="fl-table">
                       <thead>
                         <tr class="bordered">
-                          <th class="bordered"> Week </th>
-                          <th class="bordered" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
+                          <th class="bordered fonted"> Week </th>
+                          <th class="bordered fonted" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr class="" v-for="(week,index) in weekCount" :key="index">
-                          <td class="">{{index + 1}}</td>
-                          <td class=""  v-for="type in types" :key="type.id">
-                            <a v-if="displayUrl(week,type)" target="_blank" :href="displayUrl(week,type)">{{type.typeName}} {{week}}</a>
+                          <td class="fonted">{{index + 1}}</td>
+                          <td class="fonted"  v-for="type in types" :key="type.id">
+                            <a style="color: #6772e5; text-decoration: none;" v-if="displayUrl(week,type)" target="_blank" :href="displayUrl(week,type)">{{type.typeName}} {{week}}</a>
                           </td>
                         </tr>
                       </tbody>
@@ -81,35 +78,30 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-
             </div>
-
             <v-dialog v-if="editorMode" v-model="deleting" persistent max-width="290">
               <template v-slot:activator="{ on }">
-                <v-btn depressed color="primary"  v-if="signedIn()" @click="addWeek()">Add Week</v-btn>
-                <v-btn depressed color="primary" v-if="signedIn()" @click="removeWeek()">Remove Week</v-btn>
-                <v-btn depressed color="primary" v-if="signedIn()" @click="seeAllTypes()">See All Types</v-btn>
-                <v-btn depressed color="error" v-if="signedIn()" dark v-on="on">Delete Subject</v-btn>
+                <v-btn class="fatfonted" depressed color="primary"  v-if="signedIn()" @click="addWeek()">Add Week</v-btn>
+                <v-btn class="fatfonted" depressed color="primary" v-if="signedIn()" @click="removeWeek()">Remove Week</v-btn>
+                <v-btn class="fatfonted" depressed color="primary" v-if="signedIn()" @click="seeAllTypes()">See All Types</v-btn>
+                <v-btn class="fatfonted" depressed color="error" v-if="signedIn()" dark v-on="on">Delete Subject</v-btn>
               </template>
               <v-card>
-                <v-card-title class="headline">Delete {{subjectName}}?</v-card-title>
-                <v-card-text>This cannot be undone</v-card-text>
+                <v-card-title class="headline fonted" style="color: red;">Delete {{subjectName}}?</v-card-title>
+                <v-card-text class="fonted" style="text-align: left;">This cannot be undone</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="" flat @click="deleting = false">Cancel</v-btn>
-                  <v-btn color="red" flat @click="deleting = false; removeSubject()">Delete</v-btn>
+                  <v-btn color="" depressed @click="deleting = false">Cancel</v-btn>
+                  <v-btn color="error" depressed @click="deleting = false; removeSubject()">Delete</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
-
           </div>
         </div>
-
       </div>
     </div>
-
     <br>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -341,6 +333,18 @@ export default {
 }
 </script>
 <style media="screen">
+  .fonted {
+    font-family: Roboto,sans-serif !important;
+    font-weight: 300;
+  }
+  .fatfonted {
+    font-family: Roboto,sans-serif !important;
+    font-weight: 400;
+  }
+  .hide-overflow {
+    overflow: hidden;
+    max-width: 10px;
+  }
 
   .theme--light.application {
     background: transparent !important;
@@ -424,6 +428,7 @@ export default {
     border: none;
     border-collapse: collapse;
     width: 100%;
+    min-width: 100%;
     max-width: 100%;
     white-space: nowrap;
   }

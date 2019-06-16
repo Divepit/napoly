@@ -1,17 +1,18 @@
 <template lang="html">
-    <v-container >
-
+    <v-container>
+    <WelcomeScreen/>
     <SubjectList v-bind:year="this.$store.state.year" v-bind:semester="this.$store.state.semester" v-bind:field="this.$store.state.field"></SubjectList>
-
-  </v-container>
+    </v-container>
 </template>
 
 <script>
 import SubjectList from '@/components/SubjectList'
+import WelcomeScreen from '@/components/WelcomeScreen'
 import {mapState} from 'vuex'
 export default {
   components: {
-    SubjectList
+    SubjectList,
+    WelcomeScreen
   },
   data () {
     return {
