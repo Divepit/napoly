@@ -78,6 +78,7 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+
             </div>
             <v-dialog v-if="editorMode" v-model="deleting" persistent max-width="290">
               <template v-slot:activator="{ on }">
@@ -105,9 +106,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
 export default {
   name: 'Links',
-  props: ['subject', 'semester', 'weekCount', 'field'],
+  props: ['subject'],
   data () {
     return {
       // subject: 2,
@@ -120,25 +123,25 @@ export default {
       info: '',
       subjectName: '',
       deleting: false,
-      typeToggler: false,
       dialog: false,
-      editorMode: false
+      editorMode: false,
+      weekCount: null
     }
   },
   created () {
     this.getLinks()
-
     this.getSubjectName()
   },
   watch: {
     semester: function (val) {
       this.getLinks()
     }
-    // types: function (val) {
-    //   if (!this.typeToggler) {
-    //     this.getTypes()
-    //   }
-    // }
+  },
+  computed: {
+    ...mapState([
+      'semester',
+      'field'
+    ])
   },
   methods: {
     // Returns true if localStorage.signedIn is true
@@ -156,9 +159,10 @@ export default {
     },
     // Sets subjectName to the subjectName of the current subject
     getSubjectName () {
-      this.$http.secured.get('/api/v1/subjects/' + this.subject)
+      this.$http.secured.get(`/api/v1/subjects/${this.subject}`)
         .then(response => {
           this.subjectName = response.data.subjectName
+          this.weekCount = response.data.weekCount
         })
     },
     // Sends delete commant to API for current subject
@@ -178,7 +182,6 @@ export default {
     },
     // Gets all types available in API (and does not call reduceTypes)
     seeAllTypes () {
-      this.typeToggler = true
       this.$http.secured.get('/api/v1/types')
         .then(response => {
           this.types = response.data

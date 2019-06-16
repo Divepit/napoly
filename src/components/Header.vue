@@ -99,18 +99,18 @@ export default {
   methods: {
 
     getSemesterName () {
-      this.$http.secured.get('/api/v1/semesters/' + this.semester)
-        .then(response => {
-          this.rawSemester = response.data
-          return this.convertRawSemester(false)
-        })
+      let rawSem = this.semesters.filter(obj => {
+        return obj.id == this.semester
+      })
+      this.rawSemester = rawSem
+      this.convertRawSemester()
     },
     getFieldName () {
-      this.$http.secured.get('/api/v1/fields/' + this.field)
-        .then(response => {
-          this.rawField = response.data
-          this.fieldName = response.data.fieldName
-        })
+      let field = this.semesters.filter(obj => {
+        return obj.id == this.field
+      })
+      this.rawField = field
+      this.fieldName = field.fieldName
     },
     getSemesters () {
       this.$http.secured.get('/api/v1/semesters/')
@@ -158,7 +158,7 @@ export default {
         } else if (s.semesterHalf === 2) {
           prefix = 'HS'
         } else {
-          console.log('Semester error')
+          return
         }
         printSemester = prefix + ' ' + s.semesterYear
         return printSemester
@@ -168,7 +168,7 @@ export default {
         } else if (this.rawSemester.semesterHalf === 2) {
           prefix = 'HS'
         } else {
-          console.log('Semester error')
+          return
         }
         printSemester = prefix + ' ' + this.rawSemester.semesterYear
         this.printSemester = printSemester

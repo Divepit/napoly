@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Signin from '@/components/Signin'
 // import Signup from '@/components/Signup'
-import FilterComponent from '@/components/FilterComponent'
+import SubjectList from '@/components/SubjectList'
 
 Vue.use(Router)
 
@@ -16,12 +16,13 @@ export default new Router({
     {
       path: '/links',
       name: 'Links',
-      component: FilterComponent
+      component: SubjectList
+
     },
     {
       path: '/',
-      name: 'Links',
-      component: FilterComponent
+      name: 'SubjectList',
+      component: SubjectList
     }
     // {
     //   path: '/signup',

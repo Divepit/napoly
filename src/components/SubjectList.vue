@@ -1,21 +1,21 @@
 <template lang="html">
   <div class="">
       <!-- <v-btn flat color="#6772e5" :href="'#'+subject.subjectName" v-for="subject in subjects">{{subject.subjectName}}</v-btn> -->
-      <Links  v-for="(subject, index) in subjects" :key="index" v-bind:subject="subject.id" v-bind:semester="semester" v-bind:field="field" v-bind:weekCount="subject.weekCount"></Links>
-      <v-btn depressed color="primary" v-if="!adding && signedIn()" type="button" name="button" @click="adding = !adding; subjectName = ''">Add Subject</v-btn>
-      <v-text-field  placeholder="Subject Name" v-if="adding && signedIn()" type="text" name="" value="" v-model="subjectName" v-on:keyup.enter="addSubject()"></v-text-field>
-      <v-btn depressed color="primary" v-if="adding && signedIn()" type="button" name="button"  @click="addSubject()">Add Subject</v-btn>
+      <Links  v-for="subject in subjects" :key="subject.id" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></Links>
+      <v-btn depressed color="primary" v-if="!adding && signedIn()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
+      <v-text-field  placeholder="Subject Name" v-if="adding && signedIn()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
+      <v-btn depressed color="primary" v-if="adding && signedIn()" @click="addSubject()">Add Subject</v-btn>
   </div>
 
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import Links from '@/components/Links'
 export default {
   components: {
     Links
   },
-  props: ['semester', 'field', 'year'],
   created () {
     this.getSubject()
   },
@@ -24,22 +24,29 @@ export default {
       subjects: [],
       error: '',
       adding: false,
-      subjectName: ''
+      newSubjectName: ''
     }
+  },
+  computed: {
+    ...mapState([
+      'semester',
+      'field',
+      'year'
+    ])
   },
   methods: {
     signedIn () {
       return localStorage.signedIn
     },
     addSubject () {
-      if (!this.subjectName) {
+      if (!this.newSubjectName) {
         console.log('No Semester given')
         this.adding = false
         return
       }
       this.$http.secured.post('/api/v1/subjects/', {
         subject: {
-          subjectName: this.subjectName,
+          subjectName: this.newSubjectName,
           semester_id: this.$store.state.semester,
           field_id: this.$store.state.field,
           year: this.$store.state.year
