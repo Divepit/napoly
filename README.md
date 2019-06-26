@@ -19,7 +19,7 @@
 
 - node &gt;= 6.0.0
 - npm &gt;= 3.0.0
-- redis
+- Redis as Token Store
 
 ## Install
 
@@ -43,7 +43,7 @@ yarn dev
 ```
 make sure the <a href="https://github.com/Divepit/napolyAPI" target="_blank">NapolyAPI</a> as well as your <a href="https://redis.io" target="_blank">Redis Token Store</a> are running and are set up correctly.
 
-visit <a href="localhost:8080" target="_blank">localhost:8080</a> to view the app.
+visit <a href="http://localhost:8080" target="_blank">localhost:8080</a> to view the app.
 
 ## Author
 
