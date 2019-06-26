@@ -19,13 +19,11 @@
 
 ## Install
 
-To use the Napoly Vue application, the [Napoly API](https://github.com/Divepit/napolyAPI) must be installed as well.
+To use the Napoly Vue application, the [Napoly API](https://github.com/Divepit/napolyAPI) must be installed as well. Once it is all set up, you can install the node modules:
 
-Once you cloned the repo, run
 ```sh
 npm install
 ```
-to install all node dependencies.
 
 ## Usage
 
