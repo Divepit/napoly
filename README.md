@@ -13,9 +13,9 @@
 
 ## Prerequisites
 
-- node &gt;= 6.0.0
-- npm &gt;= 3.0.0
-- Redis as Token Store
+- Node
+- npm
+- Redis
 
 ## Install
 
