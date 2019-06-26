@@ -1,19 +1,50 @@
-
+infoText
 <template>
   <div class="">
     <v-layout v-for="info in infos" :key="info.id">
       <v-flex xs12 sm12>
-        <v-card class="infocard">
+        <v-card class="infocard" @click="editInfo(info); infoId = info.id">
           <v-card-title class="m0">
             <div style="width: 100%">
               <h3 class="leftabsolute infotitle">{{info.infoTitle}}</h3>
-              <h3 class="rightalign infotitle date">Erstellt am: {{info.created_at}}</h3>
+              <!-- <h3 class="rightalign infotitle date">Erstellt am: {{info.created_at}}</h3> -->
             </div>
             <hr class="divider">
             <div class="leftalign"> {{info.infoText}} </div>
           </v-card-title>
         </v-card>
       </v-flex>
+    </v-layout>
+    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; clear()">add_circle</v-icon>
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-card class="card">
+          <v-card-title>
+            <span v-if="editing" class="headline">Edit Info</span>
+            <span v-else class="headline">Add Info</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Info Title" v-model="infoTitle" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-textarea label="Info Text" v-model="infoText" required></v-textarea>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn v-if="editing" color="error" flat @click="dialog = false; removeInfo(infoId)">Delete Info</v-btn>
+
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+            <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateInfo()">Confirm</v-btn>
+            <v-btn v-else color="blue darken-1" flat @click="dialog = false; addInfo()">Add</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-layout>
   </div>
 
@@ -30,8 +61,8 @@ export default {
     return {
       infos: [],
       infoId: null,
-      infoUrl: '',
-      infoLabel: '',
+      infoText: '',
+      infoTitle: '',
       editing: false,
       dialog: false
     }
@@ -52,13 +83,13 @@ export default {
     },
     // Adds info via API if newInfo is filled
     addInfo () {
-      if (!this.infoUrl || !this.infoLabel) {
+      if (!this.infoText || !this.infoTitle) {
         return
       }
       this.$http.secured.post('/api/v1/infos/', {
         info: {
-          infoUrl: this.infoUrl,
-          infoLabel: this.infoLabel,
+          infoText: this.infoText,
+          infoTitle: this.infoTitle,
           subject_id: this.subject
         }
       })
@@ -69,19 +100,23 @@ export default {
         .catch(error => this.setError(error, 'Cannot create link'))
     },
     editInfo (info) {
+      if (!this.editorMode) {
+        return
+      }
       this.editing = true
-      this.infoUrl = info.infoUrl
-      this.infoLabel = info.infoLabel
+      this.infoText = info.infoText
+      this.infoTitle = info.infoTitle
       this.dialog = true
     },
     updateInfo () {
-      if (!this.infoUrl || !this.infoLabel) {
+      if (!this.infoText || !this.infoTitle) {
         this.removeInfo(this.infoId)
       } else {
         this.$http.secured.patch(`/api/v1/infos/${this.infoId}`, {
           info: {
-            infoUrl: this.infoUrl,
-            infoLabel: this.infoLabel,
+            infoText: this.infoText,
+            infoTitle: this.infoTitle
+,
             subject_id: this.subject
           }
         })
@@ -99,8 +134,8 @@ export default {
     },
     clear () {
       this.infoId = null
-      this.infoUrl = ''
-      this.infoLabel = ''
+      this.infoText = ''
+      this.infoTitle = ''
     }
   }
 }
@@ -127,9 +162,9 @@ export default {
     border-bottom: 0px;
     border-left: 0px;
     border-right: 0px;
-    border-color: #6772e5;
+    border-color: #9ca6f1;
     padding-top: 0px !important;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, .05), 0 4px 8px rgba(0, 0, 0, .06);
+    box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
     margin-bottom: 20px;
     margin-top: 20px;
   }

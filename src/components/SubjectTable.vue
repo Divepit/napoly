@@ -59,7 +59,7 @@
                   </div>
                 </template>
 
-                <v-card v-for="(link, index) in links" :key="link.id" :link="link" v-if="link == editedLink || adding && index == 0">
+                <v-card class="card" v-for="(link, index) in links" :key="link.id" :link="link" v-if="link == editedLink || adding && index == 0">
                   <v-card-title>
                     <span v-if="adding" class="headline">Add Link</span>
                     <span v-else class="headline">Edit Link</span>
@@ -98,9 +98,9 @@
                 <v-btn class="fatfonted" v-else depressed color="success" @click="seeAllTypes()">See All Types</v-btn>
                 <v-btn class="fatfonted" depressed color="error" dark v-on="on">Delete Subject</v-btn>
               </template>
-              <v-card>
-                <v-card-title class="headline fonted" style="color: red;">Delete {{subjectName}}?</v-card-title>
-                <v-card-text class="fonted" style="text-align: left;">This cannot be undone</v-card-text>
+              <v-card class="card">
+                <v-card-title class="headline fonted" style="color: red; text-align: left; font-size: 20px !important;">Delete {{subjectName}}?</v-card-title>
+                <v-card-text class="fonted" style="text-align: left; font-size: 18px; width: 100%;">This will delete all links, buttons and infos and <strong>cannot</strong> be undone.</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="" depressed @click="deleting = false">Cancel</v-btn>
@@ -384,10 +384,15 @@ export default {
   .card {
     border-radius: 20px;
     background: #fcfcfc;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     padding: 14px 80px 18px 36px;
     cursor: pointer;
+    /* border: solid !important;
+    border-bottom: 0px !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    border-color: #9ca6f1 !important; */
   }
 
   .card:hover {
@@ -440,9 +445,13 @@ export default {
   .table-wrapper {
     margin: 10px 70px 20px;
     border-radius: 20px;
-
+    border: solid;
+    border-bottom: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-color: #9ca6f1;
     background: white !important;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, .05), 0 4px 8px rgba(0, 0, 0, .06);
+    box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
   }
 
   .fl-table {

@@ -6,7 +6,7 @@
     <template v-if="editorMode && signedIn()">
       <v-layout row justify-center>
         <v-dialog v-model="dialog" persistent max-width="600px">
-          <v-card>
+          <v-card class="card">
             <v-card-title>
               <span v-if="editing" class="headline">Edit Button</span>
               <span v-else class="headline">Add Button</span>
@@ -127,6 +127,19 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.card {
+  border-radius: 20px;
+  background: #fcfcfc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+  transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+  padding: 14px 80px 18px 36px;
+  cursor: pointer;
+  border: solid;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-color: #9ca6f1;
+}
   .subjectButton {
       color: white;
       background: #6772e5 !important;
