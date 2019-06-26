@@ -43,6 +43,12 @@ visit [localhost:8080](http://localhost:8080) to view the app.
 
 > Password: password
 
+## Support the Project!
+
+Would you like to support the Napoly Team by chipping in for a coffee, a beer or even parts of the server and domain fee? We're happy about any help we can get!
+
+###[Donate](https://donorbox.org/napoly?default_interval=m&amount=3)
+
 ## License
 
 Copyright © 2019 [Marco Trentini](https://github.com/Divepit).<br />
