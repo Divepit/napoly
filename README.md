@@ -22,6 +22,7 @@
 
 ## Install
 
+To use the Napoly Vue application, the <a href="https://github.com/Divepit/napolyAPI">NapolyAPI</a> must be installed as well.
 ```sh
 npm install
 ```
