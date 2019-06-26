@@ -47,7 +47,7 @@ visit [localhost:8080](http://localhost:8080) to view the app.
 
 Would you like to support the Napoly Team by chipping in for a coffee, a beer or even parts of the server and domain fee? We're happy about any help we can get!
 
-<a class="dbox-donation-button" href="https://donorbox.org/napoly?default_interval=m&hide_donation_meter=true" style="background:#2d81c5 url(https://d1iczxrky3cnb2.cloudfront.net/red_logo.png) no-repeat 37px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 16px;padding: 15px 38px 15px 75px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 0 1px 0 0 #1f5a89; text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+### [Donate](https://donorbox.org/napoly?default_interval=m&amount=3)
 
 ## License
 
