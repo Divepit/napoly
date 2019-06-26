@@ -43,7 +43,7 @@ yarn dev
 ```
 make sure the [Napoly API](https://github.com/Divepit/napolyAPI") server as well as your [Redis server](https://redis.io) are running and are set up correctly.
 
-visit <a href="http://localhost:8080" target="_blank">localhost:8080</a> to view the app.
+visit [localhost:8080](http://localhost:8080) to view the app.
 
 ## Author
 
