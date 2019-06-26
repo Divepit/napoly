@@ -47,7 +47,7 @@ visit [localhost:8080](http://localhost:8080) to view the app.
 
 Would you like to support the Napoly Team by chipping in for a coffee, a beer or even parts of the server and domain fee? We're happy about any help we can get!
 
-### [Donate](https://donorbox.org/napoly?default_interval=m&amount=3)
+### [Donate](https://donorbox.org/napoly)
 
 ## License
 
