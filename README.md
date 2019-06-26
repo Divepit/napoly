@@ -23,7 +23,7 @@
 
 ## Install
 
-To use the Napoly Vue application, the <a href="https://github.com/Divepit/napolyAPI" target="_blank">NapolyAPI</a> must be installed as well.
+To use the Napoly Vue application, the [Napoly API](https://github.com/Divepit/napolyAPI") must be installed as well.
 
 Once you cloned the repo, run
 ```sh
@@ -41,7 +41,7 @@ or if you want to use yarn
 ```sh
 yarn dev
 ```
-make sure the <a href="https://github.com/Divepit/napolyAPI" target="_blank">NapolyAPI</a> as well as your <a href="https://redis.io" target="_blank">Redis Token Store</a> are running and are set up correctly.
+make sure the [Napoly API](https://github.com/Divepit/napolyAPI") server as well as your [Redis server](https://redis.io) are running and are set up correctly.
 
 visit <a href="http://localhost:8080" target="_blank">localhost:8080</a> to view the app.
 
