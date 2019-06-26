@@ -37,23 +37,9 @@ or if you want to use yarn
 ```sh
 yarn dev
 ```
-make sure the [Napoly API](https://github.com/Divepit/napolyAPI) server as well as your [Redis server](https://redis.io) are running and are set up correctly.
+make sure the [Napoly API](https://github.com/Divepit/napolyAPI) server as well as your [Redis server](https://redis.io) are running and are set up correctly. More info on Redis can be found in the NapolyAPI repository.
 
 visit [localhost:8080](http://localhost:8080) to view the app.
-
-## Author
-
-**Marco Trentini**
-
-* Github: [@Divepit](https://github.com/Divepit)
-
-## Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Divepit/napoly/issues).
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
 
 ## License
 
