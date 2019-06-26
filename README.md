@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Napoly 👋</h1>
+<h1 align="center">The Napoly Frontend</h1>
 <p>
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/node-%3E%3D%206.0.0-blue.svg" />
