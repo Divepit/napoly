@@ -1,8 +1,6 @@
 <h1 align="center">The Napoly Frontend</h1>
 <p>
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <img src="https://img.shields.io/badge/node-%3E%3D%206.0.0-blue.svg" />
-  <img src="https://img.shields.io/badge/npm-%3E%3D%203.0.0-blue.svg" />
   <a href="https://github.com/Divepit/napoly/wiki">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
