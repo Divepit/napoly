@@ -10,13 +10,13 @@
 </p>
 
 > Easily streamline links and resources in a beautiful and organized way
-
+---
 ## Prerequisites
 
 - Node
 - npm
 - Redis
-
+---
 ## Install
 
 To use the Napoly Vue application, the [Napoly API](https://github.com/Divepit/napolyAPI) must be installed as well. Once it is all set up, you can install the node modules:
@@ -24,7 +24,7 @@ To use the Napoly Vue application, the [Napoly API](https://github.com/Divepit/n
 ```sh
 npm install
 ```
-
+---
 ## Usage
 
 To start the application run
@@ -42,13 +42,13 @@ visit [localhost:8080](http://localhost:8080) to view the app.
 > Username: testuser@example.com
 
 > Password: password
-
+---
 ## Support the Project!
 
 Would you like to support the Napoly Team by chipping in for a coffee, a beer or even parts of the server and domain fee? We're happy about any help we can get!
 
 ### [Donate](https://donorbox.org/napoly)
-
+---
 ## License
 
 Copyright © 2019 [Marco Trentini](https://github.com/Divepit).<br />
