@@ -39,6 +39,9 @@ make sure the [Napoly API](https://github.com/Divepit/napolyAPI) server as well 
 
 visit [localhost:8080](http://localhost:8080) to view the app.
 
+> Username: testuser@example.com
+> Password: password
+
 ## License
 
 Copyright © 2019 [Marco Trentini](https://github.com/Divepit).<br />
