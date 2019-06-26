@@ -13,8 +13,6 @@
 
 > Easily streamline links and resources in a beautiful and organized way
 
-### 🏠 [Homepage](https://napoly.ch)
-
 ## Prerequisites
 
 - node &gt;= 6.0.0
@@ -47,11 +45,11 @@ visit [localhost:8080](http://localhost:8080) to view the app.
 
 ## Author
 
-👤 **Marco Trentini**
+**Marco Trentini**
 
 * Github: [@Divepit](https://github.com/Divepit)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Divepit/napoly/issues).
 
@@ -59,7 +57,7 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 
 Give a ⭐️ if this project helped you!
 
-## 📝 License
+## License
 
 Copyright © 2019 [Marco Trentini](https://github.com/Divepit).<br />
 This project is [MIT License](https://opensource.org/licenses/MIT) licensed.
