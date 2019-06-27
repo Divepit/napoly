@@ -6,7 +6,7 @@
         <div v-if="error">{{ error }}</div>
         <div v-if="!signedIn()">
           <label for="email" >E-mail Address</label>
-          <input type="" v-model="email" id="email" placeholder="andy@web-crunch.com">
+          <input type="" v-model="email" id="email" placeholder="testuser@example.com">
           <label for="password">Password</label>
           <input type="password" v-model="password" id="password" placeholder="Password">
         </div>
@@ -48,6 +48,7 @@ export default {
       }
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
+      this.$store.state.signer = true
       this.error = ''
       this.$router.replace('/')
     },

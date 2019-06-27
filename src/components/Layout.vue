@@ -7,13 +7,12 @@
       :clipped="primaryDrawer.clipped"
       :floating="primaryDrawer.floating"
       :mini-variant="primaryDrawer.mini"
-      absolute
       overflow
       app
     >
   <SidebarContent/>
   </v-navigation-drawer>
-    <v-toolbar :clipped-left="primaryDrawer.clipped" app absolute>
+    <v-toolbar :clipped-left="primaryDrawer.clipped" app fixed>
       <v-toolbar-side-icon
         v-if="primaryDrawer.type !== 'permanent'"
         @click.stop="primaryDrawer.model = !primaryDrawer.model">
@@ -22,8 +21,8 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat to="/" class="fonted">Links</v-btn>
-        <v-btn flat v-if="!signedIn()" to="/signin" class="fonted">Sign In</v-btn>
-        <v-btn flat v-if="signedIn()" class="fonted" @click="signOut()">Sign Out</v-btn>
+        <v-btn flat v-if="!signer" to="/signin" class="fonted">Sign In</v-btn>
+        <v-btn flat v-if="signer" class="fonted" @click="signOut()">Sign Out</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -38,6 +37,8 @@
 <script>
 import SubjectList from '@/components/SubjectList'
 import SidebarContent from '@/components/SidebarContent'
+import {mapState} from 'vuex'
+
 export default {
   components: {
     SubjectList,
@@ -64,12 +65,11 @@ export default {
       this.error = (error.response && error.response.data && error.response.data.error) || text
     },
     signedIn () {
-      this.signer = localStorage.signedIn
       return localStorage.signedIn
     },
     signOut () {
       localStorage.signedIn = false
-      this.signer = false
+      this.$store.state.signer = false
       this.$http.secured.delete('/signin')
         .then(response => {
           delete localStorage.csrf
@@ -79,10 +79,10 @@ export default {
         .catch(error => this.setError(error, 'Cannot sign out'))
     }
   },
-  watch: {
-    signer: function (val) {
-      signedIn()
-    }
+  computed: {
+    ...mapState([
+      'signer'
+    ])
   }
 }
 </script>

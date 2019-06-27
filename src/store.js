@@ -8,12 +8,10 @@ export default new Vuex.Store({
     dispError: '',
     semester: localStorage.semester,
     field: localStorage.field,
-    year: localStorage.year
+    year: localStorage.year,
+    signer: localStorage.signedIn
   },
   mutations: {
-    signedIn () {
-      return localStorage.signedIn
-    },
     updateSemester (state, semester) {
       state.semester = semester
     },
