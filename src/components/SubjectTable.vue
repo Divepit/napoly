@@ -12,7 +12,7 @@
             <p class="infos" v-if="editorMode">- Click a table cell (empty or filled) to edit or delete it</p>
             <p class="infos" v-if="editorMode">- Hitting save when a link url / button url / button label is empty, will delete the corresponding button/link</p> -->
             <SubjectButtons v-bind:subject="subject" v-bind:editorMode="editorMode"/>
-            <v-switch v-if="signedIn()" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
+            <v-switch v-if="signer" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
             <br>
             <br>
             <div>
@@ -155,6 +155,7 @@ export default {
   methods: {
     // Returns true if localStorage.signedIn is true
     signedIn () {
+      this.signer = localStorage.signedIn
       return localStorage.signedIn
     },
     // Sets error variable to the given error or if no error is present text
@@ -334,6 +335,11 @@ export default {
         return answer.linkUrl
       } else {
       }
+    }
+  },
+  watch: {
+    signer: function (val) {
+      signedIn()
     }
   }
 }

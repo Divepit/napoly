@@ -14,7 +14,7 @@ export default new Router({
       component: Signin
     },
     {
-      path: '/links',
+      path: '/',
       name: 'Links',
       component: SubjectList
     }
