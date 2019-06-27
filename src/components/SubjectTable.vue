@@ -17,7 +17,7 @@
             <br>
             <div>
               <v-dialog v-model="dialog" persistent max-width="600px">
-                <template v-if="signedIn() && editorMode" v-slot:activator=" {on} ">
+                <template v-if="signer && editorMode" v-slot:activator=" {on} ">
                   <div class="table-wrapper">
                     <table class="fl-table">
                       <thead>
@@ -121,9 +121,10 @@
 <script>
 import SubjectButtons from '@/components/SubjectButtons'
 import SubjectInfos from '@/components/SubjectInfos'
+import {mapState} from 'vuex'
 
 export default {
-  name: 'Links',
+  name: 'SubjectTable',
   props: ['subject'],
   components: {
     SubjectButtons,
@@ -151,6 +152,11 @@ export default {
   created () {
     this.getLinks()
     this.getSubjectName()
+  },
+  computed: {
+    ...mapState([
+      'signer'
+    ])
   },
   methods: {
     // Returns true if localStorage.signedIn is true
@@ -335,11 +341,6 @@ export default {
         return answer.linkUrl
       } else {
       }
-    }
-  },
-  watch: {
-    signer: function (val) {
-      signedIn()
     }
   }
 }
