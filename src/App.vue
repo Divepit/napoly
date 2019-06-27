@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <Header :drawer.sync="drawer"/>
+    <Layout/>
     <router-view/>
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import Layout from './components/Layout.vue'
 
 export default {
   name: 'App',
   components: {
-    Header
+    Layout
   },
   data () {
     return {
