@@ -1,4 +1,3 @@
-infoText
 <template>
   <div class="">
     <v-layout v-for="info in infos" :key="info.id">
@@ -115,8 +114,7 @@ export default {
         this.$http.secured.patch(`/api/v1/infos/${this.infoId}`, {
           info: {
             infoText: this.infoText,
-            infoTitle: this.infoTitle
-,
+            infoTitle: this.infoTitle,
             subject_id: this.subject
           }
         })

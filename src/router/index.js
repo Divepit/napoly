@@ -17,12 +17,6 @@ export default new Router({
       path: '/links',
       name: 'Links',
       component: SubjectList
-
-    },
-    {
-      path: '/',
-      name: 'SubjectList',
-      component: SubjectList
     }
     // {
     //   path: '/signup',
