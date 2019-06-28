@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="">
       <!-- <v-btn flat color="#6772e5" :href="'#'+subject.subjectName" v-for="subject in subjects">{{subject.subjectName}}</v-btn> -->
-      <SubjectTable  v-for="subject in subjects" :key="subject.id" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></SubjectTable>
+      <SubjectTable  v-for="subject in subjects" :key="subject.id" :id="subject.subjectName" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></SubjectTable>
       <v-btn depressed color="primary" v-if="!adding && signedIn()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
       <v-text-field  placeholder="Subject Name" v-if="adding && signedIn()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
       <v-btn depressed color="primary" v-if="adding && signedIn()" @click="addSubject()">Add Subject</v-btn>
@@ -38,6 +38,9 @@ export default {
     signedIn () {
       return localStorage.signedIn
     },
+    updateSubjects () {
+      this.$store.state.subjects = this.subjects
+    },
     addSubject () {
       if (!this.newSubjectName) {
         console.log('No Semester given')
@@ -56,6 +59,7 @@ export default {
         .then(response => {
           this.subjects.push(response.data)
           this.adding = false
+          this.updateSubjects()
         })
 
         .catch(error => this.setError(error, 'Cannot create link'))
@@ -63,7 +67,10 @@ export default {
     getSubject () {
       this.subjects = []
       this.$http.secured.get('/api/v1/subjects/?semester_id=' + this.semester + '&field_id=' + this.field + '&year=' + this.year)
-        .then(response => { this.subjects = response.data })
+        .then(response => {
+          this.subjects = response.data
+          this.updateSubjects()
+        })
     }
   },
   watch: {

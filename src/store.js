@@ -9,7 +9,8 @@ export default new Vuex.Store({
     semester: localStorage.semester,
     field: localStorage.field,
     year: localStorage.year,
-    signer: localStorage.signedIn
+    signer: localStorage.signedIn,
+    subjects: []
   },
   mutations: {
     updateSemester (state, semester) {

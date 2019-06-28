@@ -32,6 +32,17 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
+        <hr>
+        <v-list dense>
+            <v-list-tile v-for="s in subjects" :key="s.id" :href="'#'+s.subjectName">
+              <v-list-tile-action>
+                <v-icon>attach_file</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{s.subjectName}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
   </div>
 
 </template>
@@ -65,6 +76,7 @@ export default {
   },
   computed: {
     ...mapState([
+      'subjects'
     ]),
     semester: {
       get () {
