@@ -4,7 +4,7 @@
       <v-container fluid>
         <v-form>
         <v-layout row justify-center>
-          <v-flex xs2 sm2 md2>
+          <v-flex xs12 sm12 md2>
 
           <div class="">
             Create New User
@@ -15,20 +15,23 @@
       </v-layout>
       <v-layout row justify-center>
 
-        <v-flex xs2 sm2 md2>
+        <v-flex xs12 sm12 md2>
           <v-text-field
             label="E-mail address"
             placeholder=""
             outline
             type="email"
             v-model="email"
-            autocomplete="false"
+            browser-autocomplete="false"
+            color="teal accent-2"
             id="email"
+            dont-fill-mask-blanks
           ></v-text-field>
         </v-flex>
-
-        <v-flex xs2 sm2 md2>
+        &nbsp;
+        <v-flex xs12 sm12 md2>
           <v-text-field
+            color="teal accent-2"
             label="Password"
             placeholder=""
             outline
@@ -38,9 +41,10 @@
             id="password"
           ></v-text-field>
         </v-flex>
-
-        <v-flex xs2 sm2 md2>
+        &nbsp;
+        <v-flex xs12 sm12 md2>
           <v-text-field
+            color="teal accent-2"
             label="Password Confirmation"
             placeholder=""
             outline
@@ -53,12 +57,12 @@
         </v-flex>
       </v-layout>
       <v-layout row justify-center>
-        <v-flex xs2 sm2 md3>
+        <v-flex xs12 sm12 md3>
 
-        <v-checkbox v-model="admin" id="admin" label="Admin"></v-checkbox>
+        <v-checkbox color="teal accent-2" v-model="admin" id="admin" label="Admin"></v-checkbox>
       </v-flex>
-      <v-flex xs2 sm2 md3 justify-self-right style="text-align: right;">
-        <v-btn depressed color="primary" @click="signup()">Create User</v-btn>
+      <v-flex xs12 sm12 md3 justify-self-right style="text-align: right;">
+        <v-btn flat color="teal accent-2" @click="signup()">Create User</v-btn>
       </v-flex>
 
       </v-layout>

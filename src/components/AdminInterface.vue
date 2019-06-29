@@ -1,27 +1,24 @@
 <template lang="html">
   <div v-if="signer" class="">
     <Signup @pushUser="pushUser($event)"/>
-    <v-container
-        fluid
-        grid-list-lg
-      >
+    <v-container fluid grid-list-lg>
     <v-layout  row wrap >
-          <v-flex v-for="user in users" :key="user.id" xs4>
-            <v-card :color="user.role ? 'success':'info'" class="white--text text-sm-left">
+          <v-flex v-for="user in users" :key="user.id" xs12 sm12 md3>
+            <v-card :color="user.role ? 'teal accent-4':'cyan darken-3'" class="white--text text-sm-left rounded">
               <v-card-title primary-title>
                 <div>
-                  <div class="headline">[UID: {{user.id}}] {{user.email}} </div>
+                  <div class="headline"><v-icon medium >accessibility</v-icon> &nbsp; {{user.email}} </div>
                   <br>
                   <v-divider dark />
-                  <br>
                   <p></p>
                   <!-- <p>Created at: {{user.created_at}}</p> -->
                   <!-- <p>Updated at: {{user.updated_at}}</p> -->
-                  <p>Role: {{user.role}}</p>
+                  <div style="text-align: left;">UID: {{user.id}}</div>
+                  <div style="text-align: left;">Role: {{user.role}}</div>
                 </div>
               </v-card-title>
               <v-card-actions>
-                <v-btn depressed dark color="error" @click="dialog = !dialog">Delete</v-btn>
+                <v-btn depressed dark color="red lighten-2" @click="dialog = !dialog">Delete</v-btn>
               </v-card-actions>
             </v-card>
 
@@ -67,6 +64,7 @@ export default {
   created () {
     this.checkSignedIn()
     this.getUsers()
+    this.$store.state.dark = true
   },
   methods: {
     signedIn () {
@@ -99,4 +97,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+  .rounded {
+    border-radius: 10px;
+  }
 </style>
