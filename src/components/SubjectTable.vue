@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <div class="card">
+          <v-card class="card">
             <div style="color: red;" v-if="error">{{ error }}</div>
             <div style="color: red;" v-if="info">{{ info }}</div>
             <h3>{{subjectName}}</h3>
@@ -110,7 +110,7 @@
             </v-dialog>
             <SubjectInfos  v-bind:subject="subject" v-bind:editorMode="editorMode"/>
 
-          </div>
+          </v-card>
         </div>
       </div>
     </div>

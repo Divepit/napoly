@@ -1,6 +1,12 @@
 <template lang="html">
   <div class="">
     <v-list dense>
+      <v-list-tile subheader>
+        <v-subheader>Studienjahr</v-subheader>
+      </v-list-tile>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list dense>
         <v-list-tile v-bind:class="[year == y ? 'selected' : '']" v-for="y in years" :key="y.id" @click="year = y">
           <v-list-tile-action>
             <v-icon>calendar_today</v-icon>
@@ -12,6 +18,12 @@
       </v-list>
       <hr>
       <v-list dense>
+        <v-list-tile subheader>
+          <v-subheader>Semester</v-subheader>
+        </v-list-tile>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list dense>
           <v-list-tile v-bind:class="[semester == s.id ? 'selected' : '']" v-for="s in semesters" :key="s.id" @click="semester = s.id">
             <v-list-tile-action>
               <v-icon>date_range</v-icon>
@@ -22,7 +34,13 @@
           </v-list-tile>
         </v-list>
         <hr>
-      <v-list dense>
+        <v-list dense>
+          <v-list-tile subheader>
+            <v-subheader>Departement</v-subheader>
+          </v-list-tile>
+        </v-list>
+        <v-divider></v-divider>
+        <v-list dense>
           <v-list-tile v-bind:class="[field == f.id ? 'selected' : '']" v-for="f in fields" :key="f.id" @click="field = f.id">
             <v-list-tile-action>
               <v-icon>school</v-icon>
@@ -33,6 +51,12 @@
           </v-list-tile>
         </v-list>
         <hr>
+        <v-list dense>
+          <v-list-tile subheader>
+            <v-subheader>Fächer</v-subheader>
+          </v-list-tile>
+        </v-list>
+        <v-divider></v-divider>
         <v-list dense>
             <v-list-tile v-for="s in subjects" :key="s.id" :href="'#'+s.subjectName">
               <v-list-tile-action>
@@ -196,6 +220,6 @@ export default {
 
 <style>
   .selected {
-    background: #f5f5f5;
+    background: rgba(160, 160, 160, 0.2);
   }
 </style>

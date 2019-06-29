@@ -3,7 +3,7 @@
 <template>
   <div >
     <div >
-      <h3>Sign Up</h3>
+      <h3>Create new user</h3>
       <form @submit.prevent="signup">
         <div  v-if="error">{{ error }}</div>
 
@@ -45,17 +45,12 @@ export default {
       error: ''
     }
   },
-  created () {
-    this.checkedSignedIn()
-  },
-  updated () {
-    this.checkedSignedIn()
-  },
   methods: {
     signup () {
       this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation, role: this.admin })
-        .then(response => this.signupSuccessful(response))
-        .catch(error => this.signupFailed(error))
+        .then(response => {
+          this.$emit('pushUser', response)
+        })
     },
     signupSuccessful (response) {
       if (!response.data.csrf) {
@@ -72,11 +67,6 @@ export default {
       this.error = (error.response && error.response.data && error.response.data.error) || 'Something went wrong'
       delete localStorage.csrf
       delete localStorage.signedIn
-    },
-    checkedSignedIn () {
-      if (localStorage.signedIn) {
-        this.$router.replace('/links')
-      }
     }
   }
 }
