@@ -46,7 +46,6 @@ export default {
     SidebarContent
   },
   data: () => ({
-    dark: false,
     primaryDrawer: {
       model: null,
       type: 'temporary',
@@ -82,7 +81,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'signer'
+      'signer',
+      'dark'
     ])
   }
 }
