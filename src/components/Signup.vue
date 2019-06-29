@@ -1,37 +1,69 @@
 <!-- recordstore-frontend/src/components/Signup.vue -->
 
 <template>
-  <div >
-    <div >
-      <h3>Create new user</h3>
-      <form @submit.prevent="signup">
-        <div  v-if="error">{{ error }}</div>
+      <v-container fluid>
+        <v-form>
+        <v-layout row justify-center>
+          <v-flex xs2 sm2 md2>
 
-        <div >
-          <label for="email" >E-mail Address</label>
-          <input type="email" v-model="email"  id="email" placeholder="andy@web-crunch.com">
-        </div>
+          <div class="">
+            Create New User
+            <v-divider/>
+            <br>
+          </div>
+        </v-flex>
+      </v-layout>
+      <v-layout row justify-center>
 
-        <div >
-          <label for="password" >Password</label>
-          <input type="password" v-model="password"  id="password" placeholder="Password">
-        </div>
+        <v-flex xs2 sm2 md2>
+          <v-text-field
+            label="E-mail address"
+            placeholder=""
+            outline
+            type="email"
+            v-model="email"
+            autocomplete="false"
+            id="email"
+          ></v-text-field>
+        </v-flex>
 
-        <div >
-          <label for="password_confirmation">Password Confirmation</label>
-          <input type="password" v-model="password_confirmation"  id="password_confirmation" placeholder="Password Confirmation">
-        </div>
+        <v-flex xs2 sm2 md2>
+          <v-text-field
+            label="Password"
+            placeholder=""
+            outline
+            type="password"
+            v-model="password"
+            autocomplete="false"
+            id="password"
+          ></v-text-field>
+        </v-flex>
 
-        <div >
-          <label for="admin">Admin</label>
-          <input type="checkbox" v-model="admin"  id="admin">
-        </div>
-        <v-btn depressed color="primary" type="submit">Sign Up</v-btn>
+        <v-flex xs2 sm2 md2>
+          <v-text-field
+            label="Password Confirmation"
+            placeholder=""
+            outline
+            type="password"
+            v-model="password_confirmation"
+            autocomplete="false"
+            id="password_confirmation"
+            @keyup.enter="signup()"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <v-layout row justify-center>
+        <v-flex xs2 sm2 md3>
 
-        <div ><router-link to="/links" >Sign In</router-link></div>
-      </form>
-    </div>
-  </div>
+        <v-checkbox v-model="admin" id="admin" label="Admin"></v-checkbox>
+      </v-flex>
+      <v-flex xs2 sm2 md3 justify-self-right style="text-align: right;">
+        <v-btn depressed color="primary" @click="signup()">Create User</v-btn>
+      </v-flex>
+
+      </v-layout>
+    </v-form>
+    </v-container>
 </template>
 <script>
 export default {

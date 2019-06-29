@@ -22,6 +22,7 @@
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat to="/" class="fonted">Links</v-btn>
         <v-btn flat v-if="!signer" to="/signin" class="fonted">Sign In</v-btn>
+        <v-btn flat v-if="signer" class="fonted" to="/admin">Admin</v-btn>
         <v-btn flat v-if="signer" class="fonted" @click="signOut()">Sign Out</v-btn>
       </v-toolbar-items>
     </v-toolbar>
