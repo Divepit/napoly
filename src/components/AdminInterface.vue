@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="">
+  <div v-if="signer" class="">
     <Signup @pushUser="pushUser($event)"/>
     <v-container
         fluid
@@ -7,25 +7,39 @@
       >
     <v-layout  row wrap >
           <v-flex v-for="user in users" :key="user.id" xs4>
-            <v-card color="info" class="white--text text-sm-left">
+            <v-card :color="user.role ? 'success':'info'" class="white--text text-sm-left">
               <v-card-title primary-title>
                 <div>
-                  <div class="headline">{{user.email}}</div>
+                  <div class="headline">[UID: {{user.id}}] {{user.email}} </div>
                   <br>
                   <v-divider dark />
                   <br>
-                  <p>ID: {{user.id}}</p>
-                  <p>Created at: {{user.created_at}}</p>
-                  <p>Updated at: {{user.updated_at}}</p>
+                  <p></p>
+                  <!-- <p>Created at: {{user.created_at}}</p> -->
+                  <!-- <p>Updated at: {{user.updated_at}}</p> -->
                   <p>Role: {{user.role}}</p>
                 </div>
               </v-card-title>
               <v-card-actions>
-                <v-btn depressed dark color="error" @click="removeUser(user.id)">Delete</v-btn>
+                <v-btn depressed dark color="error" @click="dialog = !dialog">Delete</v-btn>
               </v-card-actions>
             </v-card>
+
+            <v-dialog v-model="dialog" persistent max-width="290">
+
+              <v-card>
+                <v-card-title class="headline">Delete User?</v-card-title>
+                <v-card-text>By confirming, the user <strong style="color: gray;">{{user.email}}</strong> will be deleted</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="info" flat @click="dialog = false">Cancel</v-btn>
+                  <v-btn color="error" flat @click="dialog = false; removeUser(user.id)">Delete</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-flex>
     </v-layout>
+
   </v-container>
   </div>
 
@@ -33,14 +47,21 @@
 
 <script>
 import Signup from '@/components/Signup'
+import {mapState} from 'vuex'
 export default {
   name: 'AdminInterface',
   components: {
     Signup
   },
+  computed: {
+    ...mapState([
+      'signer'
+    ])
+  },
   data () {
     return {
-      users: []
+      users: [],
+      dialog: false
     }
   },
   created () {
