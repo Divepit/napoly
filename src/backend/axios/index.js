@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000'
+var API_URL = 'http://localhost:3000' // Development
+
+if (process.env.NODE_ENV === 'production') {
+  API_URL = 'https://api.napoly.ch' //  Production
+}
 
 const securedAxiosInstance = axios.create({
   baseURL: API_URL,

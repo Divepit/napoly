@@ -8,7 +8,6 @@ import AdminInterface from '@/components/AdminInterface'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/signin',
@@ -24,6 +23,11 @@ export default new Router({
       path: '/admin',
       name: 'AdminInterface',
       component: AdminInterface
+    },
+    {
+      path: '/*',
+      name: 'Links',
+      component: SubjectList
     }
     // {
     //   path: '/signup',
