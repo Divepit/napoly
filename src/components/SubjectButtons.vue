@@ -141,7 +141,7 @@ export default {
   border-color: #9ca6f1;
 }
   .subjectButton {
-      color: white;
+      color: white !important;
       background: #6772e5 !important;
       border-radius: 5px;
   }

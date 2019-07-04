@@ -389,7 +389,7 @@ export default {
 
   /* Card Styles */
   .card {
-    border-radius: 20px;
+    border-radius: 20px !important;
     background: #fcfcfc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
@@ -451,7 +451,7 @@ export default {
 
   .table-wrapper {
     margin: 10px 70px 20px;
-    border-radius: 20px;
+    border-radius: 20px !important;
     border: solid;
     border-bottom: 0px;
     border-left: 0px;
@@ -462,7 +462,7 @@ export default {
   }
 
   .fl-table {
-    border-radius: 20px;
+    border-radius: 20px !important;
     font-size: 17px;
     font-weight: normal;
     border: none;

@@ -17,7 +17,7 @@
         v-if="primaryDrawer.type !== 'permanent'"
         @click.stop="primaryDrawer.model = !primaryDrawer.model">
       </v-toolbar-side-icon>
-      <v-toolbar-title>Canoodle</v-toolbar-title>
+      <v-toolbar-title href="/">Napoly</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat to="/" class="fonted">Links</v-btn>
