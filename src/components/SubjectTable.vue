@@ -1,5 +1,5 @@
 <template>
-  <section class="" :id="subjectName">
+  <section :id="subjectName">
     <div class="container">
       <div class="row">
         <div class="col-md-4">
@@ -16,99 +16,76 @@
             <br>
             <br>
             <div>
-              <v-dialog v-model="dialog" persistent max-width="600px">
-                <template v-if="signer && editorMode" v-slot:activator=" {on} ">
-                  <div class="table-wrapper">
-                    <table class="fl-table">
-                      <thead>
-                        <tr class="bordered">
-                          <th class="bordered fonted"> Week
-                            <v-icon class="unselectable" color="" @click="addWeek()">add_circle</v-icon>
-                            <v-icon class="unselectable" color="" @click="removeWeek()">remove_circle</v-icon></th>
-                          <th class="bordered fonted" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="" v-for="(week,index) in weekCount" :key="index">
-                          <td class="fonted">{{index + 1}}</td>
-                          <td class="fonted hide-overflow" v-on="on" v-for="type in types" :key="type.id" @click="editMode(week,type)">{{ displayUrl(week,type) }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </template>
-                <template v-else v-slot:activator="{on}">
-                  <div class="table-wrapper">
-                    <table class="fl-table">
-                      <thead>
-                        <tr class="bordered">
-                          <th class="bordered fonted"> Week </th>
-                          <th class="bordered fonted" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="" v-for="(week,index) in weekCount" :key="index">
-                          <td class="fonted">{{index + 1}}</td>
-                          <td class="fonted"  v-for="type in types" :key="type.id">
-                            <a style="color: #6772e5; text-decoration: none;" v-if="displayUrl(week,type)" target="_blank" :href="displayUrl(week,type)">{{type.typeName}} {{week}}</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </template>
 
-                <v-card class="card" v-for="(link, index) in links" :key="link.id" :link="link" v-if="link == editedLink || adding && index == 0">
-                  <v-card-title>
-                    <span v-if="adding" class="headline">Add Link</span>
-                    <span v-else class="headline">Edit Link</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container grid-list-md>
-                      <v-layout wrap>
-                        <v-flex xs12>
-                          <div v-if="link == editedLink">
-                            <v-text-field label="Editing" v-on:keyup.enter="updateLink(link); dialog = false" required v-model="link.linkUrl"></v-text-field>
-                          </div>
-                          <div v-if="adding">
-                            <v-text-field label="Adding" v-on:keyup.enter="addLink(); dialog = false" required v-model="newLink.linkUrl"></v-text-field>
-                          </div>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-card-text>
+              <div class="table-wrapper">
+                <table class="fl-table">
+                  <thead>
+                  <tr class="bordered">
+                    <th class="bordered fonted">Week
+                      <v-icon class="unselectable" v-if="showEditCtrls" @click="addWeek()">add_circle</v-icon>
+                      <v-icon class="unselectable" v-if="showEditCtrls" @click="removeWeek()">remove_circle</v-icon>
+                    </th>
+                    <th class="bordered fonted" v-for="type in types" :key="type.id"> {{type.typeName}} </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(week,index) in weekCount" :key="index">
+                    <td class="fonted">{{index + 1}}</td>
+                    <td class="fonted hide-overflow" v-if="showEditCtrls" v-for="type in types" :key="type.id"
+                        @click.stop="startEdit(week,type)">{{ displayUrl(week, type) }}</td>
+                    <td class="fonted" v-if="!showEditCtrls" v-for="type in types" :key="type.id">
+                      <a style="color: #6772e5; text-decoration: none;" v-if="displayUrl(week,type)" target="_blank"
+                         :href="displayUrl(week,type)">{{type.typeName}} {{week}}</a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
 
-                  <v-card-actions>
-
-                    <v-btn v-if="link == editedLink && signedIn()" color="error" flat  @click="removeLink(link); dialog = false">Remove Link</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
-                    <v-btn v-if="link == editedLink && signedIn()" color="blue darken-1" flat  @click="updateLink(link); dialog = false">Save</v-btn>
-                    <v-btn v-if="adding && signedIn()" color="blue darken-1" flat  @click="addLink(); dialog = false">Save</v-btn>
-                  </v-card-actions>
-                </v-card>
-
-              </v-dialog>
-
-            </div>
-            <v-dialog v-if="editorMode && signedIn()" v-model="deleting" persistent max-width="290">
-              <template v-slot:activator="{ on }">
+              <div v-if="showEditCtrls">
                 <v-btn class="fatfonted" v-if="allTypes" depressed color="success" @click="getTypes()">Hide Types</v-btn>
                 <v-btn class="fatfonted" v-else depressed color="success" @click="seeAllTypes()">See All Types</v-btn>
-                <v-btn class="fatfonted" depressed color="error" dark v-on="on">Delete Subject</v-btn>
-              </template>
+                <v-btn class="fatfonted" depressed color="error" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
+              </div>
+
+            </div>
+
+            <v-dialog v-model="showEditDialog" persistent max-width="600px">
+              <v-card class="card">
+                <v-card-title>
+                  <span class="headline">{{adding?'Add':'Edit'}} Link</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <v-flex xs12>
+                        <v-text-field placeholder="Link URL" v-on:keyup.enter="saveLink()" required v-model="(adding?newLink:editedLink).linkUrl"></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn v-if="!adding" color="error" flat  @click="removeLink()">Remove Link</v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat @click="cancelEdit()">Cancel</v-btn>
+                  <v-btn color="blue darken-1" flat  @click="saveLink()">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="showDeleteDialog" persistent max-width="290">
               <v-card class="card">
                 <v-card-title class="headline fonted" style="color: red; text-align: left; font-size: 20px !important;">Delete {{subjectName}}?</v-card-title>
                 <v-card-text class="fonted" style="text-align: left; font-size: 18px; width: 100%;">This will delete all links, buttons and infos and <strong>cannot</strong> be undone.</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="" depressed @click="deleting = false">Cancel</v-btn>
-                  <v-btn color="error" depressed @click="deleting = false; removeSubject()">Delete</v-btn>
+                  <v-btn depressed @click="showDeleteDialog=false">Cancel</v-btn>
+                  <v-btn color="error" depressed @click="removeSubject();showDeleteDialog=false">Delete</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
-            <SubjectInfos  v-bind:subject="subject" v-bind:editorMode="editorMode"/>
+
+            <SubjectInfos v-bind:subject="subject" v-bind:editorMode="editorMode"/>
 
           </v-card>
         </div>
@@ -135,18 +112,19 @@ export default {
       // subject: 2,
       links: [],
       newLink: [],
+      editedLink: [],
+      originalLink: '',
       newButton: [],
       error: '',
-      editedLink: '',
       types: [],
-      adding: false,
       info: '',
       subjectName: '',
-      deleting: false,
-      dialog: false,
+      showDeleteDialog: false,
+      showEditDialog: false,
       editorMode: false,
       weekCount: null,
-      allTypes: false
+      allTypes: false,
+      adding: false
     }
   },
   created () {
@@ -156,14 +134,12 @@ export default {
   computed: {
     ...mapState([
       'signer'
-    ])
+    ]),
+    showEditCtrls: function () {
+      return this.signer && this.editorMode
+    }
   },
   methods: {
-    // Returns true if localStorage.signedIn is true
-    signedIn () {
-      this.signer = localStorage.signedIn
-      return localStorage.signedIn
-    },
     // Sets error variable to the given error or if no error is present text
     setError (error, text) {
       this.error = (error.response && error.response.data && error.response.data.error) || text
@@ -256,6 +232,11 @@ export default {
         })
         .catch(error => this.setError(error, 'Something went wrong with Links'))
     },
+    saveLink (link) {
+      this.showEditDialog = false
+      if (this.adding) this.addLink()
+      else this.updateLink()
+    },
     // Adds link via API if newLink is filled
     addLink () {
       if (!this.newLink.linkUrl) {
@@ -279,55 +260,50 @@ export default {
 
         .catch(error => this.setError(error, 'Cannot create link'))
     },
-    // Sets editedLink to provided object
-    editLink (link) {
-      this.editedLink = link
-      this.exitAdding()
-    },
     // Checks if a link for the given week and type is present. If there is,
     // editedLink is set to said link. If there is no link yet, it sets adding
     // to true and fills newLink.
-    editMode (week, type) {
-      if (!this.signedIn()) {
-        return
-      }
-      this.adding = false
-      this.editedLink = ''
-      var answer = this.$data.links.find(function (link) {
-        return (link.linkWeek === week && link.type_id === type.id)
-      })
+    startEdit (week, type) {
+      var answer = this.$data.links.find((link) => link.linkWeek === week && link.type_id === type.id)
       if (!answer) {
         this.adding = true
+        this.editedLink = []
         this.newLink.subject_id = this.subject
         this.newLink.linkWeek = week
         this.newLink.type_id = type.id
       } else {
+        this.adding = false
         this.editedLink = answer
+        this.originalLink = answer.linkUrl
       }
+      this.showEditDialog = true
+    },
+    cancelEdit () {
+      this.showEditDialog = false
+      if (!this.adding) this.$data.links.find((link) => link.linkWeek === this.editedLink.linkWeek && link.type_id === this.editedLink.type_id).linkUrl = this.originalLink
     },
     // If link has a linkUrl (is not empty) the link is patched with the given
     // object. If link has no linkUrl (is empty) removeLink(link) is called.
-    updateLink (link) {
-      this.editedLink = ''
-      if (!link.linkUrl) {
-        this.removeLink(link)
+    updateLink () {
+      if (!this.editedLink.linkUrl) {
+        this.removeLink()
       } else {
-        this.$http.secured.patch(`/api/v1/links/${link.id}`, {
+        this.$http.secured.patch(`/api/v1/links/${this.editedLink.id}`, {
           link: {
-            linkUrl: link.linkUrl,
-            subject_id: link.subject_id,
-            linkWeek: link.linkWeek,
-            type_id: link.type_id
+            linkUrl: this.editedLink.linkUrl,
+            subject_id: this.editedLink.subject_id,
+            linkWeek: this.editedLink.linkWeek,
+            type_id: this.editedLink.type_id
           }
-        })
-          .catch(error => this.setError(error, 'Cannot update link'))
+        }).catch(error => this.setError(error, 'Cannot update link'))
       }
     },
     // Deletes given link via API
-    removeLink (link) {
-      this.$http.secured.delete(`/api/v1/links/${link.id}`)
+    removeLink () {
+      this.showEditDialog = false
+      this.$http.secured.delete(`/api/v1/links/${this.editedLink.id}`)
         .then(response => {
-          this.links.splice(this.links.indexOf(link), 1)
+          this.links.splice(this.links.indexOf(this.editedLink), 1)
         })
         .catch(error => this.setError(error, 'Cannot delete link'))
     },
