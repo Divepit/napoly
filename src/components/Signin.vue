@@ -1,19 +1,25 @@
 <template>
-  <div >
-    <div >
-      <h3 >Sign In</h3>
-      <form @submit.prevent="signin">
-        <div v-if="error">{{ error }}</div>
-        <div v-if="!signedIn()">
-          <label for="email" >E-mail Address</label>
-          <input type="" v-model="email" id="email" placeholder="testuser@example.com">
-          <label for="password">Password</label>
-          <input type="password" v-model="password" id="password" placeholder="Password">
-        </div>
-        <button type="submit">Sign In</button>
-      </form>
-    </div>
-  </div>
+  <v-container fluid fill-height >
+  <v-layout align-center justify-center>
+    <v-flex xs12 sm8 md4 class="rounded">
+      <v-card class="elevation-12">
+        <v-toolbar dark color="primary">
+          <v-toolbar-title>Sign In</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form>
+            <v-text-field prepend-icon="person" name="email" label="Login" type="email" id="email" v-model="email"></v-text-field>
+            <v-text-field prepend-icon="lock" name="password" label="Password" id="password" type="password" v-model="password" @keyup.enter="signin()"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="signin()">Login</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>
 </template>
 
 <script>
@@ -28,6 +34,7 @@ export default {
   },
   created () {
     this.checkSignedIn()
+    this.$store.state.dark = true
   },
   updated () {
     this.checkSignedIn()
@@ -65,3 +72,8 @@ export default {
   }
 }
 </script>
+<style media="screen">
+  .rounded {
+    border-radius: 15px !important;
+  }
+</style>

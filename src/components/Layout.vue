@@ -12,7 +12,7 @@
     >
   <SidebarContent/>
   </v-navigation-drawer>
-    <v-toolbar :clipped-left="primaryDrawer.clipped" app fixed>
+    <v-toolbar  :clipped-left="primaryDrawer.clipped" app fixed>
       <v-toolbar-side-icon
         v-if="primaryDrawer.type !== 'permanent'"
         @click.stop="primaryDrawer.model = !primaryDrawer.model">
@@ -27,23 +27,23 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
+      <Hero/>
       <router-view/>
     </v-content>
-    <v-footer :inset="footer.inset" app>
-      <span class="px-3">&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
   </v-app>
 </template>
 
 <script>
 import SubjectList from '@/components/SubjectList'
 import SidebarContent from '@/components/SidebarContent'
+import Hero from '@/components/Hero'
 import {mapState} from 'vuex'
 
 export default {
   components: {
     SubjectList,
-    SidebarContent
+    SidebarContent,
+    Hero
   },
   data: () => ({
     primaryDrawer: {
