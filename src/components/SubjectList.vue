@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <Hero/>
     <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs12 sm12 md12>
@@ -17,9 +18,11 @@
 <script>
 import {mapState} from 'vuex'
 import SubjectTable from '@/components/SubjectTable'
+import Hero from '@/components/Hero'
 export default {
   components: {
-    SubjectTable
+    SubjectTable,
+    Hero
   },
   created () {
     this.getSubject()
