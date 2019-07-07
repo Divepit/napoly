@@ -1,8 +1,7 @@
 <template>
-  <section :id="subjectName">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
+    <v-container fluid :id="subjectName" class="hundred">
+      <v-layout align-center justify-center>
+        <v-flex xs12 sm12 md12>
           <v-card class="card">
             <div style="color: red;" v-if="error">{{ error }}</div>
             <div style="color: red;" v-if="info">{{ info }}</div>
@@ -17,7 +16,7 @@
             <br>
             <div>
 
-              <div class="table-wrapper">
+              <div v-bind:class="[showEditCtrls ? 'scroller' : '', 'table-wrapper']">
                 <table class="fl-table">
                   <thead>
                   <tr class="bordered">
@@ -29,7 +28,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr v-for="(week,index) in weekCount" :key="index">
+                  <tr v-for="(week,index) in weekCount" :key="index" v-if="weeks.includes(week) || showEditCtrls">
                     <td class="fonted">{{index + 1}}</td>
                     <td class="fonted hide-overflow" v-if="showEditCtrls" v-for="type in types" :key="type.id"
                         @click.stop="startEdit(week,type)">{{ displayUrl(week, type) }}</td>
@@ -88,11 +87,9 @@
             <SubjectInfos v-bind:subject="subject" v-bind:editorMode="editorMode"/>
 
           </v-card>
-        </div>
-      </div>
-    </div>
-    <br>
-  </section>
+        </v-flex>
+      </v-layout>
+    </v-container>
 </template>
 
 <script>
@@ -124,7 +121,8 @@ export default {
       editorMode: false,
       weekCount: null,
       allTypes: false,
-      adding: false
+      adding: false,
+      weeks: []
     }
   },
   created () {
@@ -140,6 +138,14 @@ export default {
     }
   },
   methods: {
+    getWeeks () {
+      var i
+      for (i = 0; i < this.links.length; i++) {
+        if (!this.weeks.includes(this.links[i].linkWeek)) {
+          this.weeks.push(this.links[i].linkWeek)
+        }
+      }
+    },
     // Sets error variable to the given error or if no error is present text
     setError (error, text) {
       this.error = (error.response && error.response.data && error.response.data.error) || text
@@ -229,6 +235,7 @@ export default {
           if (this.links.length === 0) {
             this.links.push(1)
           }
+          this.getWeeks()
         })
         .catch(error => this.setError(error, 'Something went wrong with Links'))
     },
@@ -322,6 +329,13 @@ export default {
 }
 </script>
 <style media="screen">
+  .hundred {
+    margin: 0px;
+  }
+  .scroller{
+    overflow: scroll;
+    height: 50vh;
+  }
   .infos {
     font-size: 15px;
     color: gray
