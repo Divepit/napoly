@@ -5,12 +5,11 @@
           <v-card class="card">
             <div style="color: red;" v-if="error">{{ error }}</div>
             <div style="color: red;" v-if="info">{{ info }}</div>
-            <h3>{{subjectName}}</h3>
-            <!-- <p class="infos" v-if="editorMode">Instructions:</p>
-            <p class="infos" v-if="editorMode">- Click an existing button to edit or delete it</p>
-            <p class="infos" v-if="editorMode">- Click a table cell (empty or filled) to edit or delete it</p>
-            <p class="infos" v-if="editorMode">- Hitting save when a link url / button url / button label is empty, will delete the corresponding button/link</p> -->
-            <SubjectButtons v-bind:subject="subject" v-bind:editorMode="editorMode"/>
+            <h3 class="cardHeader">
+              {{subjectName}}
+              <SubjectButtons class="cardButton" v-bind:subject="subject" v-bind:editorMode="editorMode"/>
+            </h3>
+
             <v-switch v-if="signer" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
             <br>
             <br>
@@ -33,7 +32,7 @@
                     <td class="fonted hide-overflow" v-if="showEditCtrls" v-for="type in types" :key="type.id"
                         @click.stop="startEdit(week,type)">{{ displayUrl(week, type) }}</td>
                     <td class="fonted" v-if="!showEditCtrls" v-for="type in types" :key="type.id">
-                      <a style="color: #6772e5; text-decoration: none;" v-if="displayUrl(week,type)" target="_blank"
+                      <a style="color: #0E9CE4; text-decoration: none;" v-if="displayUrl(week,type)" target="_blank"
                          :href="displayUrl(week,type)">{{type.typeName}} {{week}}</a>
                     </td>
                   </tr>
@@ -329,16 +328,13 @@ export default {
 }
 </script>
 <style media="screen">
+
   .hundred {
     margin: 0px;
   }
   .scroller{
     overflow: scroll;
     height: 50vh;
-  }
-  .infos {
-    font-size: 15px;
-    color: gray
   }
 
   .unselectable {
@@ -367,11 +363,6 @@ export default {
     max-width: 10px;
   }
 
-  .theme--light.application {
-    background: transparent !important;
-    color: rgba(0, 0, 0, .87);
-  }
-
   .bordered {
     background: transparent !important;
     background-color: inherit;
@@ -381,54 +372,22 @@ export default {
   .card {
     border-radius: 20px !important;
     background: #fcfcfc;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05); */
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     padding: 14px 80px 18px 36px;
     cursor: pointer;
-    /* border: solid !important;
-    border-bottom: 0px !important;
-    border-left: 0px !important;
-    border-right: 0px !important;
-    border-color: #9ca6f1 !important; */
   }
 
   .card:hover {
-    transform: scale(1.0);
+    transform: scale(1.001);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
   }
 
   .card h3 {
     font-weight: 200;
     font-size: 40px;
-    color: #6772e5
-  }
-
-  .card img {
-    position: absolute;
-    top: 20px;
-    right: 15px;
-    max-height: 120px;
-  }
-
-  .card-1 {
-    background-image: url(https://ionicframework.com/img/getting-started/ionic-native-card.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 80px;
-  }
-
-  .card-2 {
-    background-image: url(https://ionicframework.com/img/getting-started/components-card.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 80px;
-  }
-
-  .card-3 {
-    background-image: url(https://ionicframework.com/img/getting-started/theming-card.png);
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 80px;
+    color: #0E9CE4;
+    text-align: left;
   }
 
   @media(max-width: 990px) {
@@ -446,7 +405,7 @@ export default {
     border-bottom: 0px;
     border-left: 0px;
     border-right: 0px;
-    border-color: #9ca6f1;
+    border-color: #FC8668;
     background: white !important;
     box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
   }
@@ -487,16 +446,37 @@ export default {
   }
 
   /* Responsive */
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+  }
 
   @media (max-width: 767px) {
+    .cardHeader {
+      align-self: center;
+      display: inline;
+      font-size: 3rem !important;
+    }
+
+    .cardButton {
+      display: grid;
+      margin-top: 15px;
+    }
+
     .card {
       padding: 3.5px 10px 5px 10px;
       cursor: pointer;
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+    .container {
+      padding: 5px;
     }
 
     .fl-table {
       display: block;
       width: 100%;
+      margin-bottom: 20px;
     }
 
     .table-wrapper {
