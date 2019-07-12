@@ -449,6 +449,13 @@ export default {
   .cardHeader {
     display: flex;
     justify-content: space-between;
+    word-break: keep-all;
+    white-space: nowrap;
+  }
+
+  .cardButton {
+    white-space: pre-line;
+    text-align: end;
   }
 
   @media (max-width: 767px) {
