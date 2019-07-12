@@ -127,22 +127,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.card {
-  border-radius: 20px;
-  background: #fcfcfc;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
-  transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
-  padding: 14px 80px 18px 36px;
-  cursor: pointer;
-  border: solid;
-  border-bottom: 0px;
-  border-left: 0px;
-  border-right: 0px;
-  border-color: #9ca6f1;
-}
   .subjectButton {
       color: white !important;
-      background: #6772e5 !important;
+      background: #FC8668 !important;
       border-radius: 5px;
   }
 </style>
