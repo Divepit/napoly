@@ -463,6 +463,8 @@ export default {
       align-self: center;
       display: inline;
       font-size: 3rem !important;
+      word-break: break-none;
+      white-space: normal;
     }
 
     .cardButton {
