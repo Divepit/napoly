@@ -10,7 +10,7 @@
               <SubjectButtons class="cardButton" v-bind:subject="subject" v-bind:editorMode="editorMode"/>
             </h3>
 
-            <v-switch v-if="signer" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
+            <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
             <br>
             <br>
             <div>
@@ -130,7 +130,10 @@ export default {
   },
   computed: {
     ...mapState([
-      'signer'
+      'signer',
+      'field',
+      'userField',
+      'admin'
     ]),
     showEditCtrls: function () {
       return this.signer && this.editorMode
@@ -323,6 +326,10 @@ export default {
         return answer.linkUrl
       } else {
       }
+    },
+    authorize () {
+      if (this.signer && (localStorage.admin === '1' || this.userField === `${this.field}`)) { return true }
+      return false
     }
   }
 }
@@ -462,9 +469,11 @@ export default {
     .cardHeader {
       align-self: center;
       display: inline;
-      font-size: 3rem !important;
-      word-break: break-none;
-      white-space: normal;
+      font-size: 2rem !important;
+    }
+
+    .hide-overflow {
+      max-width: 100%;
     }
 
     .cardButton {

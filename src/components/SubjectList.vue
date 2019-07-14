@@ -6,9 +6,9 @@
         <v-flex xs12 sm12 md12>
           <!-- <v-btn flat color="#6772e5" :href="'#'+subject.subjectName" v-for="subject in subjects">{{subject.subjectName}}</v-btn> -->
           <SubjectTable  v-for="subject in subjects" :key="subject.id" :id="subject.subjectName" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></SubjectTable>
-          <v-btn depressed color="primary" v-if="!adding && signedIn()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
-          <v-text-field  placeholder="Subject Name" v-if="adding && signedIn()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
-          <v-btn depressed color="primary" v-if="adding && signedIn()" @click="addSubject()">Add Subject</v-btn>
+          <v-btn depressed color="primary" v-if="!adding && signer && authorize()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
+          <v-text-field  placeholder="Subject Name" v-if="adding && signer && authorize()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
+          <v-btn depressed color="primary" v-if="adding && signer && authorize()" @click="addSubject()">Add Subject</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -40,7 +40,10 @@ export default {
     ...mapState([
       'semester',
       'field',
-      'year'
+      'year',
+      'signer',
+      'userField',
+      'admin'
     ])
   },
   methods: {
@@ -80,6 +83,10 @@ export default {
           this.subjects = response.data
           this.updateSubjects()
         })
+    },
+    authorize () {
+      if (this.signer && (localStorage.admin === '1' || this.userField === `${this.field}`)) { return true }
+      return false
     }
   },
   watch: {

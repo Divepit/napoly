@@ -19,7 +19,7 @@
       </v-toolbar-side-icon>
       <v-toolbar-title href="/"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-and-down">
+      <v-toolbar-items class="">
         <v-btn flat to="/" class="fonted">Links</v-btn>
         <v-btn flat v-if="!signer" to="/signin" class="fonted">Sign In</v-btn>
         <v-btn flat v-if="signer" class="fonted" to="/admin">Admin</v-btn>
@@ -73,6 +73,8 @@ export default {
         .then(response => {
           delete localStorage.csrf
           delete localStorage.signedIn
+          delete localStorage.uid
+          delete localStorage.admin
           this.$forceUpdate()
         })
         .catch(error => this.setError(error, 'Cannot sign out'))
