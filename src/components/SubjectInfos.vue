@@ -160,7 +160,7 @@ export default {
     border-bottom: 0px;
     border-left: 0px;
     border-right: 0px;
-    border-color: #9ca6f1;
+    border-color: #FC8668;
     padding-top: 0px !important;
     box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
     margin-bottom: 20px;
