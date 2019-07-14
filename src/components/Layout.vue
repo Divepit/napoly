@@ -75,6 +75,7 @@ export default {
           delete localStorage.signedIn
           delete localStorage.uid
           delete localStorage.admin
+          delete localStorage.userField
           this.$forceUpdate()
         })
         .catch(error => this.setError(error, 'Cannot sign out'))
