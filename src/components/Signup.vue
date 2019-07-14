@@ -86,6 +86,9 @@ export default {
       this.$http.secured.post('/signup/', { email: this.email, password: this.password, password_confirmation: this.password_confirmation, role: this.admin })
         .then(response => {
           this.$emit('pushUser', response)
+          this.email = ''
+          this.password = ''
+          this.password_confirmation = ''
         })
     },
     signupSuccessful (response) {
