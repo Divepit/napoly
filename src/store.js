@@ -6,12 +6,13 @@ export default new Vuex.Store({
   state: {
     globalTypes: [],
     dispError: '',
-    semester: localStorage.semester,
-    field: localStorage.field,
-    year: localStorage.year,
+    semester: localStorage.semester ? localStorage.semester : 1,
+    field: localStorage.field ? localStorage.field : 1,
+    year: localStorage.year ? localStorage.year : 1,
     signer: localStorage.signedIn,
     subjects: [],
-    dark: false
+    dark: false,
+    userField: localStorage.userField
   },
   mutations: {
     updateSemester (state, semester) {

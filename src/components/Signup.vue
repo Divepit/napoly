@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     signup () {
-      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation, role: this.admin })
+      this.$http.secured.post('/signup/', { email: this.email, password: this.password, password_confirmation: this.password_confirmation, role: this.admin })
         .then(response => {
           this.$emit('pushUser', response)
         })

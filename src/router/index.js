@@ -26,7 +26,7 @@ export default new Router({
     },
     {
       path: '/*',
-      name: 'Links',
+      name: 'redirect',
       component: SubjectList
     }
     // {

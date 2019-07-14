@@ -55,6 +55,9 @@ export default {
       }
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
+      localStorage.uid = response.data.id
+      localStorage.admin = response.data.role
+      localStorage.userField = response.data.field_id
       this.$store.state.signer = true
       this.error = ''
       this.$router.replace('/')
