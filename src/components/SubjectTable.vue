@@ -11,8 +11,7 @@
             </h3>
 
             <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode"></v-switch>
-            <br>
-            <br>
+
             <div>
 
               <div v-bind:class="[showEditCtrls ? 'scroller' : '', 'table-wrapper']">
@@ -339,6 +338,7 @@ export default {
   .hundred {
     margin: 0px;
   }
+
   .scroller{
     overflow: scroll;
     height: 50vh;
@@ -372,21 +372,18 @@ export default {
 
   .bordered {
     background: transparent !important;
-    background-color: inherit;
   }
 
   /* Card Styles */
   .card {
     border-radius: 20px !important;
     background: #fcfcfc;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05); */
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     padding: 14px 80px 18px 36px;
-    cursor: pointer;
   }
 
   .card:hover {
-    transform: scale(1.001);
+    /*transform: scale(1.001);*/
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
   }
 
@@ -408,17 +405,15 @@ export default {
   .table-wrapper {
     margin: 10px 70px 20px;
     border-radius: 20px !important;
-    border: solid;
-    border-bottom: 0px;
-    border-left: 0px;
-    border-right: 0px;
-    border-color: #FC8668;
+    border: solid #FC8668;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
     background: white !important;
-    box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
+    box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
   }
 
   .fl-table {
-    border-radius: 20px !important;
     font-size: 17px;
     font-weight: normal;
     border: none;
@@ -432,21 +427,29 @@ export default {
   .fl-table td,
   .fl-table th {
     text-align: center;
-
-    padding: 8px;
   }
 
   .fl-table td {
-    border-right: 1px solid #f8f8f8;
     font-size: 15px;
+    border-right: 1px solid #f8f8f8;
+  }
+
+  .fl-table td a{
+    display: block;
+  }
+
+  .fl-table th,
+  .fl-table td a {
+    padding: 8px;
+  }
+
+  .fl-table td:not(:empty):not(:first-of-type):hover{
+    background-color: rgba(252,134,104,.05);
   }
 
   .fl-table thead th {
     border-bottom: 1px solid #f8f8f8;
   }
-
-  /* .fl-table thead th:nth-child(odd) {
-} */
 
   .fl-table tr:nth-child(even) {
     background: #F8F8F8;
@@ -483,7 +486,6 @@ export default {
 
     .card {
       padding: 3.5px 10px 5px 10px;
-      cursor: pointer;
       margin-left: 0px;
       margin-right: 0px;
     }
@@ -498,13 +500,13 @@ export default {
     }
 
     .table-wrapper {
-      margin: 0px 0px 0px;
+      margin: 0;
       width: auto;
       display: block;
       text-align: left;
       font-size: 15px;
       background: white;
-      padding: 0 0 0px;
+      padding: 0;
     }
 
     .fl-table thead,
@@ -519,31 +521,46 @@ export default {
 
     .fl-table thead {
       float: left;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
     }
 
     .fl-table tbody {
       width: auto;
       position: relative;
       overflow-x: auto;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
     }
 
     .fl-table td,
     .fl-table th {
-      padding: 20px .625em .625em .625em;
-      height: 60px;
+      font-size: 15px;
+      overflow: hidden;
       vertical-align: middle;
       box-sizing: border-box;
-      overflow-x: hidden;
-      overflow-y: auto;
-      width: 120px;
-      font-size: 15px;
       text-overflow: ellipsis;
+    }
+
+    .fl-table td:not(:first-of-type),
+    .fl-table th:not(:first-of-type) {
+      height: 54px;
     }
 
     .fl-table thead th {
       text-align: left;
       border-bottom: 1px solid #f7f7f9;
       max-width: 75px;
+    }
+
+    .fl-table th,
+    .fl-table td a{
+      padding: 16px 8px;
+    }
+
+    .fl-table tr th:first-of-type,
+    .fl-table tr td:first-of-type {
+      padding: 8px 8px;
     }
 
     .fl-table tbody tr {
@@ -569,6 +586,7 @@ export default {
 
     .fl-table tbody td {
       display: block;
+      min-width: 100px;
       text-align: center;
     }
   }
