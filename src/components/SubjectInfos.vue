@@ -9,7 +9,7 @@
               <!-- <h3 class="rightalign infotitle date">Erstellt am: {{info.created_at}}</h3> -->
             </div>
             <hr class="divider">
-            <div class="leftalign"> {{info.infoText}} </div>
+            <vue-markdown class="leftalign not-underlined"> {{info.infoText}} </vue-markdown>
           </v-card-title>
         </v-card>
       </v-flex>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown'
 export default {
   name: 'SubjectInfos',
   props: ['subject', 'editorMode'],
@@ -65,6 +66,9 @@ export default {
       editing: false,
       dialog: false
     }
+  },
+  components: {
+    VueMarkdown
   },
   methods: {
     // Returns true if localStorage.signedIn is true
@@ -118,7 +122,11 @@ export default {
             subject_id: this.subject
           }
         })
-          .then(this.getInfos())
+          .then(
+            this.getInfos(),
+            info.infoText = 'this.infoText',
+            info.infoTitle = 'this.infoTitle'
+          )
           .catch(error => this.setError(error, 'Cannot update info'))
       }
     },
