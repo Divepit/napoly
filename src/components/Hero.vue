@@ -10,7 +10,7 @@
           justify-center
         >
           <h1 class="display-2 font-weight-thin mb-3 custTitle">Napoly</h1>
-          <h4 class="subheading custTitle">Beta v1.5.0</h4>
+          <h4 class="subheading custTitle">Beta v1.6.1</h4>
         </v-layout>
       </v-parallax>
 </template>
