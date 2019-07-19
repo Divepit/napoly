@@ -27,13 +27,13 @@
             <v-card-text>
               <v-container grid-list-xl class="full-w">
                 <v-layout wrap class="full-w">
-                  <v-flex xs12>
+                  <v-flex xs12 md12>
                     <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
                   </v-flex>
-                  <v-flex xs6>
+                  <v-flex sm12 md6>
                     <v-textarea label="Info Text" v-model="newInfoText" auto-grow required @input="update"></v-textarea>
                   </v-flex>
-                  <v-flex xs6>
+                  <v-flex sm12 md6>
                     <vue-markdown class="leftalign bordered" :source="preview"> </vue-markdown>
                   </v-flex>
                 </v-layout>
@@ -162,6 +162,8 @@ export default {
 <style lang="css" scoped>
   .card {
     padding: 5px;
+    word-break: break-all;
+    overflow: hidden;
   }
   .full-h {
     height: 100%
@@ -202,6 +204,8 @@ export default {
     box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
     margin-bottom: 20px;
     margin-top: 20px;
+    word-break: break-all;
+    overflow: hidden;
   }
 
   .date {
