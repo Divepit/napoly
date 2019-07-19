@@ -1,5 +1,6 @@
 <template>
   <div class="">
+
     <v-layout v-for="info in infos" :key="info.id">
       <v-flex xs12 sm12>
         <v-card class="infocard" @click="editInfo(info)">
@@ -14,32 +15,36 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; clear()">add_circle</v-icon>
+    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; stopEditing()">add_circle</v-icon>
     <v-layout row justify-center>
         <v-flex xs12 sm12>
-        <v-dialog v-model="dialog" persistent max-width="1000px">
+        <v-dialog v-model="dialog" persistent >
           <v-card class="card">
             <v-card-title>
               <span v-if="editing" class="headline">Edit Info</span>
               <span v-else class="headline">Add Info</span>
             </v-card-title>
             <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
+              <v-container grid-list-xl class="full-w">
+                <v-layout wrap class="full-w">
                   <v-flex xs12>
                     <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
                   </v-flex>
-                  <v-flex xs12>
-                    <v-textarea label="Info Text" v-model="newInfoText" required></v-textarea>
+                  <v-flex xs6>
+                    <v-textarea label="Info Text" v-model="newInfoText" auto-grow required @input="update"></v-textarea>
+                  </v-flex>
+                  <v-flex xs6>
+                    <vue-markdown class="leftalign bordered" :source="preview"> </vue-markdown>
                   </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
+
             <v-card-actions>
               <v-btn v-if="editing" color="error" flat @click="dialog = false; removeInfo(infoId)">Delete Info</v-btn>
 
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+              <v-btn color="blue darken-1" flat @click="dialog = false; stopEditing()">Close</v-btn>
               <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateInfo()">Confirm</v-btn>
               <v-btn v-else color="blue darken-1" flat @click="dialog = false; addInfo()">Add</v-btn>
             </v-card-actions>
@@ -66,13 +71,17 @@ export default {
       newInfoText: '',
       newInfoTitle: '',
       editing: false,
-      dialog: false
+      dialog: false,
+      preview: ''
     }
   },
   components: {
     VueMarkdown
   },
   methods: {
+    update () {
+      this.preview = this.newInfoText
+    },
     // Returns true if localStorage.signedIn is true
     signedIn () {
       return localStorage.signedIn
@@ -111,6 +120,7 @@ export default {
       this.dialog = true
       this.newInfoText = info.infoText
       this.newInfoTitle = info.infoTitle
+      this.preview = this.newInfoText
     },
     updateInfo () {
       if (!this.newInfoText || !this.newInfoTitle) {
@@ -125,6 +135,7 @@ export default {
         })
           .then(response => {
             this.getInfos()
+            this.stopEditing()
           }
           )
           .catch(error => this.setError(error, 'Cannot update info'))
@@ -138,8 +149,9 @@ export default {
         })
         .catch(error => this.setError(error, 'Cannot delete link'))
     },
-    clear () {
+    stopEditing () {
       this.infoId = null
+      this.editing = false
       this.newInfoText = ''
       this.newInfoTitle = ''
     }
@@ -150,6 +162,15 @@ export default {
 <style lang="css" scoped>
   .card {
     padding: 5px;
+  }
+  .full-h {
+    height: 100%
+  }
+  .full-w {
+    width: 100% !important;
+    padding: 0px;
+    margin: 0px;
+    max-width: 100vw;
   }
   .infotitle {
     top: 5px;
@@ -164,6 +185,11 @@ export default {
   .leftabsolute {
     text-align: left !important;
     left: 20px;
+  }
+  .bordered {
+    border: solid 1px lightgray;
+    padding: 20px;
+    /* border-radius: 15px; */
   }
   .infocard {
     border-radius: 10px;

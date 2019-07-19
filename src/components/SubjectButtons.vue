@@ -2,7 +2,7 @@
   <div class="">
     <v-btn v-if="editorMode && signedIn()" class="subjectButton" v-for="button in buttons" :key="button.id" depressed @click="editButton(button); buttonId = button.id">{{button.buttonLabel}}</v-btn>
     <v-btn v-if="!editorMode" class="subjectButton" v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
-    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; clear()">add_circle</v-icon>
+    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; stopEditing()">add_circle</v-icon>
     <template v-if="editorMode && signedIn()">
       <v-layout row justify-center>
         <v-dialog v-model="dialog" persistent max-width="600px">
@@ -27,7 +27,7 @@
               <v-btn v-if="editing" color="error" flat @click="dialog = false; removeButton(buttonId)">Delete Button</v-btn>
 
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+              <v-btn color="blue darken-1" flat @click="dialog = false; stopEditing()">Close</v-btn>
               <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateButton()">Confirm</v-btn>
               <v-btn v-else color="blue darken-1" flat @click="dialog = false; addButton()">Add</v-btn>
             </v-card-actions>
@@ -105,6 +105,7 @@ export default {
         })
           .then(response => {
             this.getButtons()
+            this.stopEditing()
           })
       }
     },
@@ -115,7 +116,8 @@ export default {
           this.buttons.splice(this.buttons.indexOf(button), 1)
         })
     },
-    clear () {
+    stopEditing () {
+      this.editing = false
       this.buttonId = null
       this.newButtonUrl = ''
       this.newButtonLabel = ''
