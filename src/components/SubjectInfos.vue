@@ -27,13 +27,13 @@
             <v-card-text>
               <v-container grid-list-xl class="full-w">
                 <v-layout wrap class="full-w">
-                  <v-flex xs12>
+                  <v-flex xs12 md12>
                     <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
                   </v-flex>
-                  <v-flex xs6>
+                  <v-flex sm12 md6>
                     <v-textarea label="Info Text" v-model="newInfoText" auto-grow required @input="update"></v-textarea>
                   </v-flex>
-                  <v-flex xs6>
+                  <v-flex sm12 md6>
                     <vue-markdown class="leftalign bordered" :source="preview"> </vue-markdown>
                   </v-flex>
                 </v-layout>
