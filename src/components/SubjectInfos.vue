@@ -2,7 +2,7 @@
   <div class="">
     <v-layout v-for="info in infos" :key="info.id">
       <v-flex xs12 sm12>
-        <v-card class="infocard" @click="editInfo(info); infoId = info.id">
+        <v-card class="infocard" @click="editInfo(info)">
           <v-card-title class="m0">
             <div style="width: 100%">
               <h3 class="leftabsolute infotitle">{{info.infoTitle}}</h3>
@@ -26,10 +26,10 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Info Title" v-model="infoTitle" required></v-text-field>
+                  <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-textarea label="Info Text" v-model="infoText" required></v-textarea>
+                  <v-textarea label="Info Text" v-model="newInfoText" required></v-textarea>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -61,8 +61,8 @@ export default {
     return {
       infos: [],
       infoId: null,
-      infoText: '',
-      infoTitle: '',
+      newInfoText: '',
+      newInfoTitle: '',
       editing: false,
       dialog: false
     }
@@ -86,46 +86,44 @@ export default {
     },
     // Adds info via API if newInfo is filled
     addInfo () {
-      if (!this.infoText || !this.infoTitle) {
+      if (!this.newInfoText || !this.newInfoTitle) {
         return
       }
       this.$http.secured.post('/api/v1/infos/', {
         info: {
-          infoText: this.infoText,
-          infoTitle: this.infoTitle,
+          infoText: this.newInfoText,
+          infoTitle: this.newInfoTitle,
           subject_id: this.subject
         }
       })
-
         .then(response => {
           this.infos.push(response.data)
         })
-        .catch(error => this.setError(error, 'Cannot create link'))
     },
     editInfo (info) {
       if (!this.editorMode) {
         return
       }
+      this.infoId = info.id
       this.editing = true
-      this.infoText = info.infoText
-      this.infoTitle = info.infoTitle
       this.dialog = true
+      this.newInfoText = info.infoText
+      this.newInfoTitle = info.infoTitle
     },
     updateInfo () {
-      if (!this.infoText || !this.infoTitle) {
+      if (!this.newInfoText || !this.newInfoTitle) {
         this.removeInfo(this.infoId)
       } else {
         this.$http.secured.patch(`/api/v1/infos/${this.infoId}`, {
           info: {
-            infoText: this.infoText,
-            infoTitle: this.infoTitle,
+            infoText: this.newInfoText,
+            infoTitle: this.newInfoTitle,
             subject_id: this.subject
           }
         })
-          .then(
-            this.getInfos(),
-            info.infoText = 'this.infoText',
-            info.infoTitle = 'this.infoTitle'
+          .then(response => {
+            this.getInfos()
+          }
           )
           .catch(error => this.setError(error, 'Cannot update info'))
       }
@@ -140,8 +138,8 @@ export default {
     },
     clear () {
       this.infoId = null
-      this.infoText = ''
-      this.infoTitle = ''
+      this.newInfoText = ''
+      this.newInfoTitle = ''
     }
   }
 }

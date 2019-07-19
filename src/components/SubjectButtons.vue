@@ -15,10 +15,10 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12>
-                    <v-text-field label="Button Label" v-model="buttonLabel" required></v-text-field>
+                    <v-text-field label="Button Label" v-model="newButtonLabel" required></v-text-field>
                   </v-flex>
                   <v-flex xs12>
-                    <v-text-field label="Button Url" v-model="buttonUrl" required></v-text-field>
+                    <v-text-field label="Button Url" v-model="newButtonUrl" required></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -50,8 +50,8 @@ export default {
     return {
       buttons: [],
       buttonId: null,
-      buttonUrl: '',
-      buttonLabel: '',
+      newButtonUrl: '',
+      newButtonLabel: '',
       editing: false,
       dialog: false
     }
@@ -68,17 +68,16 @@ export default {
         .then(response => {
           this.buttons = response.data
         })
-        .catch(error => this.setError(error, 'Something went wrong with Buttons'))
     },
     // Adds button via API if newButton is filled
     addButton () {
-      if (!this.buttonUrl || !this.buttonLabel) {
+      if (!this.newButtonUrl || !this.newButtonLabel) {
         return
       }
       this.$http.secured.post('/api/v1/buttons/', {
         button: {
-          buttonUrl: this.buttonUrl,
-          buttonLabel: this.buttonLabel,
+          buttonUrl: this.newButtonUrl,
+          buttonLabel: this.newButtonLabel,
           subject_id: this.subject
         }
       })
@@ -86,27 +85,27 @@ export default {
         .then(response => {
           this.buttons.push(response.data)
         })
-        .catch(error => this.setError(error, 'Cannot create link'))
     },
     editButton (button) {
       this.editing = true
-      this.buttonUrl = button.buttonUrl
-      this.buttonLabel = button.buttonLabel
+      this.newButtonUrl = button.buttonUrl
+      this.newButtonLabel = button.buttonLabel
       this.dialog = true
     },
     updateButton () {
-      if (!this.buttonUrl || !this.buttonLabel) {
+      if (!this.newButtonUrl || !this.newButtonLabel) {
         this.removeButton(this.buttonId)
       } else {
         this.$http.secured.patch(`/api/v1/buttons/${this.buttonId}`, {
           button: {
-            buttonUrl: this.buttonUrl,
-            buttonLabel: this.buttonLabel,
+            buttonUrl: this.newButtonUrl,
+            buttonLabel: this.newButtonLabel,
             subject_id: this.subject
           }
         })
-          .then(this.getButtons())
-          .catch(error => this.setError(error, 'Cannot update button'))
+          .then(response => {
+            this.getButtons()
+          })
       }
     },
     // Deletes given button via API
@@ -115,12 +114,11 @@ export default {
         .then(response => {
           this.buttons.splice(this.buttons.indexOf(button), 1)
         })
-        .catch(error => this.setError(error, 'Cannot delete link'))
     },
     clear () {
       this.buttonId = null
-      this.buttonUrl = ''
-      this.buttonLabel = ''
+      this.newButtonUrl = ''
+      this.newButtonLabel = ''
     }
   }
 }
