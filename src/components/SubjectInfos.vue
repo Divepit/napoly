@@ -16,34 +16,36 @@
     </v-layout>
     <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; clear()">add_circle</v-icon>
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <v-card class="card">
-          <v-card-title>
-            <span v-if="editing" class="headline">Edit Info</span>
-            <span v-else class="headline">Add Info</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-textarea label="Info Text" v-model="newInfoText" required></v-textarea>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn v-if="editing" color="error" flat @click="dialog = false; removeInfo(infoId)">Delete Info</v-btn>
+        <v-flex xs12 sm12>
+        <v-dialog v-model="dialog" persistent max-width="1000px">
+          <v-card class="card">
+            <v-card-title>
+              <span v-if="editing" class="headline">Edit Info</span>
+              <span v-else class="headline">Add Info</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-textarea label="Info Text" v-model="newInfoText" required></v-textarea>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn v-if="editing" color="error" flat @click="dialog = false; removeInfo(infoId)">Delete Info</v-btn>
 
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-            <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateInfo()">Confirm</v-btn>
-            <v-btn v-else color="blue darken-1" flat @click="dialog = false; addInfo()">Add</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+              <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateInfo()">Confirm</v-btn>
+              <v-btn v-else color="blue darken-1" flat @click="dialog = false; addInfo()">Add</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-flex>
     </v-layout>
   </div>
 
@@ -146,6 +148,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+  .card {
+    padding: 5px;
+  }
   .infotitle {
     top: 5px;
     position: absolute;
@@ -166,7 +171,7 @@ export default {
     border-bottom: 0px;
     border-left: 0px;
     border-right: 0px;
-    border-color: #FC8668;
+    border-color: #FC8668 !important;
     padding-top: 0px !important;
     box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
     margin-bottom: 20px;
