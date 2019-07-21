@@ -73,8 +73,6 @@ export default {
           this.adding = false
           this.updateSubjects()
         })
-
-        .catch(error => this.setError(error, 'Cannot create link'))
     },
     getSubject () {
       this.subjects = []

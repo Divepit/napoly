@@ -161,11 +161,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-  .card {
-    padding: 5px;
-    word-break: break-all;
-    overflow: hidden;
-  }
+
   .full-h {
     height: 100%
   }
@@ -230,5 +226,17 @@ export default {
   color: #c1c1c1;
   background-color: #c1c1c1;
   border: none;
+  }
+
+  @media (max-width: 767px) {
+    .infocard {
+      word-break: break-all;
+      overflow: hidden;
+    }
+    .card {
+      padding: 5px;
+      word-break: break-all;
+      overflow: hidden;
+    }
   }
 </style>
