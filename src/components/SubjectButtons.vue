@@ -104,6 +104,7 @@ export default {
           }
         })
           .then(response => {
+            this.buttons.push(response.Data)
             this.getButtons()
             this.stopEditing()
           })

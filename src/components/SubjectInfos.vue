@@ -109,6 +109,7 @@ export default {
       })
         .then(response => {
           this.infos.push(response.data)
+          this.getInfos()
         })
     },
     editInfo (info) {
