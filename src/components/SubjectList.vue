@@ -4,8 +4,7 @@
     <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs12 sm12 md12>
-          <!-- <v-btn flat color="#6772e5" :href="'#'+subject.subjectName" v-for="subject in subjects">{{subject.subjectName}}</v-btn> -->
-          <SubjectTable  v-for="subject in subjects" :key="subject.id" :id="subject.subjectName" v-bind:subject="subject.id" v-bind:weekCount="subject.weekCount"></SubjectTable>
+          <SubjectTable  v-for="subject in subjects" :key="subject.id" :id="subject.subjectName" v-bind:subject="subject.id" v-bind:allTypes="types"></SubjectTable>
           <v-btn depressed color="primary" v-if="!adding && signer && authorize()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
           <v-text-field  placeholder="Subject Name" v-if="adding && signer && authorize()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
           <v-btn depressed color="primary" v-if="adding && signer && authorize()" @click="addSubject()">Add Subject</v-btn>
@@ -25,11 +24,13 @@ export default {
     Hero
   },
   created () {
-    this.getSubject()
+    this.getTypes()
+    this.getSubjects()
     this.$store.state.dark = false
   },
   data () {
     return {
+      types: [],
       subjects: [],
       error: '',
       adding: false,
@@ -56,30 +57,33 @@ export default {
     addSubject () {
       if (!this.newSubjectName) {
         console.log('No Semester given')
-        this.adding = false
-        return
-      }
-      this.$http.secured.post('/api/v1/subjects/', {
-        subject: {
-          subjectName: this.newSubjectName,
-          semester_id: this.$store.state.semester,
-          field_id: this.$store.state.field,
-          year: this.$store.state.year
-        }
-      })
-
-        .then(response => {
+      } else {
+        this.$http.secured.post('/api/v1/subjects/', {
+          subject: {
+            subjectName: this.newSubjectName,
+            semester_id: this.$store.state.semester,
+            field_id: this.$store.state.field,
+            year: this.$store.state.year
+          }
+        }).then(response => {
           this.subjects.push(response.data)
-          this.adding = false
           this.updateSubjects()
         })
+      }
+      this.adding = false
     },
-    getSubject () {
+    getSubjects () {
       this.subjects = []
       this.$http.secured.get('/api/v1/subjects/?semester_id=' + this.semester + '&field_id=' + this.field + '&year=' + this.year)
         .then(response => {
           this.subjects = response.data
           this.updateSubjects()
+        })
+    },
+    getTypes () {
+      this.$http.secured.get('/api/v1/types')
+        .then(response => {
+          this.types = response.data
         })
     },
     authorize () {

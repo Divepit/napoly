@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="">
-    <v-btn v-if="editorMode && signedIn()" class="subjectButton" v-for="button in buttons" :key="button.id" depressed @click="editButton(button); buttonId = button.id">{{button.buttonLabel}}</v-btn>
+    <v-btn v-if="editorMode && signedIn()" class="subjectButton" v-for="button in buttons" :key="button.id" @click="editButton(button); buttonId = button.id">{{button.buttonLabel}}</v-btn>
     <v-btn v-if="!editorMode" class="subjectButton" v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
     <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; stopEditing()">add_circle</v-icon>
     <template v-if="editorMode && signedIn()">
