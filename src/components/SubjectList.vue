@@ -92,14 +92,14 @@ export default {
     }
   },
   watch: {
-    semester: function (val) {
-      this.getSubject()
+    semester: function () {
+      this.getSubjects()
     },
-    field: function (val) {
-      this.getSubject()
+    field: function () {
+      this.getSubjects()
     },
-    year: function (val) {
-      this.getSubject()
+    year: function () {
+      this.getSubjects()
     }
   }
 }
