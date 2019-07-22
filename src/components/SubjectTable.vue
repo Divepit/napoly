@@ -166,10 +166,6 @@ export default {
     }
   },
   methods: {
-    // Sets error variable to the given error or if no error is present text
-    setError (error, text) {
-      this.error = (error.response && error.response.data && error.response.data.error) || text
-    },
     // Sets subjectName to the subjectName of the current subject
     getData () {
       this.$http.secured.get('/api/v1/subjects/' + this.subject)
@@ -187,7 +183,6 @@ export default {
             this.typesUsed = [2]
           }
         })
-        .catch(error => this.setError(error, 'Something went wrong with Links'))
     },
     getTypeName (typeId) {
       return (this.allTypes.find((type) => type.id === typeId) || []).typeName
@@ -196,7 +191,6 @@ export default {
     removeSubject () {
       this.$http.secured.delete(`/api/v1/subjects/${this.subject}`)
         .then(this.info = 'Subject will be removed on reload')
-        .catch(error => this.setError(error, 'Cannot delete Subject'))
     },
     saveType () {
       this.showTypeDialog = false
@@ -207,7 +201,7 @@ export default {
           subject_id: this.subject,
           type_new: this.newType,
           type_old: this.initialType
-        }).catch(error => this.setError(error, 'Cannot update links'))
+        })
         this.links.filter((link) => link.type_id === this.initialType).forEach(function (link) { link.type_id = this.newType }, this)
       } else {
         this.typesUsed.push(this.newType)
@@ -244,7 +238,7 @@ export default {
           }
         }).then(response => {
           this.links.push(response.data)
-        }).catch(error => this.setError(error, 'Cannot create link'))
+        })
       }
       this.addingLink = false
     },
@@ -283,7 +277,7 @@ export default {
             linkWeek: this.activeLink.linkWeek,
             type_id: this.activeLink.type_id
           }
-        }).catch(error => this.setError(error, 'Cannot update link'))
+        })
       }
     },
     // Deletes given link via API
@@ -293,7 +287,6 @@ export default {
         .then(response => {
           this.links.splice(this.links.indexOf(this.activeLink), 1)
         })
-        .catch(error => this.setError(error, 'Cannot delete link'))
     },
     // Returns linkUrl of link with given week and type in links[]
     displayUrl (week, type) {

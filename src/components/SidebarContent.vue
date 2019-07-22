@@ -169,8 +169,6 @@ export default {
           this.semesters.push(response.data)
           this.exitAdding()
         })
-
-        .catch(error => this.setError(error, 'Cannot create Semester'))
     },
     convertRawSemester (s) {
       var prefix

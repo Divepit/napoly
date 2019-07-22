@@ -93,7 +93,6 @@ export default {
         .then(response => {
           this.infos = response.data
         })
-        .catch(error => this.setError(error, 'Something went wrong with Infos'))
     },
     // Adds info via API if newInfo is filled
     addInfo () {
@@ -139,7 +138,6 @@ export default {
             this.stopEditing()
           }
           )
-          .catch(error => this.setError(error, 'Cannot update info'))
       }
     },
     // Deletes given info via API
@@ -148,7 +146,6 @@ export default {
         .then(response => {
           this.infos.splice(this.infos.indexOf(info), 1)
         })
-        .catch(error => this.setError(error, 'Cannot delete link'))
     },
     stopEditing () {
       this.infoId = null

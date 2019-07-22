@@ -60,9 +60,6 @@ export default {
     this.signedIn()
   },
   methods: {
-    setError (error, text) {
-      this.error = (error.response && error.response.data && error.response.data.error) || text
-    },
     signedIn () {
       return localStorage.signedIn
     },
@@ -78,7 +75,6 @@ export default {
           delete localStorage.userField
           this.$forceUpdate()
         })
-        .catch(error => this.setError(error, 'Cannot sign out'))
     }
   },
   computed: {
