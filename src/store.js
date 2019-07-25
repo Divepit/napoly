@@ -12,7 +12,7 @@ export default new Vuex.Store({
     signer: localStorage.signedIn,
     subjects: [],
     dark: false,
-    userField: localStorage.userField
+    userField: parseInt(localStorage.userField, 10)
   },
   mutations: {
     updateSemester (state, semester) {

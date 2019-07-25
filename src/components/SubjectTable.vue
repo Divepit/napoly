@@ -299,7 +299,7 @@ export default {
       }
     },
     authorize () {
-      if (this.signer && (localStorage.admin === '1' || this.userField === `${this.field}`)) { return true }
+      if (this.signer && (localStorage.admin === 1 || this.userField === this.field)) { return true }
       return false
     }
   }
