@@ -1,40 +1,35 @@
-<template lang="html">
-  <div class="">
-    <v-btn v-if="editorMode && signedIn()" class="subjectButton" v-for="button in buttons" :key="button.id" @click="editButton(button); buttonId = button.id">{{button.buttonLabel}}</v-btn>
-    <v-btn v-if="!editorMode" class="subjectButton" v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
-    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; stopEditing()">add_circle</v-icon>
-    <template v-if="editorMode && signedIn()">
-      <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="600px">
-          <v-card class="card">
-            <v-card-title>
-              <span v-if="editing" class="headline">Edit Button</span>
-              <span v-else class="headline">Add Button</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12>
-                    <v-text-field label="Button Label" v-model="newButtonLabel" required></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field label="Button Url" v-model="newButtonUrl" required></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn v-if="editing" color="error" flat @click="dialog = false; removeButton(buttonId)">Delete Button</v-btn>
+<template>
 
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false; stopEditing()">Close</v-btn>
-              <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateButton()">Confirm</v-btn>
-              <v-btn v-else color="blue darken-1" flat @click="dialog = false; addButton()">Add</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-layout>
-    </template>
+  <div>
+    <v-btn v-if="showEditCtrls" class="subject-button" v-for="button in buttons" :key="button.id" @click="startEdit(button)">{{button.buttonLabel}}</v-btn>
+    <v-btn v-if="!showEditCtrls" class="subject-button" v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
+    <v-icon class="unselectable" v-if="showEditCtrls" @click="addingButton=showButtonDialog=true">add_circle</v-icon>
+
+    <v-dialog v-model="showButtonDialog" persistent max-width="600px">
+      <v-card class="dialog-card">
+        <v-card-title>
+          <span class="headline">{{addingButton?'Add':'Edit'}} Button</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field label="Button Label" v-model="activeButton.buttonLabel" required></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field label="Button Url" v-model="activeButton.buttonUrl" required></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn v-if="!addingButton" color="error" flat @click="removeButton(activeButton.id)">Remove Button</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="cancelEdit()">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click="saveButton()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 
 </template>
@@ -42,25 +37,20 @@
 <script>
 export default {
   name: 'SubjectButtons',
-  props: ['subject', 'editorMode'],
+  props: ['subject', 'showEditCtrls'],
   created () {
     this.getButtons()
   },
   data () {
     return {
       buttons: [],
-      buttonId: null,
-      newButtonUrl: '',
-      newButtonLabel: '',
-      editing: false,
-      dialog: false
+      activeButton: [],
+      originalButton: [],
+      addingButton: false,
+      showButtonDialog: false
     }
   },
   methods: {
-    // Returns true if localStorage.signedIn is true
-    signedIn () {
-      return localStorage.signedIn
-    },
     // Gets all buttons from API with the current subject
     getButtons () {
       this.buttons = []
@@ -69,66 +59,67 @@ export default {
           this.buttons = response.data
         })
     },
+    saveButton () {
+      if (this.addingButton) this.addButton()
+      else this.updateButton()
+    },
     // Adds button via API if newButton is filled
     addButton () {
-      if (!this.newButtonUrl || !this.newButtonLabel) {
-        return
-      }
-      this.$http.secured.post('/api/v1/buttons/', {
-        button: {
-          buttonUrl: this.newButtonUrl,
-          buttonLabel: this.newButtonLabel,
-          subject_id: this.subject
-        }
-      })
-
-        .then(response => {
-          this.buttons.push(response.data)
-        })
-    },
-    editButton (button) {
-      this.editing = true
-      this.newButtonUrl = button.buttonUrl
-      this.newButtonLabel = button.buttonLabel
-      this.dialog = true
-    },
-    updateButton () {
-      if (!this.newButtonUrl || !this.newButtonLabel) {
-        this.removeButton(this.buttonId)
-      } else {
-        this.$http.secured.patch(`/api/v1/buttons/${this.buttonId}`, {
+      if (this.activeButton.buttonUrl && this.activeButton.buttonLabel) {
+        this.$http.secured.post('/api/v1/buttons/', {
           button: {
-            buttonUrl: this.newButtonUrl,
-            buttonLabel: this.newButtonLabel,
+            buttonUrl: this.activeButton.buttonUrl,
+            buttonLabel: this.activeButton.buttonLabel,
             subject_id: this.subject
           }
+        }).then(response => {
+          this.endEdit()
+          this.buttons.push(response.data)
         })
-          .then(response => {
-            this.buttons.push(response.Data)
-            this.getButtons()
-            this.stopEditing()
-          })
+      }
+    },
+    startEdit (button) {
+      if (!this.showEditCtrls) return
+      this.addingButton = false
+      this.activeButton = button
+      this.originalInfo = {...button}
+      this.showButtonDialog = true
+    },
+    endEdit () {
+      this.showButtonDialog = false
+      this.activeButton = []
+    },
+    cancelEdit () {
+      this.buttons[this.buttons.indexOf(this.activeButton)] = this.originalInfo
+      this.endEdit()
+    },
+    updateButton () {
+      if (!this.activeButton.buttonUrl || !this.activeButton.buttonLabel) {
+        this.removeButton(this.activeButton.id)
+      } else {
+        this.$http.secured.patch(`/api/v1/buttons/${this.activeButton.id}`, {
+          button: {
+            buttonUrl: this.activeButton.buttonUrl,
+            buttonLabel: this.activeButton.buttonLabel,
+            subject_id: this.subject
+          }
+        }).then(response => this.endEdit())
       }
     },
     // Deletes given button via API
     removeButton (button) {
       this.$http.secured.delete(`/api/v1/buttons/${button}`)
         .then(response => {
+          this.endEdit()
           this.buttons.splice(this.buttons.indexOf(button), 1)
         })
-    },
-    stopEditing () {
-      this.editing = false
-      this.buttonId = null
-      this.newButtonUrl = ''
-      this.newButtonLabel = ''
     }
   }
 }
 </script>
 
 <style lang="css" scoped>
-  .subjectButton {
+  .subject-button {
       color: white !important;
       background: #FC8668 !important;
       border-radius: 5px;

@@ -1,9 +1,8 @@
 <template>
-  <div class="">
 
-    <v-layout v-for="info in infos" :key="info.id">
+    <v-layout align-center justify-center>
       <v-flex xs12 sm12>
-        <v-card class="infocard" @click="editInfo(info)">
+        <v-card class="info-card" v-for="info in infos" :key="info.id" @click="startEdit(info)">
           <v-card-title class="m0">
             <div style="width: 100%">
               <h3 class="leftabsolute infotitle">{{info.infoTitle}}</h3>
@@ -13,46 +12,39 @@
             <vue-markdown class="leftalign not-underlined"> {{info.infoText}} </vue-markdown>
           </v-card-title>
         </v-card>
-      </v-flex>
-    </v-layout>
-    <v-icon class="unselectable" v-if="editorMode && signedIn()" color="" @click="dialog = !dialog; editing = false; stopEditing()">add_circle</v-icon>
-    <v-layout row justify-center>
-        <v-flex xs12 sm12>
-        <v-dialog v-model="dialog" persistent >
-          <v-card class="card">
+        <v-icon class="unselectable" v-if="showEditCtrls" @click="addingInfo=showInfoDialog=true">add_circle</v-icon>
+
+        <v-dialog v-model="showInfoDialog" persistent max-width="1200px">
+          <v-card class="dialog-card">
             <v-card-title>
-              <span v-if="editing" class="headline">Edit Info</span>
-              <span v-else class="headline">Add Info</span>
+              <span class="headline">{{addingInfo?'Add':'Edit'}} Info</span>
             </v-card-title>
             <v-card-text>
               <v-container grid-list-xl class="full-w">
                 <v-layout wrap class="full-w">
                   <v-flex xs12 md12>
-                    <v-text-field label="Info Title" v-model="newInfoTitle" required></v-text-field>
+                    <v-text-field label="Info Title" v-model="activeInfo.infoTitle" required></v-text-field>
                   </v-flex>
                   <v-flex sm12 md6>
-                    <v-textarea label="Info Text" v-model="newInfoText" auto-grow required @input="update"></v-textarea>
+                    <v-textarea label="Info Text" v-model="activeInfo.infoText" auto-grow required></v-textarea>
                   </v-flex>
                   <v-flex sm12 md6>
-                    <vue-markdown class="leftalign bordered" :source="preview"> </vue-markdown>
+                    <vue-markdown class="leftalign bordered" :source="activeInfo.infoText"> </vue-markdown>
                   </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
-
             <v-card-actions>
-              <v-btn v-if="editing" color="error" flat @click="dialog = false; removeInfo(infoId)">Delete Info</v-btn>
-
+              <v-btn v-if="!addingInfo" color="error" flat @click="removeInfo(activeInfo.id)">Remove Info</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false; stopEditing()">Close</v-btn>
-              <v-btn v-if="editing" color="blue darken-1" flat @click="dialog = false; updateInfo()">Confirm</v-btn>
-              <v-btn v-else color="blue darken-1" flat @click="dialog = false; addInfo()">Add</v-btn>
+              <v-btn color="blue darken-1" flat @click="cancelEdit()">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="saveInfo()">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
+
       </v-flex>
     </v-layout>
-  </div>
 
 </template>
 
@@ -60,32 +52,23 @@
 import VueMarkdown from 'vue-markdown'
 export default {
   name: 'SubjectInfos',
-  props: ['subject', 'editorMode'],
+  props: ['subject', 'showEditCtrls'],
   created () {
     this.getInfos()
   },
   data () {
     return {
       infos: [],
-      infoId: null,
-      newInfoText: '',
-      newInfoTitle: '',
-      editing: false,
-      dialog: false,
-      preview: ''
+      activeInfo: [],
+      originalInfo: [],
+      addingInfo: false,
+      showInfoDialog: false
     }
   },
   components: {
     VueMarkdown
   },
   methods: {
-    update () {
-      this.preview = this.newInfoText
-    },
-    // Returns true if localStorage.signedIn is true
-    signedIn () {
-      return localStorage.signedIn
-    },
     // Gets all infos from API with the current subject
     getInfos () {
       this.infos = []
@@ -94,64 +77,60 @@ export default {
           this.infos = response.data
         })
     },
+    saveInfo () {
+      if (this.addingInfo) this.addInfo()
+      else this.updateInfo()
+    },
     // Adds info via API if newInfo is filled
     addInfo () {
-      if (!this.newInfoText || !this.newInfoTitle) {
-        return
-      }
-      this.$http.secured.post('/api/v1/infos/', {
-        info: {
-          infoText: this.newInfoText,
-          infoTitle: this.newInfoTitle,
-          subject_id: this.subject
-        }
-      })
-        .then(response => {
-          this.infos.push(response.data)
-          this.getInfos()
-        })
-    },
-    editInfo (info) {
-      if (!this.editorMode) {
-        return
-      }
-      this.infoId = info.id
-      this.editing = true
-      this.dialog = true
-      this.newInfoText = info.infoText
-      this.newInfoTitle = info.infoTitle
-      this.preview = this.newInfoText
-    },
-    updateInfo () {
-      if (!this.newInfoText || !this.newInfoTitle) {
-        this.removeInfo(this.infoId)
-      } else {
-        this.$http.secured.patch(`/api/v1/infos/${this.infoId}`, {
+      if (this.activeInfo.infoText && this.activeInfo.infoTitle) {
+        this.$http.secured.post('/api/v1/infos/', {
           info: {
-            infoText: this.newInfoText,
-            infoTitle: this.newInfoTitle,
+            infoText: this.activeInfo.infoText,
+            infoTitle: this.activeInfo.infoTitle,
             subject_id: this.subject
           }
+        }).then(response => {
+          this.endEdit()
+          this.infos.push(response.data)
         })
-          .then(response => {
-            this.getInfos()
-            this.stopEditing()
+      }
+    },
+    startEdit (info) {
+      if (!this.showEditCtrls) return
+      this.addingInfo = false
+      this.activeInfo = info
+      this.originalInfo = {...info}
+      this.showInfoDialog = true
+    },
+    endEdit () {
+      this.showInfoDialog = false
+      this.activeInfo = []
+    },
+    cancelEdit () {
+      this.infos[this.infos.indexOf(this.activeInfo)] = this.originalInfo
+      this.endEdit()
+    },
+    updateInfo () {
+      if (!this.activeInfo.infoText || !this.activeInfo.infoTitle) {
+        this.removeInfo(this.activeInfo.id)
+      } else {
+        this.$http.secured.patch(`/api/v1/infos/${this.activeInfo.id}`, {
+          info: {
+            infoText: this.activeInfo.infoText,
+            infoTitle: this.activeInfo.infoTitle,
+            subject_id: this.subject
           }
-          )
+        }).then(response => this.endEdit())
       }
     },
     // Deletes given info via API
     removeInfo (info) {
       this.$http.secured.delete(`/api/v1/infos/${info}`)
         .then(response => {
+          this.endEdit()
           this.infos.splice(this.infos.indexOf(info), 1)
         })
-    },
-    stopEditing () {
-      this.infoId = null
-      this.editing = false
-      this.newInfoText = ''
-      this.newInfoTitle = ''
     }
   }
 }
@@ -187,15 +166,15 @@ export default {
     padding: 20px;
     /* border-radius: 15px; */
   }
-  .infocard {
+  .info-card {
     border-radius: 10px;
     border: solid 2px;
-    border-bottom: 0px;
-    border-left: 0px;
-    border-right: 0px;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
     border-color: #FC8668 !important;
-    padding-top: 0px !important;
-    box-shadow: 0 0px 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
+    padding-top: 0 !important;
+    box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
     margin-bottom: 20px;
     margin-top: 20px;
     word-break: break-all;
@@ -226,14 +205,14 @@ export default {
   }
 
   @media (max-width: 767px) {
-    .infocard {
+    .info-card {
       word-break: break-all;
       overflow: hidden;
     }
-    .card {
-      padding: 5px;
-      word-break: break-all;
-      overflow: hidden;
-    }
+    /*.card {*/
+    /*  padding: 5px;*/
+    /*  word-break: break-all;*/
+    /*  overflow: hidden;*/
+    /*}*/
   }
 </style>

@@ -7,6 +7,8 @@ import store from './store'
 import VueAxios from 'vue-axios'
 import { securedAxiosInstance, plainAxiosInstance } from './backend/axios'
 import Vuetify from 'vuetify'
+
+import './assets/styles/main.less'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 Vue.use(Vuetify)
