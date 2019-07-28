@@ -1,13 +1,14 @@
 <template>
+
     <v-container fluid :id="subjectName" class="hundred">
       <v-layout align-center justify-center>
         <v-flex xs12 sm12 md12>
-          <v-card class="card">
-            <div style="color: red;" v-if="error">{{ error }}</div>
-            <div style="color: red;" v-if="info">{{ info }}</div>
+          <v-card class="subject-card ">
+            <div style="color: red;" v-if="error">{{error}}</div>
+            <div style="color: red;" v-if="info">{{info}}</div>
             <div class="card-header">
               <h3>{{subjectName}}</h3>
-              <SubjectButtons class="card-button" v-bind:subject="subject" v-bind:editorMode="editorMode"/>
+              <SubjectButtons class="card-button" v-bind:subject="subject" v-bind:showEditCtrls="showEditCtrls"/>
             </div>
 
             <div class="card-controls">
@@ -27,17 +28,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="week in weekCount" :key="week" v-if="weeks.includes(week) || showEditCtrls">
-                  <td class="fonted">{{week}}</td>
+                <tr v-for="week in range(startWeek,startWeek+weekCount)" :key="week" v-if="weeks.includes(week) || showEditCtrls">
+                  <td v-if="showEditCtrls && week===startWeek" class="fonted" @click="showWeekDialog=true">{{week}} <v-icon v-if="showEditCtrls && week===startWeek" small class="unselectable edit-type">edit</v-icon></td>
+                  <td v-else class="fonted" >{{week}}</td>
                   <td class="fonted hide-overflow" v-if="showEditCtrls" v-for="type in typesUsed" :key="type"
                       @click.stop="startEdit(week,type)">{{ displayUrl(week,type) }}</td>
                   <td class="fonted" v-if="!showEditCtrls" v-for="type in typesUsed" :key="type">
-                    <a style="color: #0E9CE4; text-decoration: none;" v-if="displayUrl(week,type)" target="_blank"
+                    <a v-if="displayUrl(week,type)" target="_blank"
                        :href="displayUrl(week,type)">{{getTypeName(type)}} {{week}}</a>
                   </td>
                   <td v-if="showAddType"></td>
                 </tr>
-                <tr v-if="showEditCtrls && weekCount<20">
+                <tr v-if="showEditCtrls && weekCount<16">
                   <td><v-icon class="unselectable" v-if="showEditCtrls" @click="weekCount += 1">add_circle</v-icon></td>
                   <td v-for="type in typesUsed" :key="type"></td>
                   <td v-if="showAddType"></td>
@@ -47,7 +49,7 @@
             </div>
 
             <v-dialog v-model="showLinkDialog" persistent max-width="600px">
-              <v-card class="card">
+              <v-card class="dialog-card">
                 <v-card-title style="display: inline-block; width: 100%">
                   <span style="float: left" class="headline">{{addingLink?'Add':'Edit'}} Link</span>
                   <span style="float: right">{{getTypeName(activeLink.type_id)}} | Week {{activeLink.linkWeek}}</span>
@@ -70,8 +72,8 @@
               </v-card>
             </v-dialog>
 
-            <v-dialog v-model="showDeleteDialog" persistent max-width="290">
-              <v-card class="card">
+            <v-dialog v-model="showDeleteDialog" persistent max-width="300">
+              <v-card class="dialog-card">
                 <v-card-title class="headline fonted" style="color: red; text-align: left; font-size: 20px !important;">Delete {{subjectName}}?</v-card-title>
                 <v-card-text class="fonted" style="text-align: left; font-size: 18px; width: 100%;">This will delete all links, buttons and infos and <strong>cannot</strong> be undone.</v-card-text>
                 <v-card-actions>
@@ -82,8 +84,8 @@
               </v-card>
             </v-dialog>
 
-            <v-dialog v-model="showTypeDialog" persistent max-width="290">
-              <v-card class="card">
+            <v-dialog v-model="showTypeDialog" persistent max-width="300">
+              <v-card class="dialog-card">
                 <v-card-title>
                   <span class="headline">{{initialType?'Edit':'Add'}} Type</span>
                 </v-card-title>
@@ -99,17 +101,40 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" flat @click="showTypeDialog=false">Cancel</v-btn>
-                  <v-btn color="blue darken-1" flat  @click="saveType()">Save</v-btn>
+                  <v-btn color="blue darken-1" flat @click="saveType()">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
 
-            <SubjectInfos v-bind:subject="subject" v-bind:editorMode="editorMode"/>
+            <v-dialog v-model="showWeekDialog" persistent max-width="300">
+              <v-card class="dialog-card">
+                <v-card-title>
+                  <span class="headline">Edit Start Week</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <v-flex xs12>
+                        <v-text-field placeholder="1" type="number" v-on:keyup.enter="saveStartWeek()" required v-model="newStartWeek"></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat @click="showWeekDialog=false">Cancel</v-btn>
+                  <v-btn color="blue darken-1" flat  @click="saveStartWeek()">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+            <SubjectInfos v-bind:subject="subject" v-bind:showEditCtrls="showEditCtrls"/>
 
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
+
 </template>
 
 <script>
@@ -118,7 +143,7 @@ import SubjectInfos from '@/components/SubjectInfos'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'SubjectTable',
+  name: 'Subject',
   props: ['subject', 'allTypes'],
   components: {
     SubjectButtons,
@@ -127,11 +152,13 @@ export default {
   data () {
     return {
       links: [],
-      weekCount: 0,
+      startWeek: 1,
+      newStartWeek: 1,
+      weekCount: 1,
       activeLink: [],
       originalLink: '',
       newButton: [],
-      typesUsed: [],
+      typesUsed: [2],
       typesAvailable: [],
       newType: 0,
       error: '',
@@ -140,6 +167,7 @@ export default {
       showDeleteDialog: false,
       showLinkDialog: false,
       showTypeDialog: false,
+      showWeekDialog: false,
       editorMode: false,
       addingLink: false,
       initialType: false
@@ -159,7 +187,7 @@ export default {
       return this.signer && this.editorMode
     },
     showAddType: function () {
-      return this.typesUsed.length < 4 && this.showEditCtrls
+      return this.typesUsed.length < 6 && this.showEditCtrls
     },
     weeks: function () {
       return this.$data.links.map(function (link, index) { return link.linkWeek })
@@ -171,6 +199,7 @@ export default {
       this.$http.secured.get('/api/v1/subjects/' + this.subject)
         .then(response => {
           this.subjectName = response.data.subjectName
+          this.startWeek = this.newStartWeek = response.data.startWeek
         })
       this.$http.secured.get('/api/v1/links?subject_id=' + this.subject)
         .then(response => {
@@ -178,9 +207,6 @@ export default {
             this.links = response.data
             this.weekCount = Math.max(...this.weeks)
             this.typesUsed = [...new Set(this.$data.links.map(function (link, index) { return link.type_id }))]
-          } else {
-            this.weekCount = 1
-            this.typesUsed = [2]
           }
         })
     },
@@ -207,6 +233,18 @@ export default {
         this.typesUsed.push(this.newType)
       }
     },
+    saveStartWeek () {
+      this.showWeekDialog = false
+      this.newStartWeek = Number(this.newStartWeek)
+      this.$http.secured.patch(`/api/v1/subjects/${this.subject}/startWeek`, {
+        subject: {
+          startWeek: this.newStartWeek
+        }
+      }).then(response => {
+        this.links.forEach(function (link) { link.linkWeek += (this.newStartWeek - this.startWeek) }, this)
+        this.startWeek = this.newStartWeek
+      })
+    },
     addType () {
       this.initialType = false
       this.typesAvailable = this.allTypes.filter((type) => !this.typesUsed.includes(type.id))
@@ -220,7 +258,6 @@ export default {
       this.showTypeDialog = true
     },
     saveLink () {
-      this.showLinkDialog = false
       if (this.addingLink) this.addLink()
       else this.updateLink()
     },
@@ -237,32 +274,35 @@ export default {
             type_id: this.activeLink.type_id
           }
         }).then(response => {
+          this.endEdit()
           this.links.push(response.data)
         })
       }
-      this.addingLink = false
     },
     // Checks if a link for the given week and type is present. If there is,
     // activeLink is set to said link. If there is no link yet, it sets adding
     // to true and fills activeLink.
     startEdit (week, type) {
-      const answer = this.$data.links.find((link) => link.linkWeek === week && link.type_id === type)
-      if (!answer) {
+      this.activeLink = []
+      const existingLink = this.$data.links.find((link) => link.linkWeek === week && link.type_id === type)
+      if (!existingLink) {
         this.addingLink = true
         this.activeLink.subject_id = this.subject
         this.activeLink.linkWeek = week
         this.activeLink.type_id = type
-        this.activeLink.linkUrl = ''
       } else {
         this.addingLink = false
-        this.activeLink = answer
-        this.originalLink = answer.linkUrl
+        this.activeLink = existingLink
+        this.originalLink = existingLink.linkUrl
       }
       this.showLinkDialog = true
     },
-    cancelEdit () {
+    endEdit () {
       this.showLinkDialog = false
-      if (!this.addingLink) this.$data.links.find((link) => link.linkWeek === this.activeLink.linkWeek && link.type_id === this.activeLink.type_id).linkUrl = this.originalLink
+    },
+    cancelEdit () {
+      if (!this.addingLink) this.activeLink.linkUrl = this.originalLink
+      this.endEdit()
     },
     // If link has a linkUrl (is not empty) the link is patched with the given
     // object. If link has no linkUrl (is empty) removeLink(link) is called.
@@ -277,7 +317,7 @@ export default {
             linkWeek: this.activeLink.linkWeek,
             type_id: this.activeLink.type_id
           }
-        })
+        }).then(response => this.endEdit())
       }
     },
     // Deletes given link via API
@@ -301,15 +341,16 @@ export default {
     authorize () {
       if (this.signer && (localStorage.admin === 1 || this.userField === this.field)) { return true }
       return false
+    },
+    range (start, stop) {
+      return new Array(stop - start).fill(start).map((n, i) => n + i)
     }
   }
 }
 </script>
-<style media="screen">
+<style media="screen" lang="less" rel="stylesheet/less">
 
-  .hundred {
-    margin: 0;
-  }
+  @import url("../assets/styles/colors");
 
   .unselectable {
    -moz-user-select: -moz-none;
@@ -342,41 +383,33 @@ export default {
   }
 
   /* Card Styles */
-  .card {
+  .dialog-card,
+  .subject-card {
     border-radius: 20px !important;
     background: #fcfcfc;
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     padding: 18px 36px 18px 36px;
   }
 
-  .card:hover {
+  .subject-card:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
   }
 
-  .card h3 {
+  .subject-card  h3 {
     font-weight: 200;
     font-size: 40px;
-    color: #0E9CE4;
-  }
-
-  @media(max-width: 990px) {
-    .card {
-      margin: 20px;
-    }
+    color: @blue;
   }
 
   .card-table {
     margin: 20px 0;
     border-radius: 20px !important;
-    border: solid #FC8668;
+    border: solid @orange;
     border-left-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     background: white !important;
     box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
-  }
-
-  .edit-mode{
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
   }
@@ -387,25 +420,35 @@ export default {
     font-size: 17px;
     font-weight: normal;
     border: none;
-    border-collapse: collapse;
+    border-spacing: 0;
     width: 100%;
     min-width: 100%;
     max-width: 100%;
     white-space: nowrap;
-  }
 
-  .fl-table td {
-    font-size: 15px;
-    border-right: 1px solid #f8f8f8;
-  }
+    td {
+      font-size: 15px;
+      border-right: 1px solid #f8f8f8;
 
-  .fl-table td a{
-    display: block;
-  }
+      a{
+        color: @blue;
+        padding: 8px;
+        display: block;
+        text-decoration: none;
+      }
+    }
 
-  .fl-table th,
-  .fl-table td a {
-    padding: 8px;
+    tbody tr:first-child td:first-child{
+      position: relative;
+
+      &>i{
+        top: 50%;
+        left: 50%;
+        margin-top: -8px;
+        margin-left: 10px;
+        position: absolute;
+      }
+    }
   }
 
   .view-mode .fl-table td:not(:empty):not(:first-of-type):hover{
@@ -438,30 +481,51 @@ export default {
   }
 
   @media (min-width: 767px) {
-    .fl-table td,
-    .fl-table th {
-      background: white;
-      text-align: center;
-    }
+    .fl-table {
+      td, th {
+        height: 38px;
+        background: white;
+        text-align: center;
+      }
 
-    .fl-table tr:first-child th:first-child{
-      border-top-left-radius: 20px;
-    }
+      th:first-child,
+      td:first-child {
+        width: 80px;
+        line-height: 38px;
+        position: absolute !important;
+      }
 
-    .fl-table tr:first-child th:last-child{
-      border-top-right-radius: 20px;
-    }
+      th:nth-child(2),
+      td:nth-child(2) {
+        padding-left: 80px !important;
+      }
 
-    .fl-table tr:last-child td:first-child{
-      border-bottom-left-radius: 20px;
-    }
+      tr:first-child th {
+        &:first-child {
+          border-top-left-radius: 20px;
+        }
 
-    .fl-table tr:last-child td:last-child{
-      border-bottom-right-radius: 20px;
-    }
+        &:last-child {
+          border-top-right-radius: 20px;
+        }
+      }
 
-    .fl-table tr:nth-child(even) td {
-      background: #F8F8F8;
+      tr:last-child td {
+        &:first-child {
+          border-bottom-left-radius: 20px;
+        }
+        &:last-child {
+          border-bottom-right-radius: 20px;
+        }
+      }
+
+      tr:nth-child(even) td {
+        background: #F8F8F8;
+      }
+
+      th:not(:first-child) {
+        padding: 0 8px;
+      }
     }
 
     .card-controls {
@@ -471,23 +535,15 @@ export default {
       white-space: nowrap;
     }
 
-    th:first-child,
-    td:first-child {
-      width: 80px;
-    }
-
-    .edit-mode th:first-child,
-    .edit-mode td:first-child {
-      position: absolute;
-    }
-
     .edit-mode th:nth-child(2),
     .edit-mode td:nth-child(2) {
-      padding-left: 88px;
+      padding-left: 88px !important;
     }
 
-    .edit-mode td{
-      height: 38px;
+    /*th:first-child,*/
+    /*td:first-child,*/
+    .edit-mode td:not(:first-child) {
+      /*height: 38px;*/
       padding: 8px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -504,8 +560,8 @@ export default {
       justify-content: center;
     }
 
-    .card h3{
-      font-size: 2rem !important;
+    .subject-card  h3{
+      font-size: 2rem;
     }
 
     .hide-overflow {
@@ -517,15 +573,10 @@ export default {
       margin-top: 15px;
     }
 
-    .card {
+    .subject-card  {
       padding: 5px 10px 5px 10px;
       margin-left: 0;
       margin-right: 0;
-    }
-
-    .fl-table {
-      display: block;
-      width: 100%;
     }
 
     .card-table {
@@ -538,91 +589,99 @@ export default {
       padding: 0;
     }
 
-    .fl-table thead,
-    .fl-table tbody,
-    .fl-table thead th {
+    .fl-table {
       display: block;
-    }
+      width: 100%;
 
-    .fl-table thead th:last-child {
-      border-bottom: none;
-    }
+      thead,
+      tbody,
+      thead th {
+        display: block;
+      }
 
-    .fl-table thead {
-      float: left;
-      border-top-left-radius: 20px;
-      border-bottom-left-radius: 20px;
-    }
+      thead th:last-child {
+        border-bottom: none;
+      }
 
-    .fl-table tbody {
-      width: auto;
-      position: relative;
-      overflow-x: scroll;
-      -webkit-overflow-scrolling: touch;
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
-    }
+      thead {
+        float: left;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
 
-    .fl-table td,
-    .fl-table th {
-      font-size: 15px;
-      overflow: hidden;
-      vertical-align: middle;
-      box-sizing: border-box;
-      text-overflow: ellipsis;
-    }
+      tbody {
+        width: auto;
+        position: relative;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
 
-    .fl-table td:not(:first-of-type),
-    .fl-table th:not(:first-of-type) {
-      height: 54px;
-    }
+      td,
+      th {
+        font-size: 15px;
+        overflow: hidden;
+        vertical-align: middle;
+        box-sizing: border-box;
+        text-overflow: ellipsis;
+      }
 
-    .fl-table thead th {
-      text-align: left;
-      border-bottom: 1px solid #f7f7f9;
-      max-width: 75px;
-    }
+      td:not(:first-of-type),
+      th:not(:first-of-type) {
+        height: 54px;
+      }
 
-    .fl-table thead th .edit-type {
-      display: none;
-    }
+      thead th {
+        text-align: left;
+        border-bottom: 1px solid #f7f7f9;
+        max-width: 75px;
 
-    .fl-table th,
-    .fl-table td a{
-      padding: 16px 8px;
-    }
+        .edit-type {
+          display: none;
+        }
+      }
 
-    .fl-table tr th:first-of-type,
-    .fl-table tr td:first-of-type {
-      padding: 8px 8px;
-    }
+      th,
+      td a{
+        padding: 16px 8px;
+      }
 
-    .fl-table tbody tr {
-      display: table-cell;
-    }
+      tr th:first-of-type,
+      tr td:first-of-type {
+        padding: 8px 8px;
+      }
 
-    .fl-table tbody tr:nth-child(odd) {
-      background: none;
-    }
+      tbody tr {
+        display: table-cell;
 
-    .fl-table tr:nth-child(even) {
-      background: white;
-    }
+        &:nth-child(odd) {
+          background: none;
+        }
+      }
 
-    .fl-table tr td:nth-child(odd) {
-      background: #F8F8F8;
-      border-right: 1px solid #E6E4E4;
-    }
+      tr{
+        &:nth-child(even) {
+          background: white;
+        }
 
-    .fl-table tr td:nth-child(even) {
-      border-right: 1px solid #E6E4E4;
-    }
+        td{
+          &:nth-child(odd) {
+            background: #F8F8F8;
+            border-right: 1px solid #E6E4E4;
+          }
+          &:nth-child(even) {
+            border-right: 1px solid #E6E4E4;
+          }
+        }
+      }
 
-    .fl-table tbody td {
-      display: block;
-      min-width: 100px;
-      max-width: 140px;
-      text-align: center;
+      tbody td {
+        display: block;
+        min-width: 100px;
+        max-width: 140px;
+        text-align: center;
+      }
     }
 
     .edit-mode .fl-table tbody td:not(:first-child) {
