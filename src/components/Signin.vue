@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height >
   <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4 class="rounded">
+    <v-flex xs12 sm8 md4>
       <v-card class="elevation-12">
         <v-toolbar dark color="primary">
           <v-toolbar-title>Sign In</v-toolbar-title>
@@ -76,8 +76,3 @@ export default {
   }
 }
 </script>
-<style media="screen">
-  .rounded {
-    border-radius: 15px !important;
-  }
-</style>

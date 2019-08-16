@@ -1,11 +1,11 @@
 <template lang="html">
   <div>
     <Hero/>
-    <v-container grid-list-md text-xs-center>
-      <v-layout row wrap>
-        <v-flex xs12 sm12 md12>
+    <v-container>
+      <v-layout>
+        <v-flex>
           <Subject  v-for="subject in subjects" :key="subject.id" :id="subject.subjectName" v-bind:subject="subject.id" v-bind:allTypes="types"></Subject>
-          <v-btn depressed color="primary" v-if="!adding && signer && authorize()" @click="adding = !adding; newSubjectName = ''">Add Subject</v-btn>
+          <v-btn flat color="primary" v-if="!adding && signer && authorize()" @click="adding = !adding; newSubjectName = ''">+ Add Subject</v-btn>
           <v-text-field  placeholder="Subject Name" v-if="adding && signer && authorize()" type="text" name="" value="" v-model="newSubjectName" v-on:keyup.enter="addSubject()"></v-text-field>
           <v-btn depressed color="primary" v-if="adding && signer && authorize()" @click="addSubject()">Add Subject</v-btn>
         </v-flex>

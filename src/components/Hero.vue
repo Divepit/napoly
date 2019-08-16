@@ -1,18 +1,6 @@
+<!-- TODO: Unfuck this -->
 <template lang="html">
-    <v-parallax
-        src="https://www.napoly.ch/assets/18.jpg"
-        class="custImage"
-        height=""
-      >
-        <v-layout
-          align-center
-          column
-          justify-center
-        >
-          <h1 class="display-2 font-weight-thin mb-3 custTitle">Napoly</h1>
-          <h4 class="subheading custTitle">Beta v2.0.0</h4>
-        </v-layout>
-      </v-parallax>
+
 </template>
 
 <script>

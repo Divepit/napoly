@@ -1,37 +1,24 @@
 <template>
-
-  <div>
-    <v-btn v-if="showEditCtrls" class="subject-button" v-for="button in buttons" :key="button.id" @click="startEdit(button)">{{button.buttonLabel}}</v-btn>
-    <v-btn v-if="!showEditCtrls" class="subject-button" v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
-    <v-icon class="unselectable" v-if="showEditCtrls" @click="addingButton=showButtonDialog=true">add_circle</v-icon>
-
-    <v-dialog v-model="showButtonDialog" persistent max-width="600px">
-      <v-card class="dialog-card">
-        <v-card-title>
-          <span class="headline">{{addingButton?'Add':'Edit'}} Button</span>
-        </v-card-title>
+  <span>
+    <v-btn v-if="showEditCtrls" color="blue" class="white--text" v-for="button in buttons" :key="button.id" @click="startEdit(button)">{{button.buttonLabel}}</v-btn>
+    <v-btn v-if="!showEditCtrls" color="blue" class="white--text" v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
+    <v-icon class="pb-2" v-if="showEditCtrls" @click="addingButton=showButtonDialog=true">add_circle</v-icon>
+    <v-dialog v-model="showButtonDialog" max-width="700px">
+      <v-card class="py-3 px-3">
+        <v-card-title> {{addingButton?'Add':'Edit'}} Button </v-card-title>
         <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field label="Button Label" v-model="activeButton.buttonLabel" required></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field label="Button Url" v-model="activeButton.buttonUrl" required></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
+          <v-text-field label="Button Label" v-model="activeButton.buttonLabel" required></v-text-field>
+          <v-text-field label="Button Url" v-model="activeButton.buttonUrl" required></v-text-field>
         </v-card-text>
         <v-card-actions>
-          <v-btn v-if="!addingButton" color="error" flat @click="removeButton(activeButton.id)">Remove Button</v-btn>
+          <v-btn v-if="!addingButton" color="error"  @click="removeButton(activeButton.id)">Remove Button</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="cancelEdit()">Cancel</v-btn>
           <v-btn color="blue darken-1" flat @click="saveButton()">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
-
+  </span>
 </template>
 
 <script>
@@ -117,11 +104,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css" scoped>
-  .subject-button {
-      color: white !important;
-      background: #FC8668 !important;
-      border-radius: 5px;
-  }
-</style>

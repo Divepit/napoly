@@ -1,35 +1,31 @@
 <template>
 
-    <v-layout align-center justify-center>
+    <v-layout>
       <v-flex xs12 sm12>
         <v-card class="info-card" v-for="info in infos" :key="info.id" @click="startEdit(info)">
-          <v-card-title class="m0">
-            <div style="width: 100%">
-              <h3 class="leftabsolute infotitle">{{info.infoTitle}}</h3>
-              <!-- <h3 class="rightalign infotitle date">Erstellt am: {{info.created_at}}</h3> -->
-            </div>
-            <hr class="divider">
-            <vue-markdown class="leftalign not-underlined"> {{info.infoText}} </vue-markdown>
-          </v-card-title>
+          <v-card-title  class="blue--text font-weight-light">{{info.infoTitle}}</v-card-title>
+          <v-card-text>
+          <vue-markdown class="text-xs-left font-weight-thin"> {{info.infoText}} </vue-markdown>
+          </v-card-text>
         </v-card>
         <v-icon class="unselectable" v-if="showEditCtrls" @click="addingInfo=showInfoDialog=true">add_circle</v-icon>
 
-        <v-dialog v-model="showInfoDialog" persistent max-width="1200px">
-          <v-card class="dialog-card">
-            <v-card-title>
-              <span class="headline">{{addingInfo?'Add':'Edit'}} Info</span>
+        <v-dialog v-model="showInfoDialog" persistent>
+          <v-card>
+            <v-card-title >
+              <span>{{addingInfo?'Add':'Edit'}} Info</span>
             </v-card-title>
             <v-card-text>
-              <v-container grid-list-xl class="full-w">
-                <v-layout wrap class="full-w">
+              <v-container grid-list-xl py-0 px-0>
+                <v-layout wrap>
                   <v-flex xs12 md12>
-                    <v-text-field label="Info Title" v-model="activeInfo.infoTitle" required></v-text-field>
+                    <v-text-field  label="Info Title" v-model="activeInfo.infoTitle" required></v-text-field>
                   </v-flex>
                   <v-flex sm12 md6>
                     <v-textarea label="Info Text" v-model="activeInfo.infoText" auto-grow required></v-textarea>
                   </v-flex>
                   <v-flex sm12 md6>
-                    <vue-markdown class="leftalign bordered" :source="activeInfo.infoText"> </vue-markdown>
+                    <vue-markdown class="text-sm-left bordered font-weight-thin" :source="activeInfo.infoText"> </vue-markdown>
                   </v-flex>
                 </v-layout>
               </v-container>

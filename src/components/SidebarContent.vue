@@ -1,7 +1,7 @@
 <template lang="html">
-  <div class="">
+  <div>
     <v-list dense>
-      <v-list-tile subheader>
+      <v-list-tile >
         <v-subheader>Studienjahr</v-subheader>
       </v-list-tile>
     </v-list>
@@ -16,9 +16,9 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-      <hr>
+      <v-divider></v-divider>
       <v-list dense>
-        <v-list-tile subheader>
+        <v-list-tile >
           <v-subheader>Semester</v-subheader>
         </v-list-tile>
       </v-list>
@@ -33,9 +33,9 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-        <hr>
+        <v-divider></v-divider>
         <v-list dense>
-          <v-list-tile subheader>
+          <v-list-tile >
             <v-subheader>Departement</v-subheader>
           </v-list-tile>
         </v-list>
@@ -50,7 +50,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-        <hr>
+        <v-divider></v-divider>
         <v-list dense>
           <v-list-tile subheader>
             <v-subheader>Fächer</v-subheader>

@@ -1,27 +1,27 @@
 <template>
+    <v-container mx-0 px-0 :id="subjectName">
+      <v-layout>
+        <v-flex>
+          <v-card class="py-4 px-4 rounded text-center"> <!-- TODO: Add rounded corners -->
+            <span style="color: red;">{{error}}</span>
+            <span style="color: red;">{{info}}</span>
+              <v-card-title class="pl-1 font-weight-thin blue--text display-1 text-truncate">{{subjectName}}
+                <v-spacer />
+                <SubjectButtons class="hidden-sm-and-down" :subject="subject" :showEditCtrls="showEditCtrls"/>
+              </v-card-title>
+              <SubjectButtons class="hidden-md-and-up " style="width: 100%; align: left;" :subject="subject" :showEditCtrls="showEditCtrls"/>
 
-    <v-container fluid :id="subjectName" class="hundred">
-      <v-layout align-center justify-center>
-        <v-flex xs12 sm12 md12>
-          <v-card class="subject-card ">
-            <div style="color: red;" v-if="error">{{error}}</div>
-            <div style="color: red;" v-if="info">{{info}}</div>
-            <div class="card-header">
-              <h3>{{subjectName}}</h3>
-              <SubjectButtons class="card-button" v-bind:subject="subject" v-bind:showEditCtrls="showEditCtrls"/>
-            </div>
+              <v-card-actions>
+                <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
+                <v-btn  v-if="showEditCtrls"  color="error" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
+              </v-card-actions>
 
-            <div class="card-controls">
-              <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" class="control-switch"></v-switch>
-              <v-btn  v-if="showEditCtrls" class="fatfonted delete-subject" color="error" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
-            </div>
-
-            <div v-bind:class="[showEditCtrls ? 'edit-mode' : 'view-mode', 'card-table']">
+            <div :class="[showEditCtrls ? 'edit-mode' : 'view-mode', 'card-table']">
               <table class="fl-table">
                 <thead>
-                <tr class="bordered">
-                  <th class="bordered fonted">Week</th>
-                  <th class="bordered fonted" v-for="type in typesUsed" :key="type" @click="editType(type)">
+                <tr >
+                  <th class="font-weight-light">Week</th>
+                  <th class="font-weight-light" v-for="type in typesUsed" :key="type" @click="editType(type)">
                     {{getTypeName(type)}} <v-icon v-if="showEditCtrls" small class="unselectable edit-type">edit</v-icon>
                   </th>
                   <th v-if="showAddType"><v-icon class="unselectable" @click="addType()">add_circle</v-icon></th>
@@ -29,11 +29,11 @@
                 </thead>
                 <tbody>
                 <tr v-for="week in range(startWeek,startWeek+weekCount)" :key="week" v-if="weeks.includes(week) || showEditCtrls">
-                  <td v-if="showEditCtrls && week===startWeek" class="fonted" @click="showWeekDialog=true">{{week}} <v-icon v-if="showEditCtrls && week===startWeek" small class="unselectable edit-type">edit</v-icon></td>
-                  <td v-else class="fonted" >{{week}}</td>
-                  <td class="fonted hide-overflow" v-if="showEditCtrls" v-for="type in typesUsed" :key="type"
+                  <td v-if="showEditCtrls && week===startWeek" @click="showWeekDialog=true">{{week}} <v-icon v-if="showEditCtrls && week===startWeek" small class="unselectable edit-type">edit</v-icon></td>
+                  <td v-else class="font-weight-light">{{week}}</td>
+                  <td class="hide-overflow font-weight-light body-1" v-if="showEditCtrls" v-for="type in typesUsed" :key="type"
                       @click.stop="startEdit(week,type)">{{ displayUrl(week,type) }}</td>
-                  <td class="fonted" v-if="!showEditCtrls" v-for="type in typesUsed" :key="type">
+                  <td v-if="!showEditCtrls" class="font-weight-light body-1" v-for="type in typesUsed" :key="type">
                     <a v-if="displayUrl(week,type)" target="_blank"
                        :href="displayUrl(week,type)">{{getTypeName(type)}} {{week}}</a>
                   </td>
@@ -48,16 +48,17 @@
               </table>
             </div>
 
-            <v-dialog v-model="showLinkDialog" persistent max-width="600px">
-              <v-card class="dialog-card">
-                <v-card-title style="display: inline-block; width: 100%">
-                  <span style="float: left" class="headline">{{addingLink?'Add':'Edit'}} Link</span>
-                  <span style="float: right">{{getTypeName(activeLink.type_id)}} | Week {{activeLink.linkWeek}}</span>
+            <v-dialog v-model="showLinkDialog"  max-width="700px">
+              <v-card>
+                <v-card-title>
+                  <v-card-title>{{addingLink?'Add':'Edit'}} Link</v-card-title>
+                  <v-spacer/>
+                  <v-card-title class="font-weight-thin">{{getTypeName(activeLink.type_id)}} | Week {{activeLink.linkWeek}}</v-card-title>
                 </v-card-title>
                 <v-card-text>
-                  <v-container grid-list-md>
-                    <v-layout wrap>
-                      <v-flex xs12>
+                  <v-container>
+                    <v-layout>
+                      <v-flex>
                         <v-text-field placeholder="Link URL" v-on:keyup.enter="saveLink()" required v-model="activeLink.linkUrl"></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -72,10 +73,10 @@
               </v-card>
             </v-dialog>
 
-            <v-dialog v-model="showDeleteDialog" persistent max-width="300">
-              <v-card class="dialog-card">
-                <v-card-title class="headline fonted" style="color: red; text-align: left; font-size: 20px !important;">Delete {{subjectName}}?</v-card-title>
-                <v-card-text class="fonted" style="text-align: left; font-size: 18px; width: 100%;">This will delete all links, buttons and infos and <strong>cannot</strong> be undone.</v-card-text>
+            <v-dialog v-model="showDeleteDialog" max-width="600">
+              <v-card >
+                <v-card-title class="red--text font-weight-light">Delete {{subjectName}}?</v-card-title>
+                <v-card-text  class="text-sm-left font-weight-light">This will delete all links, buttons and infos and <strong>cannot</strong> be undone.</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn depressed @click="showDeleteDialog=false">Cancel</v-btn>
@@ -84,15 +85,13 @@
               </v-card>
             </v-dialog>
 
-            <v-dialog v-model="showTypeDialog" persistent max-width="300">
-              <v-card class="dialog-card">
-                <v-card-title>
-                  <span class="headline">{{initialType?'Edit':'Add'}} Type</span>
-                </v-card-title>
+            <v-dialog v-model="showTypeDialog" max-width="300">
+              <v-card>
+                <v-card-title> {{initialType?'Edit':'Add'}} Type </v-card-title>
                 <v-card-text>
-                  <v-container grid-list-md>
-                    <v-layout wrap>
-                      <v-flex xs12>
+                  <v-container>
+                    <v-layout>
+                      <v-flex>
                         <v-select v-on:enter="saveType()" required v-model="newType" :items="typesAvailable" item-text="typeName" item-value="id"></v-select>
                       </v-flex>
                     </v-layout>
@@ -107,14 +106,12 @@
             </v-dialog>
 
             <v-dialog v-model="showWeekDialog" persistent max-width="300">
-              <v-card class="dialog-card">
-                <v-card-title>
-                  <span class="headline">Edit Start Week</span>
-                </v-card-title>
+              <v-card>
+                <v-card-title> Edit Start Week </v-card-title>
                 <v-card-text>
-                  <v-container grid-list-md>
-                    <v-layout wrap>
-                      <v-flex xs12>
+                  <v-container>
+                    <v-layout>
+                      <v-flex>
                         <v-text-field placeholder="1" type="number" v-on:keyup.enter="saveStartWeek()" required v-model="newStartWeek"></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -127,9 +124,7 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-
             <SubjectInfos v-bind:subject="subject" v-bind:showEditCtrls="showEditCtrls"/>
-
           </v-card>
         </v-flex>
       </v-layout>
@@ -350,343 +345,31 @@ export default {
 </script>
 <style media="screen" lang="less" rel="stylesheet/less">
 
-  @import url("../assets/styles/colors");
+  @import url("../assets/styles/main");
 
   .unselectable {
    -moz-user-select: -moz-none;
    -khtml-user-select: none;
    -webkit-user-select: none;
-
-   /*
-     Introduced in IE 10.
-     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
-   */
    -ms-user-select: none;
    user-select: none;
 }
 
-  .fonted {
-    font-family: Roboto,sans-serif !important;
-    font-weight: 300;
-  }
-  .fatfonted {
-    font-family: Roboto,sans-serif !important;
-    font-weight: 400;
-  }
   .hide-overflow {
     overflow: hidden;
     max-width: 10px;
   }
-
-  .bordered {
-    background: transparent;
-  }
-
-  /* Card Styles */
-  .dialog-card,
-  .subject-card {
-    border-radius: 20px !important;
-    background: #fcfcfc;
-    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
-    padding: 18px 36px 18px 36px;
-  }
-
-  .subject-card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
-  }
-
-  .subject-card  h3 {
-    font-weight: 200;
-    font-size: 40px;
-    color: @blue;
+  .ellipsis {
+    overflow: hidden;
   }
 
   .card-table {
-    margin: 20px 0;
-    border-radius: 20px !important;
-    border: solid @orange;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    background: white !important;
+    margin-bottom: 20px;
+    border-radius: 10px !important;
+    border-top: solid 2px @orange;
     box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Table Styles , https://codepen.io/florantara/pen/dROvdb*/
-
-  .fl-table {
-    font-size: 17px;
-    font-weight: normal;
-    border: none;
-    border-spacing: 0;
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-    white-space: nowrap;
-
-    td {
-      font-size: 15px;
-      border-right: 1px solid #f8f8f8;
-
-      a{
-        color: @blue;
-        padding: 8px;
-        display: block;
-        text-decoration: none;
-      }
-    }
-
-    tbody tr:first-child td:first-child{
-      position: relative;
-
-      &>i{
-        top: 50%;
-        left: 50%;
-        margin-top: -8px;
-        margin-left: 10px;
-        position: absolute;
-      }
-    }
-  }
-
-  .view-mode .fl-table td:not(:empty):not(:first-of-type):hover{
-    background-color: rgba(252,134,104,.05);
-  }
-
-  .edit-mode .fl-table td:not(:first-of-type):hover{
-    background-color: rgba(252,134,104,.05);
-    cursor: text;
-  }
-
-  .fl-table thead th {
-    border-bottom: 1px solid #f8f8f8;
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    word-break: keep-all;
-    white-space: nowrap;
-  }
-
-  .card-button {
-    white-space: pre-line;
-    text-align: end;
-  }
-
-  .delete-subject {
-    border-radius: 5px;
-  }
-
-  @media (min-width: 767px) {
-    .fl-table {
-      td, th {
-        height: 38px;
-        background: white;
-        text-align: center;
-      }
-
-      th:first-child,
-      td:first-child {
-        width: 80px;
-        line-height: 38px;
-        position: absolute !important;
-      }
-
-      th:nth-child(2),
-      td:nth-child(2) {
-        padding-left: 80px !important;
-      }
-
-      tr:first-child th {
-        &:first-child {
-          border-top-left-radius: 20px;
-        }
-
-        &:last-child {
-          border-top-right-radius: 20px;
-        }
-      }
-
-      tr:last-child td {
-        &:first-child {
-          border-bottom-left-radius: 20px;
-        }
-        &:last-child {
-          border-bottom-right-radius: 20px;
-        }
-      }
-
-      tr:nth-child(even) td {
-        background: #F8F8F8;
-      }
-
-      th:not(:first-child) {
-        padding: 0 8px;
-      }
-    }
-
-    .card-controls {
-      display: flex;
-      justify-content: space-between;
-      word-break: keep-all;
-      white-space: nowrap;
-    }
-
-    .edit-mode th:nth-child(2),
-    .edit-mode td:nth-child(2) {
-      padding-left: 88px !important;
-    }
-
-    /*th:first-child,*/
-    /*td:first-child,*/
-    .edit-mode td:not(:first-child) {
-      /*height: 38px;*/
-      padding: 8px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .card-header {
-      align-self: center;
-      display: inline;
-    }
-
-    .control-switch {
-      justify-content: center;
-    }
-
-    .subject-card  h3{
-      font-size: 2rem;
-    }
-
-    .hide-overflow {
-      max-width: 100%;
-    }
-
-    .card-button, .card-controls {
-      display: grid;
-      margin-top: 15px;
-    }
-
-    .subject-card  {
-      padding: 5px 10px 5px 10px;
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    .card-table {
-      margin: 20px 0 20px;
-      width: auto;
-      display: block;
-      text-align: left;
-      font-size: 15px;
-      background: white;
-      padding: 0;
-    }
-
-    .fl-table {
-      display: block;
-      width: 100%;
-
-      thead,
-      tbody,
-      thead th {
-        display: block;
-      }
-
-      thead th:last-child {
-        border-bottom: none;
-      }
-
-      thead {
-        float: left;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-      }
-
-      tbody {
-        width: auto;
-        position: relative;
-        overflow-x: scroll;
-        -webkit-overflow-scrolling: touch;
-        border-top-right-radius: 20px;
-        border-bottom-right-radius: 20px;
-      }
-
-      td,
-      th {
-        font-size: 15px;
-        overflow: hidden;
-        vertical-align: middle;
-        box-sizing: border-box;
-        text-overflow: ellipsis;
-      }
-
-      td:not(:first-of-type),
-      th:not(:first-of-type) {
-        height: 54px;
-      }
-
-      thead th {
-        text-align: left;
-        border-bottom: 1px solid #f7f7f9;
-        max-width: 75px;
-
-        .edit-type {
-          display: none;
-        }
-      }
-
-      th,
-      td a{
-        padding: 16px 8px;
-      }
-
-      tr th:first-of-type,
-      tr td:first-of-type {
-        padding: 8px 8px;
-      }
-
-      tbody tr {
-        display: table-cell;
-
-        &:nth-child(odd) {
-          background: none;
-        }
-      }
-
-      tr{
-        &:nth-child(even) {
-          background: white;
-        }
-
-        td{
-          &:nth-child(odd) {
-            background: #F8F8F8;
-            border-right: 1px solid #E6E4E4;
-          }
-          &:nth-child(even) {
-            border-right: 1px solid #E6E4E4;
-          }
-        }
-      }
-
-      tbody td {
-        display: block;
-        min-width: 100px;
-        max-width: 140px;
-        text-align: center;
-      }
-    }
-
-    .edit-mode .fl-table tbody td:not(:first-child) {
-      line-height: 38px;
-      padding: 8px;
-    }
-  }
 </style>
