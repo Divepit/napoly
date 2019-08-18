@@ -8,17 +8,18 @@
     >
     <SidebarContent />
   </v-navigation-drawer>
-  <v-toolbar app fixed dark color="info" >
+  <v-toolbar app fixed dark color="main" >
     <v-toolbar-side-icon @click.stop="primaryDrawer.model = !primaryDrawer.model"/>
-    <v-toolbar-title class="headline font-weight-black"> napoly </v-toolbar-title>
+    <v-toolbar-title class=" hidden-sm-and-down titlebartext--text headline font-weight-bold muli"> napoly </v-toolbar-title>
     <v-spacer/>
     <v-toolbar-items >
-      <v-btn flat to="/" class="subheading font-weight-regular text-capitalize">Links</v-btn>
-      <v-btn flat v-if="!signer" to="/signin" class="subheading font-weight-regular text-capitalize">Sign In</v-btn>
-      <v-btn flat v-if="signer" to="/admin" class="subheading font-weight-regular text-capitalize">Admin</v-btn>
-      <v-btn flat v-if="signer" @click="signOut()" class="subheading font-weight-regular text-capitalize">Sign Out</v-btn>
+      <v-btn flat to="/" class="titlebartext--text subheading font-weight-regular text-capitalize">Links</v-btn>
+      <v-btn flat v-if="!signer" to="/signin" class="titlebartext--text subheading font-weight-regular text-capitalize">Sign In</v-btn>
+      <v-btn flat v-if="signer" to="/admin" class="titlebartext--text subheading font-weight-regular text-capitalize">Admin</v-btn>
+      <v-btn flat v-if="signer" @click="signOut()" class="titlebartext--text subheading font-weight-regular text-capitalize">Sign Out</v-btn>
     </v-toolbar-items>
   </v-toolbar>
+
   <v-content>
     <router-view/>
   </v-content>
@@ -67,3 +68,8 @@ export default {
   }
 }
 </script>
+<style media="screen">
+.muli {
+  font-family: 'Muli', sans-serif !important;
+}
+</style>

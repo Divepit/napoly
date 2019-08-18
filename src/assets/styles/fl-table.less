@@ -9,7 +9,7 @@
     border-right: 1px solid #f8f8f8;
 
     a{
-      color: @blue;
+      color: @link;
       padding: 8px;
       display: block;
       text-decoration: none;
@@ -30,11 +30,11 @@
 }
 
 .view-mode .fl-table td:not(:empty):not(:first-of-type):hover{
-  background-color: rgba(252,134,104,.05);
+  background-color: @hover;
 }
 
 .edit-mode .fl-table td:not(:first-of-type):hover{
-  background-color: rgba(252,134,104,.05);
+  background-color: @hover;
   cursor: text;
 }
 

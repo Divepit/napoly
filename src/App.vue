@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <v-container id="app"  px-0 py-0 style="max-width: 100vw;">
     <Layout/>
-  </div>
+  </v-container>
 </template>
 
 <script>

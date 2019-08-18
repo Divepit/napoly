@@ -2,10 +2,11 @@
 
     <v-layout>
       <v-flex xs12 sm12>
-        <v-card class="info-card" v-for="info in infos" :key="info.id" @click="startEdit(info)">
-          <v-card-title  class="blue--text font-weight-light">{{info.infoTitle}}</v-card-title>
-          <v-card-text>
-          <vue-markdown class="text-xs-left font-weight-thin"> {{info.infoText}} </vue-markdown>
+        <v-card elevation="3" class="info-card" v-for="info in infos" :key="info.id" @click="startEdit(info)">
+          <v-card-title  class="grey--text text--darken-2 subheading pb-0 pt-2">{{info.infoTitle}}</v-card-title>
+          <hr class="mt-2">
+          <v-card-text >
+          <vue-markdown class="grey--text text--darken-1 text-xs-left font-weight-light subheading "> {{info.infoText}} </vue-markdown>
           </v-card-text>
         </v-card>
         <v-icon class="unselectable" v-if="showEditCtrls" @click="addingInfo=showInfoDialog=true">add_circle</v-icon>
@@ -13,7 +14,7 @@
         <v-dialog v-model="showInfoDialog" persistent>
           <v-card>
             <v-card-title >
-              <span>{{addingInfo?'Add':'Edit'}} Info</span>
+              {{addingInfo?'Add':'Edit'}} Info
             </v-card-title>
             <v-card-text>
               <v-container grid-list-xl py-0 px-0>
@@ -24,8 +25,8 @@
                   <v-flex sm12 md6>
                     <v-textarea label="Info Text" v-model="activeInfo.infoText" auto-grow required></v-textarea>
                   </v-flex>
-                  <v-flex sm12 md6>
-                    <vue-markdown class="text-sm-left bordered font-weight-thin" :source="activeInfo.infoText"> </vue-markdown>
+                  <v-flex sm12 md6 class="bordered">
+                    <vue-markdown class="text-sm-left font-weight-light " :source="activeInfo.infoText"> </vue-markdown>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -132,78 +133,28 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style media="screen" lang="less" rel="stylesheet/less" scoped>
 
-  .full-h {
-    height: 100%
-  }
-  .full-w {
-    width: 100% !important;
-    padding: 0px;
-    margin: 0px;
-    max-width: 100vw;
-  }
-  .infotitle {
-    top: 5px;
-    position: absolute;
-    font-weight: 300;
-    font-size: 18px;
-  }
-  .rightalign {
-    text-align: right !important;
-    right: 20px;
-  }
-  .leftabsolute {
-    text-align: left !important;
-    left: 20px;
-  }
-  .bordered {
-    border: solid 1px lightgray;
-    padding: 20px;
-    /* border-radius: 15px; */
-  }
+  @import url("../assets/styles/main");
+
   .info-card {
     border-radius: 10px;
-    border: solid 2px;
-    border-bottom: 0;
-    border-left: 0;
-    border-right: 0;
-    border-color: #FC8668 !important;
-    padding-top: 0 !important;
-    box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06);
-    margin-bottom: 20px;
+    border-top: solid 3px;
+    border-color: @accent;
     margin-top: 20px;
-    word-break: break-all;
-    overflow: hidden;
+    margin-bottom: 20px;
   }
 
-  .date {
-    color: gray;
-    font-weight: 300;
-  }
-  .m0 {
-    padding-top: 10px;
-  }
-  .leftalign{
-    text-align: left;
-    font-size: 17px;
-    font-weight: 200;
-    margin-left: 5px;
-  }
   hr{
   width: 100%;
-  margin-top: 30px;
-  margin-bottom: 7px;
   height: 1px;
-  color: #c1c1c1;
   background-color: #c1c1c1;
   border: none;
   }
 
   @media (max-width: 767px) {
     .info-card {
-      word-break: break-all;
-      overflow: hidden;
+      word-break: keep-all;
     }
     /*.card {*/
     /*  padding: 5px;*/

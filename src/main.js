@@ -8,10 +8,20 @@ import VueAxios from 'vue-axios'
 import { securedAxiosInstance, plainAxiosInstance } from './backend/axios'
 import Vuetify from 'vuetify'
 
-import './assets/styles/main.less'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+import './assets/styles/main.less'
+import './stylus/main.styl'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    main: '#45aaf2',
+    button: '#45aaf2',
+    accent: '#45aaf2',
+    buttontext: '#FFFFFF',
+    titlebartext: '#FFFFFF',
+    error: '#fc5c65'
+  }
+})
 Vue.config.productionTip = false
 Vue.use(VueAxios, {
   secured: securedAxiosInstance,

@@ -1,11 +1,11 @@
 <template>
-    <v-container mx-0 px-0 :id="subjectName">
-      <v-layout>
+    <v-container justify-center my-4 :id="subjectName">
+      <v-layout justify-center>
         <v-flex>
-          <v-card class="py-4 px-4 rounded text-center"> <!-- TODO: Add rounded corners -->
+          <v-card class="py-4 px-4 rounded text-center" hover raised="20"> <!-- TODO: Add rounded corners -->
             <span style="color: red;">{{error}}</span>
             <span style="color: red;">{{info}}</span>
-              <v-card-title class="pl-1 font-weight-thin blue--text display-1 text-truncate">{{subjectName}}
+              <v-card-title style="font-weight: 100 !important;"class="accent--text pl-1  display-2 font-weight-thin text-truncate ">{{subjectName}}
                 <v-spacer />
                 <SubjectButtons class="hidden-sm-and-down" :subject="subject" :showEditCtrls="showEditCtrls"/>
               </v-card-title>
@@ -13,15 +13,15 @@
 
               <v-card-actions>
                 <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
-                <v-btn  v-if="showEditCtrls"  color="error" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
+                <v-btn  v-if="showEditCtrls"  color="error" class="font-weight-bold" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
               </v-card-actions>
 
             <div :class="[showEditCtrls ? 'edit-mode' : 'view-mode', 'card-table']">
               <table class="fl-table">
                 <thead>
                 <tr >
-                  <th class="font-weight-light">Week</th>
-                  <th class="font-weight-light" v-for="type in typesUsed" :key="type" @click="editType(type)">
+                  <th class="font-weight-light subheading">Woche</th>
+                  <th class="font-weight-light subheading" v-for="type in typesUsed" :key="type" @click="editType(type)">
                     {{getTypeName(type)}} <v-icon v-if="showEditCtrls" small class="unselectable edit-type">edit</v-icon>
                   </th>
                   <th v-if="showAddType"><v-icon class="unselectable" @click="addType()">add_circle</v-icon></th>
@@ -30,10 +30,10 @@
                 <tbody>
                 <tr v-for="week in range(startWeek,startWeek+weekCount)" :key="week" v-if="weeks.includes(week) || showEditCtrls">
                   <td v-if="showEditCtrls && week===startWeek" @click="showWeekDialog=true">{{week}} <v-icon v-if="showEditCtrls && week===startWeek" small class="unselectable edit-type">edit</v-icon></td>
-                  <td v-else class="font-weight-light">{{week}}</td>
-                  <td class="hide-overflow font-weight-light body-1" v-if="showEditCtrls" v-for="type in typesUsed" :key="type"
+                  <td v-else class="font-weight-light subheading">{{week}}</td>
+                  <td class="hide-overflow font-weight-light subheading" v-if="showEditCtrls" v-for="type in typesUsed" :key="type"
                       @click.stop="startEdit(week,type)">{{ displayUrl(week,type) }}</td>
-                  <td v-if="!showEditCtrls" class="font-weight-light body-1" v-for="type in typesUsed" :key="type">
+                  <td v-if="!showEditCtrls" class="font-weight-light" v-for="type in typesUsed" :key="type">
                     <a v-if="displayUrl(week,type)" target="_blank"
                        :href="displayUrl(week,type)">{{getTypeName(type)}} {{week}}</a>
                   </td>
@@ -366,7 +366,7 @@ export default {
   .card-table {
     margin-bottom: 20px;
     border-radius: 10px !important;
-    border-top: solid 2px @orange;
+    border-top: solid 2px @accent;
     box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
