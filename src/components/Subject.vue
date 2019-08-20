@@ -374,7 +374,7 @@ export default {
 
   @media (max-width: 767px) {
     .center-text {
-      text-align: center;
+      text-align: center !important;
     }
     .responsive-text {
       display: block;
