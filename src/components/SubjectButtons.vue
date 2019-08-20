@@ -107,7 +107,7 @@ export default {
 <style media="screen" lang="less" rel="stylesheet/less" scoped>
 
   @import url("../assets/styles/main");
-  @media (max-width: 767px) {
+  @media (max-width: 1080px) {
     .responsive-flex {
       display: flex !important;
     }

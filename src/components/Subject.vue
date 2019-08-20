@@ -1,15 +1,16 @@
 <template>
     <v-container justify-center my-4 :id="subjectName">
-      <v-layout justify-center>
+      <v-layout>
         <v-flex>
-          <v-card class="py-4 px-4 rounded center-text" hover raised="20"> <!-- TODO: Add rounded corners -->
+          <v-card class="py-4 px-4 rounded" hover raised="20"> <!-- TODO: Add rounded corners -->
             <span style="color: red;">{{error}}</span>
             <span style="color: red;">{{info}}</span>
-              <v-card-title class="accent--text pl-1  display-2 font-weight-thin responsive-text">{{subjectName}}
+              <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin">{{subjectName}}
                 <v-spacer />
-                <SubjectButtons class="hidden-sm-and-down" :subject="subject" :showEditCtrls="showEditCtrls"/>
+                <SubjectButtons class="" :subject="subject" :showEditCtrls="showEditCtrls"/>
               </v-card-title>
-              <SubjectButtons class="hidden-md-and-up " style="width: 100%; align: left;" :subject="subject" :showEditCtrls="showEditCtrls"/>
+              <p class="hidden-md-and-up accent--text pl-1 mb-4 pb-4 font-weight-thin center-text responsive-text">{{subjectName}}</p>
+              <SubjectButtons class="hidden-md-and-up " :subject="subject" :showEditCtrls="showEditCtrls"/>
 
               <v-card-actions>
                 <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
@@ -372,14 +373,12 @@ export default {
     -webkit-overflow-scrolling: touch;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1080px) {
     .center-text {
       text-align: center !important;
     }
     .responsive-text {
-      display: block;
-      font-size: 5vw !important;
-      color: red;
+      font-size: 6vw !important;
     }
   }
 
