@@ -2,10 +2,10 @@
     <v-container justify-center my-4 :id="subjectName">
       <v-layout justify-center>
         <v-flex>
-          <v-card class="py-4 px-4 rounded text-center" hover raised="20"> <!-- TODO: Add rounded corners -->
+          <v-card class="py-4 px-4 rounded center-text" hover raised="20"> <!-- TODO: Add rounded corners -->
             <span style="color: red;">{{error}}</span>
             <span style="color: red;">{{info}}</span>
-              <v-card-title style="font-weight: 100 !important;"class="accent--text pl-1  display-2 font-weight-thin text-truncate ">{{subjectName}}
+              <v-card-title class="accent--text pl-1  display-2 font-weight-thin responsive-text">{{subjectName}}
                 <v-spacer />
                 <SubjectButtons class="hidden-sm-and-down" :subject="subject" :showEditCtrls="showEditCtrls"/>
               </v-card-title>
@@ -370,6 +370,17 @@ export default {
     box-shadow: 0 0 1px rgba(0, 0, 0, .05), 0 1px 3px rgba(0, 0, 0, .06);
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
+  }
+
+  @media (max-width: 767px) {
+    .center-text {
+      text-align: center;
+    }
+    .responsive-text {
+      display: block;
+      font-size: 5vw !important;
+      color: red;
+    }
   }
 
 </style>

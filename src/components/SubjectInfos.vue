@@ -140,7 +140,7 @@ export default {
   .info-card {
     border-radius: 10px;
     border-top: solid 3px;
-    border-color: @accent;
+    border-color: @accent !important;
     margin-top: 20px;
     margin-bottom: 20px;
   }
@@ -156,10 +156,5 @@ export default {
     .info-card {
       word-break: keep-all;
     }
-    /*.card {*/
-    /*  padding: 5px;*/
-    /*  word-break: break-all;*/
-    /*  overflow: hidden;*/
-    /*}*/
   }
 </style>

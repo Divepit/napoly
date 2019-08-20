@@ -1,7 +1,7 @@
 <template>
   <span>
-    <v-btn class="text-none subheading buttontext--text" color="button" v-if="showEditCtrls"  v-for="button in buttons" :key="button.id" @click="startEdit(button)">{{button.buttonLabel}}</v-btn>
-    <v-btn class="text-none subheading font-weight-light buttontext--text" color="button" v-if="!showEditCtrls"  v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
+    <v-btn class="responsive-flex text-none subheading buttontext--text" color="button" v-if="showEditCtrls"  v-for="button in buttons" :key="button.id" @click="startEdit(button)">{{button.buttonLabel}}</v-btn>
+    <v-btn class="responsive-flex text-none subheading font-weight-light buttontext--text" color="button" v-if="!showEditCtrls"  v-for="button in buttons" :key="button.id" target="_blank" :href="button.buttonUrl">{{button.buttonLabel}}</v-btn>
     <v-icon class="pb-2" v-if="showEditCtrls" @click="addingButton=showButtonDialog=true">add_circle</v-icon>
     <v-dialog v-model="showButtonDialog" max-width="700px">
       <v-card class="py-3 px-3">
@@ -104,3 +104,12 @@ export default {
   }
 }
 </script>
+<style media="screen" lang="less" rel="stylesheet/less" scoped>
+
+  @import url("../assets/styles/main");
+  @media (max-width: 767px) {
+    .responsive-flex {
+      display: flex !important;
+    }
+  }
+</style>
