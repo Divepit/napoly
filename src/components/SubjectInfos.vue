@@ -32,7 +32,7 @@
               </v-container>
             </v-card-text>
             <v-card-actions>
-              <v-btn v-if="!addingInfo" color="error" flat @click="removeInfo(activeInfo.id)">Remove Info</v-btn>
+              <v-btn v-if="!addingInfo" color="error" flat @click="removeInfo(activeInfo.id)">Remove</v-btn>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click="cancelEdit()">Cancel</v-btn>
               <v-btn color="blue darken-1" flat @click="saveInfo()">Save</v-btn>

@@ -11,7 +11,7 @@
           <v-text-field label="Button Url" v-model="activeButton.buttonUrl" required></v-text-field>
         </v-card-text>
         <v-card-actions>
-          <v-btn v-if="!addingButton" color="error"  @click="removeButton(activeButton.id)">Remove Button</v-btn>
+          <v-btn v-if="!addingButton" flat color="error"  @click="removeButton(activeButton.id)">Remove</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="cancelEdit()">Cancel</v-btn>
           <v-btn color="blue darken-1" flat @click="saveButton()">Save</v-btn>

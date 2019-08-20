@@ -21,7 +21,7 @@
               <table class="fl-table">
                 <thead>
                 <tr >
-                  <th class="font-weight-light subheading">Woche</th>
+                  <th class="font-weight-light subheading">#</th>
                   <th class="font-weight-light subheading" v-for="type in typesUsed" :key="type" @click="editType(type)">
                     {{getTypeName(type)}} <v-icon v-if="showEditCtrls" small class="unselectable edit-type">edit</v-icon>
                   </th>
