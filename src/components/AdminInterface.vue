@@ -1,9 +1,9 @@
 <template>
   <div v-if="signer">
     <Signup v-if="this.super" @pushUser="pushUser($event)"/>
-    <v-container grid-list-lg>
-      <v-layout justify-center>
-        <v-flex v-for="user in users" :key="user.id" xs12 sm12 md3>
+    <v-container fluid grid-list-md >
+      <v-layout justify-center row wrap class="responsive-text" >
+        <v-flex v-for="user in users" :key="user.id" xs12 sm12 md4 >
           <v-card :color="user.role ? 'teal accent-4':'cyan darken-3'" class="text-sm-left" @click="editUser(user)">
             <v-card-title class="headline">
               <v-icon class="mr-3" v-if="user.role == 1" large >android</v-icon>
@@ -16,14 +16,14 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <v-layout>
+      <v-layout >
         <v-dialog v-model="dialog" max-width="500px">
           <v-card>
             <v-card-title class="headline"> User Profile </v-card-title>
             <v-card-text>
               <v-text-field label="Username" type="email" v-model="editedEmail" required></v-text-field>
-              <v-text-field label="Password" v-model="editedPassword" required></v-text-field>
-              <v-text-field label="Password confirmation" v-model="editedPasswordConfirmation" required></v-text-field>
+              <v-text-field label="Password" type="password" v-model="editedPassword" required></v-text-field>
+              <v-text-field label="Password confirmation" type="password" v-model="editedPasswordConfirmation" required></v-text-field>
               <v-select v-if="this.super"
               :items="fields"
               item-value="id"

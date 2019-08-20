@@ -5,12 +5,12 @@
           <v-card class="py-4 px-4 rounded" hover raised="20"> <!-- TODO: Add rounded corners -->
             <span style="color: red;">{{error}}</span>
             <span style="color: red;">{{info}}</span>
-              <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin">{{subjectName}}
+              <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin responsive-text">{{subjectName}}
                 <v-spacer />
-                <SubjectButtons class="" :subject="subject" :showEditCtrls="showEditCtrls"/>
+                <SubjectButtons :subject="subject" :showEditCtrls="showEditCtrls"/>
               </v-card-title>
               <p class="hidden-md-and-up accent--text pl-1 mb-4 pb-4 font-weight-thin center-text responsive-text">{{subjectName}}</p>
-              <SubjectButtons class="hidden-md-and-up " :subject="subject" :showEditCtrls="showEditCtrls"/>
+              <SubjectButtons class="hidden-md-and-up" :subject="subject" :showEditCtrls="showEditCtrls"/>
 
               <v-card-actions>
                 <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
