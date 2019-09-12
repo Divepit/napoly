@@ -6,7 +6,7 @@
         <v-flex md12 >
             <span class="muli display-3 white--text font-weight-thin ">napoly</span>
             <br>
-            <span class="headline white--text font-weight-thin">ETH Document Repository</span>
+            <span class="headline white--text font-weight-thin">Student Document Repository</span>
         </v-flex>
       </v-layout >
     </v-container>

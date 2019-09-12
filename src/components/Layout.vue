@@ -13,8 +13,7 @@
     <v-toolbar-title class=" hidden-sm-and-down titlebartext--text headline font-weight-bold muli"> napoly </v-toolbar-title>
     <v-spacer/>
     <v-toolbar-items >
-      <v-btn flat to="/" class="titlebartext--text subheading font-weight-regular text-capitalize">Links</v-btn>
-      <v-btn flat v-if="!signer" to="/signin" class="titlebartext--text subheading font-weight-regular text-capitalize">Sign In</v-btn>
+      <!-- <v-btn flat to="/" class="titlebartext--text subheading font-weight-regular text-capitalize">Links</v-btn> -->
       <v-btn flat v-if="signer" to="/admin" class="titlebartext--text subheading font-weight-regular text-capitalize">Admin</v-btn>
       <v-btn flat v-if="signer" @click="signOut()" class="titlebartext--text subheading font-weight-regular text-capitalize">Sign Out</v-btn>
     </v-toolbar-items>
