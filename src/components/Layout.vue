@@ -9,8 +9,11 @@
     <SidebarContent />
   </v-navigation-drawer>
   <v-toolbar app fixed dark color="main" >
-    <v-toolbar-side-icon @click.stop="primaryDrawer.model = !primaryDrawer.model"/>
-    <v-toolbar-title class=" hidden-sm-and-down titlebartext--text headline font-weight-bold muli"> napoly </v-toolbar-title>
+    <v-toolbar-side-icon @click.stop="primaryDrawer.model = !primaryDrawer.model" />
+    <p class="pt-3" @click.stop="primaryDrawer.model = !primaryDrawer.model" style="cursor: pointer;">
+      Filter anpassen
+    </p>
+    <!-- <v-toolbar-title class=" hidden-sm-and-down titlebartext--text headline font-weight-bold muli"> napoly </v-toolbar-title> -->
     <v-spacer/>
     <v-toolbar-items >
       <!-- <v-btn flat to="/" class="titlebartext--text subheading font-weight-regular text-capitalize">Links</v-btn> -->
