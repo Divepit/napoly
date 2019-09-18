@@ -10,10 +10,9 @@
           >
             <template v-slot:items="props">
               <td>{{ props.item.id }}</td>
-              <td>{{ subjects[props.item.subject_id].subjectName }}</td>
-              <td>{{ types[props.item.type_id].typeName }}</td>
+              <td >{{ subjects.find(function(element){ return element.id == props.item.subject_id}).subjectName}}</td>
+              <td>{{ types.find(function(element){ return element.id == props.item.type_id}).typeName}}</td>
               <td>{{ props.item.linkWeek }}</td>
-              <td>{{ props.item.created_at }}</td>
               <td>{{ props.item.updated_at }}</td>
             </template>
           </v-data-table>
@@ -25,21 +24,22 @@
 <script>
 export default {
   created () {
-    this.getLinks()
+    this.getSemesters()
     this.getSubjects()
     this.getTypes()
+    this.getLinks()
   },
   data () {
     return {
       links: [],
       subjects: [],
       types: [],
+      semesters: [],
       headers: [
         { text: 'Link ID', value: 'id' },
         { text: 'Subject', value: 'subject_id' },
         { text: 'Type', value: 'type_id' },
         { text: 'Week', value: 'linkWeek' },
-        { text: 'Created', sortable: false, value: 'created_at' },
         { text: 'Updated', sortable: false, value: 'updated_at' }
 
       ]
@@ -60,7 +60,6 @@ export default {
         .then(response => {
           if (response.data.length) {
             this.subjects = response.data
-            this.subjects = this.subjects.reverse()
           }
         })
     },
@@ -69,7 +68,14 @@ export default {
         .then(response => {
           if (response.data.length) {
             this.types = response.data
-            this.types = this.types.reverse()
+          }
+        })
+    },
+    getSemesters () {
+      this.$http.secured.get('/api/v1/semesters')
+        .then(response => {
+          if (response.data.length) {
+            this.semesters = response.data
           }
         })
     }
