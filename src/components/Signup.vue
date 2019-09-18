@@ -7,14 +7,13 @@
 
         <v-flex xs12 sm12 md12>
           <v-text-field
-            label="E-mail address"
+            label="Username"
             placeholder=""
             outline
-            type="email"
             v-model="email"
             browser-autocomplete="false"
             color="teal accent-2"
-            id="email"
+            id="username"
             dont-fill-mask-blanks
           ></v-text-field>
         </v-flex>

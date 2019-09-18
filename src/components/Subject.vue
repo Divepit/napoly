@@ -270,7 +270,8 @@ export default {
             linkUrl: this.activeLink.linkUrl,
             subject_id: this.activeLink.subject_id,
             linkWeek: this.activeLink.linkWeek,
-            type_id: this.activeLink.type_id
+            type_id: this.activeLink.type_id,
+            creator: localStorage.username
           }
         }).then(response => {
           this.endEdit()
@@ -314,7 +315,8 @@ export default {
             linkUrl: this.activeLink.linkUrl,
             subject_id: this.activeLink.subject_id,
             linkWeek: this.activeLink.linkWeek,
-            type_id: this.activeLink.type_id
+            type_id: this.activeLink.type_id,
+            editor: localStorage.username
           }
         }).then(response => this.endEdit())
       }
@@ -338,6 +340,7 @@ export default {
       }
     },
     authorize () {
+      // eslint-disable-next-line
       if (this.signer && (localStorage.admin == 1 || this.userField === this.field)) { return true }
       return false
     },

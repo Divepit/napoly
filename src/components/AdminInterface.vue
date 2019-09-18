@@ -3,20 +3,32 @@
     <v-container fluid grid-list-md v-if="this.super" >
       <v-layout justify-center>
         <v-flex xs12 sm12 md4 >
-          <v-card color="info" class="text-sm-left pointer" @click="addingUser = !addingUser">
+          <v-card color="info" class="text-sm-left pointer" @click="display = 'users'">
             <v-card-title class="headline">
-              <v-icon class="mr-3" medium >add</v-icon>
-              Add new user
+              <v-icon class="mr-3" medium >account_box</v-icon>
+              Manage the Users
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm12 md4 >
+          <v-card color="warn" class="text-sm-left pointer" @click="display = 'linklog'">
+            <v-card-title class="headline">
+              <v-icon class="mr-3" medium >assignment</v-icon>
+              See the logs
             </v-card-title>
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
+    <v-container fluid grid-list-md justify-center>
+      <v-btn v-if="display == 'users'" class="text-sm-left" @click="addingUser = !addingUser" >
+          <v-icon class="mr-3" medium >add</v-icon>
+          Add new user
+      </v-btn>
+      <v-layout  v-if="display == 'users'" row wrap class="responsive-text" align-center>
 
-    <v-container fluid grid-list-md >
-      <v-layout justify-center row wrap class="responsive-text" >
         <v-flex v-for="user in users" :key="user.id" xs12 sm12 md4 >
-          <v-card :color="user.role ? 'teal accent-4':'cyan darken-3'" class="text-sm-left pointer" @click="editUser(user)">
+          <v-card :color="user.role ? '#4b6584':'#778ca3'" class="text-sm-left pointer" @click="editUser(user)">
             <v-card-title class="headline">
               <v-icon class="mr-3" v-if="user.role == 1" large >android</v-icon>
               <v-icon v-else large >account_box</v-icon>
@@ -28,13 +40,13 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <Linklog/>
+      <Linklog v-if="display == 'linklog'"/>
       <v-layout >
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <v-card>
             <v-card-title class="headline"> User Profile </v-card-title>
             <v-card-text>
-              <v-text-field label="Username" type="email" v-model="editedEmail" required></v-text-field>
+              <v-text-field label="Username" v-model="editedEmail" required></v-text-field>
               <v-switch color="info" v-model="changingPassword" label="Edit Password" ></v-switch>
               <v-text-field v-if="!changingPassword" disabled label="Password" type="password" v-model="editedPassword" required></v-text-field>
               <v-text-field v-else label="Password" type="password" v-model="editedPassword" required></v-text-field>
@@ -118,7 +130,8 @@ export default {
       admin: null,
       super: false,
       changingPassword: false,
-      addingUser: false
+      addingUser: false,
+      display: 'users'
 
     }
   },
@@ -193,6 +206,7 @@ export default {
       this.admin = user.role
     },
     checkSuper () {
+      // eslint-disable-next-line
       if (localStorage.admin == '1') {
         this.super = true
       } else {

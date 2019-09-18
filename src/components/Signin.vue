@@ -56,6 +56,7 @@ export default {
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
       localStorage.uid = response.data.id
+      localStorage.username = response.data.username
       localStorage.admin = parseInt(response.data.role, 10)
       localStorage.userField = parseInt(response.data.field_id, 10)
       this.$store.state.userField = parseInt(response.data.field_id, 10)

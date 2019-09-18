@@ -58,6 +58,7 @@ export default {
           delete localStorage.uid
           delete localStorage.admin
           delete localStorage.userField
+          delete localStorage.username
           this.$forceUpdate()
         })
     }

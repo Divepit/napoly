@@ -88,6 +88,7 @@ export default {
         })
     },
     authorize () {
+      // eslint-disable-next-line
       if (this.signer && (localStorage.admin == 1 || this.userField === this.field)) { return true }
       return false
     }

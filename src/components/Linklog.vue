@@ -7,12 +7,16 @@
             :items="links"
             class="elevation-1"
             disable-initial-sort
+            :loading="links.length == 0"
+            :rows-per-page-items="[10,25,50, {'text':'$vuetify.dataIterator.rowsPerPageAll','value':-1}]"
           >
             <template v-slot:items="props">
               <td>{{ props.item.id }}</td>
               <td >{{ subjects.find(function(element){ return element.id == props.item.subject_id}).subjectName}}</td>
               <td>{{ types.find(function(element){ return element.id == props.item.type_id}).typeName}}</td>
               <td>{{ props.item.linkWeek }}</td>
+              <td>{{ props.item.creator }}</td>
+              <td>{{ props.item.editor }}</td>
               <td>{{ props.item.updated_at }}</td>
             </template>
           </v-data-table>
@@ -40,6 +44,8 @@ export default {
         { text: 'Subject', value: 'subject_id' },
         { text: 'Type', value: 'type_id' },
         { text: 'Week', value: 'linkWeek' },
+        { text: 'Created by', value: 'creator' },
+        { text: 'Last edit by', value: 'editor' },
         { text: 'Updated', sortable: false, value: 'updated_at' }
 
       ]

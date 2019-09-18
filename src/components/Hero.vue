@@ -22,6 +22,30 @@ import SubjectButtons from '@/components/SubjectButtons'
 export default {
   components: {
     SubjectButtons
+  },
+  created () {
+    this.ensureLocalStorage()
+  },
+  methods: {
+    ensureLocalStorage () {
+      if (localStorage.signedIn && localStorage.username == null) {
+        this.signOut()
+      }
+    },
+    signOut () {
+      localStorage.signedIn = false
+      this.$store.state.signer = false
+      this.$http.secured.delete('/signin')
+        .then(response => {
+          delete localStorage.csrf
+          delete localStorage.signedIn
+          delete localStorage.uid
+          delete localStorage.admin
+          delete localStorage.userField
+          this.$forceUpdate()
+        })
+    }
+
   }
 }
 </script>
