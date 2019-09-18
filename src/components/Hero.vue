@@ -4,9 +4,13 @@
     <v-container grid-list-md text-xs-center justify-center fill-height class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
       <v-layout row wrap align-center>
         <v-flex md12 >
-            <span class="muli display-3 white--text font-weight-thin ">napoly</span>
-            <br>
-            <span class="headline white--text font-weight-thin">Student Document Repository</span>
+          <!-- <v-avatar tile size="200" >
+            <img src="https://www.svgrepo.com/show/229523/volcano.svg" alt="avatar" style="border-radius: 0px 0px 75px 75px;">
+          </v-avatar>
+          <br> -->
+          <span class="muli display-3 white--text font-weight-thin ">napoly.ch</span>
+          <br>
+          <span class="headline white--text font-weight-thin">Student Document Repository</span>
         </v-flex>
       </v-layout >
     </v-container>

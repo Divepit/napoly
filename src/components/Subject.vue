@@ -2,10 +2,13 @@
     <v-container justify-center my-4 :id="subjectName">
       <v-layout>
         <v-flex>
-          <v-card class="py-4 px-4 rounded" hover raised="20"> <!-- TODO: Add rounded corners -->
+          <v-card class="py-4 px-4 rounded" hover> <!-- TODO: Add rounded corners -->
             <span style="color: red;">{{error}}</span>
             <span style="color: red;">{{info}}</span>
               <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin responsive-text">{{subjectName}}
+              <v-card-title v-if="showEditCtrls" class="hidden-sm-and-down grey--text pl-1 subheading font-weight-thin responsive-text">(Subject ID: {{subject}})
+              </v-card-title>
+
                 <v-spacer />
                 <SubjectButtons :subject="subject" :showEditCtrls="showEditCtrls"/>
               </v-card-title>

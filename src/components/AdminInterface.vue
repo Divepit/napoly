@@ -16,6 +16,7 @@
           </v-card>
         </v-flex>
       </v-layout>
+      <Linklog/>
       <v-layout >
         <v-dialog v-model="dialog" max-width="500px">
           <v-card>
@@ -65,11 +66,13 @@
 
 <script>
 import Signup from '@/components/Signup'
+import Linklog from '@/components/Linklog'
 import {mapState} from 'vuex'
 export default {
   name: 'AdminInterface',
   components: {
-    Signup
+    Signup,
+    Linklog
   },
   computed: {
     ...mapState([
