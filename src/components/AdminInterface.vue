@@ -1,10 +1,22 @@
 <template>
   <div v-if="signer">
-    <Signup v-if="this.super" @pushUser="pushUser($event)"/>
+    <v-container fluid grid-list-md v-if="this.super" >
+      <v-layout justify-center>
+        <v-flex xs12 sm12 md4 >
+          <v-card color="info" class="text-sm-left pointer" @click="addingUser = !addingUser">
+            <v-card-title class="headline">
+              <v-icon class="mr-3" medium >add</v-icon>
+              Add new user
+            </v-card-title>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+
     <v-container fluid grid-list-md >
       <v-layout justify-center row wrap class="responsive-text" >
         <v-flex v-for="user in users" :key="user.id" xs12 sm12 md4 >
-          <v-card :color="user.role ? 'teal accent-4':'cyan darken-3'" class="text-sm-left" @click="editUser(user)">
+          <v-card :color="user.role ? 'teal accent-4':'cyan darken-3'" class="text-sm-left pointer" @click="editUser(user)">
             <v-card-title class="headline">
               <v-icon class="mr-3" v-if="user.role == 1" large >android</v-icon>
               <v-icon v-else large >account_box</v-icon>
@@ -18,13 +30,16 @@
       </v-layout>
       <Linklog/>
       <v-layout >
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="500px" persistent>
           <v-card>
             <v-card-title class="headline"> User Profile </v-card-title>
             <v-card-text>
               <v-text-field label="Username" type="email" v-model="editedEmail" required></v-text-field>
-              <v-text-field label="Password" type="password" v-model="editedPassword" required></v-text-field>
-              <v-text-field label="Password confirmation" type="password" v-model="editedPasswordConfirmation" required></v-text-field>
+              <v-switch color="info" v-model="changingPassword" label="Edit Password" ></v-switch>
+              <v-text-field v-if="!changingPassword" disabled label="Password" type="password" v-model="editedPassword" required></v-text-field>
+              <v-text-field v-else label="Password" type="password" v-model="editedPassword" required></v-text-field>
+              <v-text-field v-if="!changingPassword" disabled label="Password confirmation" type="password" v-model="editedPasswordConfirmation" required></v-text-field>
+              <v-text-field v-else label="Password confirmation" type="password" v-model="editedPasswordConfirmation" required></v-text-field>
               <v-select v-if="this.super"
               :items="fields"
               item-value="id"
@@ -43,8 +58,8 @@
             <v-card-actions>
               <v-btn v-if="this.super" depressed dark color="red lighten-2" @click="deleting = !deleting">Delete</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-              <v-btn color="blue darken-1" flat @click="dialog = false; updateUser()">Save</v-btn>
+              <v-btn color="blue darken-1" flat @click="dialog = false; changingPassword = false">Close</v-btn>
+              <v-btn color="blue darken-1" flat @click="dialog = false; changingPassword = false; updateUser()">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -58,6 +73,16 @@
             <v-spacer/>
             <v-btn color="error" flat @click="deleting = false; removeUser(currentUser.id)">Delete</v-btn>
           </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="addingUser"  max-width="900">
+        <v-card>
+          <v-card-title>
+            New User
+          </v-card-title>
+          <v-card-text>
+            <Signup v-if="this.super && addingUser" @pushUser="pushUser($event)"/>
+          </v-card-text>
         </v-card>
       </v-dialog>
     </v-container>
@@ -91,7 +116,9 @@ export default {
       editedPasswordConfirmation: '',
       dialog: false,
       admin: null,
-      super: false
+      super: false,
+      changingPassword: false,
+      addingUser: false
 
     }
   },
@@ -166,7 +193,7 @@ export default {
       this.admin = user.role
     },
     checkSuper () {
-      if (localStorage.admin === '1') {
+      if (localStorage.admin == '1') {
         this.super = true
       } else {
         this.super = false

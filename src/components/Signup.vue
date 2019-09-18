@@ -3,19 +3,9 @@
 <template>
       <v-container fluid>
         <v-form>
-        <v-layout row justify-center>
-          <v-flex xs12 sm12 md2>
-
-          <div class="">
-            Create New User
-            <v-divider/>
-            <br>
-          </div>
-        </v-flex>
-      </v-layout>
       <v-layout row justify-center>
 
-        <v-flex xs12 sm12 md2>
+        <v-flex xs12 sm12 md12>
           <v-text-field
             label="E-mail address"
             placeholder=""
@@ -29,7 +19,7 @@
           ></v-text-field>
         </v-flex>
         &nbsp;
-        <v-flex xs12 sm12 md2>
+        <v-flex xs12 sm12 md12>
           <v-text-field
             color="teal accent-2"
             label="Password"
@@ -42,7 +32,7 @@
           ></v-text-field>
         </v-flex>
         &nbsp;
-        <v-flex xs12 sm12 md2>
+        <v-flex xs12 sm12 md12>
           <v-text-field
             color="teal accent-2"
             label="Password Confirmation"
@@ -57,11 +47,11 @@
         </v-flex>
       </v-layout>
       <v-layout row justify-center>
-        <v-flex xs12 sm12 md3>
+        <v-flex xs12 sm12 md12>
 
         <v-checkbox color="teal accent-2" v-model="admin" id="admin" label="Admin"></v-checkbox>
       </v-flex>
-      <v-flex xs12 sm12 md3 justify-self-right style="text-align: right;">
+      <v-flex xs12 sm12 md12 justify-self-right style="text-align: right;">
         <v-btn flat color="teal accent-2" @click="signup()">Create User</v-btn>
       </v-flex>
 
