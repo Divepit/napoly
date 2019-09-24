@@ -1,17 +1,26 @@
 <template>
   <div v-if="signer">
-    <v-container fluid grid-list-md v-if="this.super" >
+    <v-container fluid grid-list-md>
       <v-layout justify-center>
         <v-flex xs12 sm12 md4 >
-          <v-card color="info" class="text-sm-left pointer" @click="display = 'users'">
+          <v-card class="text-sm-left pointer" to="/">
             <v-card-title class="headline">
-              <v-icon class="mr-3" medium >account_box</v-icon>
-              Manage the Users
+              <v-icon class="mr-3" medium >arrow_left</v-icon>
+              <p class="my-0 mx-0 py-0 px-0">Back to Napoly</p>
             </v-card-title>
           </v-card>
         </v-flex>
         <v-flex xs12 sm12 md4 >
-          <v-card color="warn" class="text-sm-left pointer" @click="display = 'linklog'">
+          <v-card color="info" class="text-sm-left pointer" @click="display = 'users'">
+            <v-card-title class="headline">
+              <v-icon class="mr-3" medium >account_box</v-icon>
+              <p v-if="this.super" class="my-0 mx-0 py-0 px-0">Manage the Users</p>
+              <p v-else class="my-0 mx-0 py-0 px-0">My Account</p>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm12 md4 >
+          <v-card color="warning" class="text-sm-left pointer" @click="display = 'linklog'">
             <v-card-title class="headline">
               <v-icon class="mr-3" medium >assignment</v-icon>
               See the logs
@@ -21,22 +30,26 @@
       </v-layout>
     </v-container>
     <v-container fluid grid-list-md justify-center>
-      <v-btn v-if="display == 'users'" class="text-sm-left" @click="addingUser = !addingUser" >
+      <v-btn v-if="display == 'users' && this.super" class="text-sm-left" @click="addingUser = !addingUser" >
           <v-icon class="mr-3" medium >add</v-icon>
           Add new user
       </v-btn>
-      <v-layout  v-if="display == 'users'" row wrap class="responsive-text" align-center>
+      <v-layout  v-if="display == 'users'" row wrap class="responsive-text" align-center justify-center>
 
         <v-flex v-for="user in users" :key="user.id" xs12 sm12 md4 >
-          <v-card :color="user.role ? '#4b6584':'#778ca3'" class="text-sm-left pointer" @click="editUser(user)">
+          <v-card :color="user.role ? '#4b6584':'#778ca3'" class="text-sm-left">
             <v-card-title class="headline">
               <v-icon class="mr-3" v-if="user.role == 1" large >android</v-icon>
-              <v-icon v-else large >account_box</v-icon>
+              <v-icon v-else large class="mr-3">account_box</v-icon>
               {{user.email}}
             </v-card-title>
             <v-card-text class="py-1">User ID: {{user.id}}</v-card-text>
             <v-card-text class="py-1">{{getRole(user)}}</v-card-text>
             <v-card-text class="py-1 pb-3">Field: {{user.field_id}}</v-card-text>
+            <v-card-actions>
+              <v-spacer/>
+              <v-btn color="accent"  @click="editUser(user)">Edit account</v-btn>
+            </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>

@@ -1,7 +1,7 @@
 <!-- TODO: Unfuck this -->
 <template lang="html">
   <div style="height: 100vh" class="gradient absolute">
-    <v-container grid-list-md text-xs-center justify-center fill-height class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
+    <v-container grid-list-md text-xs-center fill-height align-center class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
       <v-layout row wrap align-center>
         <v-flex md12 >
           <!-- <v-avatar tile size="200" >
@@ -11,7 +11,12 @@
           <span class="muli display-3 white--text font-weight-thin ">napoly.ch</span>
           <br>
           <span class="headline white--text font-weight-thin">Student Document Repository</span>
+          <v-flex md12 height="10" mt-5 >
+            <v-progress-circular v-if="this.$store.state.loadingSubjects" indeterminate color="white" :size="50" width="2" ></v-progress-circular>
+          </v-flex>
+
         </v-flex>
+
       </v-layout >
     </v-container>
   </div>
