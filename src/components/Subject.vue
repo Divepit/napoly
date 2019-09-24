@@ -207,6 +207,9 @@ export default {
       }
     },
     updateTitle () {
+      if (this.editedTitle.length < 1) {
+        return 0
+      }
       this.$http.secured.patch(`/api/v1/subjects/` + this.subject, {
         subjectName: this.editedTitle
       })
