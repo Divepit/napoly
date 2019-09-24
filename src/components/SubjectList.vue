@@ -75,10 +75,12 @@ export default {
     },
     getSubjects () {
       this.subjects = []
+      this.$store.state.loadingSubjects = true
       this.$http.secured.get('/api/v1/subjects/?semester_id=' + this.semester + '&field_id=' + this.field + '&year=' + this.year)
         .then(response => {
           this.subjects = response.data
           this.updateSubjects()
+          this.$store.state.loadingSubjects = false
         })
     },
     getTypes () {
@@ -89,7 +91,7 @@ export default {
     },
     authorize () {
       // eslint-disable-next-line
-      if (this.signer && (localStorage.admin == 1 || this.userField === this.field)) { return true }
+      if (this.signer && (localStorage.admin == 1 || this.userField == this.field)) { return true }
       return false
     }
   },
