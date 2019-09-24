@@ -5,7 +5,9 @@
           <v-card class="py-4 px-4 rounded" hover> <!-- TODO: Add rounded corners -->
             <span style="color: red;">{{error}}</span>
             <span style="color: red;">{{info}}</span>
-              <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin responsive-text">{{subjectName}}
+              <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin responsive-text" @click="editTitle()">
+                <p class="my-0" v-if="!editingTitle">{{subjectName}}</p>
+                <v-text-field v-if="editingTitle" label="Hit enter to submit" :rules="[rules.min]" v-on:keyup.enter="updateTitle()" required v-model="editedTitle"></v-text-field>
               <v-card-title v-if="showEditCtrls" class="hidden-sm-and-down grey--text pl-1 subheading font-weight-thin responsive-text">(Subject ID: {{subject}})
               </v-card-title>
 
@@ -169,7 +171,12 @@ export default {
       showWeekDialog: false,
       editorMode: false,
       addingLink: false,
-      initialType: false
+      initialType: false,
+      editingTitle: false,
+      editedTitle: '',
+      rules: {
+        min: v => v.length >= 1 || 'Cannot be empty'
+      }
     }
   },
   created () {
@@ -193,6 +200,22 @@ export default {
     }
   },
   methods: {
+    editTitle () {
+      this.editedTitle = this.subjectName
+      if (this.showEditCtrls) {
+        this.editingTitle = true
+      }
+    },
+    updateTitle () {
+      this.$http.secured.patch(`/api/v1/subjects/` + this.subject, {
+        subjectName: this.editedTitle
+      })
+        .then(response => {
+          this.subjectName = this.editedTitle
+          this.editingTitle = false
+          this.editedTitle = ''
+        })
+    },
     // Sets subjectName to the subjectName of the current subject
     getData () {
       this.$http.secured.get('/api/v1/subjects/' + this.subject)
@@ -341,7 +364,7 @@ export default {
     },
     authorize () {
       // eslint-disable-next-line
-      if (this.signer && (localStorage.admin == 1 || this.userField === this.field)) { return true }
+      if (this.signer && (localStorage.admin == 1 || this.userField == this.field)) { return true }
       return false
     },
     range (start, stop) {
