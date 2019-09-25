@@ -41,22 +41,41 @@
         </v-list>
         <v-divider></v-divider>
         <v-list dense>
-          <v-list-tile v-bind:class="[field == f.id ? 'selected' : '']" v-for="f in fields" :key="f.id" @click="field = f.id">
+          <v-list-tile v-bind:class="[field == f.id ? 'selected' : '']" v-for="f in fields" :key="f.id" @click="setField(f.id)">
             <v-list-tile-action>
               <v-icon>school</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>{{f.fieldName}}</v-list-tile-title>
+              <v-list-tile-title v-if="(f.id != editId)">{{f.fieldName}}</v-list-tile-title>
+              <v-text-field v-if="(f.id == editId)" v-model="editedField" v-on:keyup.enter="updateField()"/>
             </v-list-tile-content>
+            <v-spacer/>
+            <v-icon color="grey lighten-1" v-if="authorize()" @click=" editId = f.id; editingField = true; editedField = f.fieldName">edit</v-icon>
+            <v-icon color="grey lighten-1" v-if="editId == f.id" @click="editId = ''; editingField = false; editedField = ''">cancel</v-icon>
+          </v-list-tile>
+          <v-list-tile v-if="authorize()" class="grey lighten-4">
+            <v-list-tile-action>
+              <v-icon color="grey">add</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title v-if="!addingField" class="grey--text pointer" @click="addingField = true" >ADD FIELD</v-list-tile-title>
+              <v-text-field v-if="addingField" :rules="[rules.min]" v-on:keyup.enter="confirmFieldAdd = true" v-model="newField"></v-text-field>
+            </v-list-tile-content>
+            <v-icon color="grey lighten-1" v-if="addingField" @click="addingField = false">cancel</v-icon>
+
           </v-list-tile>
         </v-list>
         <v-divider></v-divider>
         <v-list dense>
           <v-list-tile subheader>
             <v-subheader>Fächer</v-subheader>
+            <v-spacer/>
+            <v-progress-circular v-if="subjects.length == 0" indeterminate color="grey" :size="15" width="2" ></v-progress-circular>
+
           </v-list-tile>
         </v-list>
         <v-divider></v-divider>
+
         <v-list dense>
             <v-list-tile v-for="s in subjects" :key="s.id" :href="'#'+s.subjectName">
               <v-list-tile-action>
@@ -67,6 +86,21 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
+          <v-dialog v-model="confirmFieldAdd" persistent max-width="550">
+            <v-card>
+              <v-card-title class="headline error--text"> Are you sure? </v-card-title>
+              <v-card-text class="subheading">
+                You are about to add the field
+                <strong class="info--text">{{newField}}</strong>.
+                This cannot be undone.
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer/>
+                <v-btn color="error"  @click="confirmFieldAdd=false">No</v-btn>
+                <v-btn color="success"   @click="addField(); confirmFieldAdd=false">Yes</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
   </div>
 
 </template>
@@ -95,7 +129,15 @@ export default {
       newSemesterYear: '',
       addingSemester: false,
       years: [1, 2, 3],
-      year: ''
+      year: '',
+      newField: 'D-',
+      addingField: false,
+      rules: {
+        min: v => v.length >= 1 || 'Cannot be empty'
+      },
+      editId: '',
+      editingField: false,
+      confirmFieldAdd: false
     }
   },
   computed: {
@@ -120,7 +162,17 @@ export default {
     }
   },
   methods: {
-
+    setField (id) {
+      // eslint-disable-next-line
+      if (this.editId == '') {
+        this.field = id
+      }
+    },
+    authorize () {
+      // eslint-disable-next-line
+      if (this.$store.state.signer && localStorage.admin == 1) { return true }
+      return false
+    },
     getSemesterName () {
       let rawSem = this.semesters.filter(obj => {
         return obj.id === this.semester
@@ -152,22 +204,34 @@ export default {
       this.newSemesterHalf = ''
       this.newSemesterYear = ''
     },
-    addSemester () {
-      if (!this.newSemesterHalf || !this.newSemesterYear) {
-        this.exitAdding()
-        console.log('Not enough info given')
-        return
+    addField () {
+      if (this.newField.length < 1) {
+        return 0
       }
-      this.$http.secured.post('/api/v1/semesters/', {
-        semester: {
-          semesterHalf: this.newSemesterHalf,
-          semesterYear: this.newSemesterYear
+      this.$http.secured.post('/api/v1/fields/', {
+        field: {
+          fieldName: this.newField
         }
       })
-
         .then(response => {
-          this.semesters.push(response.data)
-          this.exitAdding()
+          this.fields.push(response.data)
+          this.newField = ''
+          this.addingField = false
+        })
+    },
+    updateField () {
+      if (this.editedField.length < 1) {
+        return 0
+      }
+      this.$http.secured.patch(`/api/v1/fields/` + this.editId, {
+        fieldName: this.editedField
+      })
+        .then(response => {
+          this.fieldName = this.editedField
+          this.editingField = false
+          this.editedField = ''
+          this.editId = ''
+          this.getFields()
         })
     },
     convertRawSemester (s) {
