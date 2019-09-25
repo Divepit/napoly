@@ -1,6 +1,6 @@
 <!-- TODO: Unfuck this -->
 <template lang="html">
-  <div style="height: 100vh" :class="(color == 5 || color == null) ? 'gradient' : '', absolute" :style="color == 5 ? '' : ('background: ' + colors[color] )">
+  <div style="height: 100vh" :class="(color == 5 || color == null) ? 'gradient absolute' : 'absolute'" :style="(color == 5 || color == null) ? '' : ('background: ' + colors[color] )">
     <v-container grid-list-md text-xs-center fill-height align-center class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
       <v-layout row wrap align-center>
         <v-flex md12 >

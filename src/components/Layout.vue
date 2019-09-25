@@ -67,14 +67,17 @@ export default {
         })
     },
     setColor () {
+      // eslint-disable-next-line
       if (this.$store.state.signer || (localStorage.color != 5 && localStorage.color != null)) {
         if (localStorage.color != null) {
           this.color = parseInt(localStorage.color, 10)
           this.$store.state.color = localStorage.color
         } else {
           localStorage.color = 5
-          this.color = 5
         }
+      } else {
+        this.color = 5
+        this.$store.state.color = 5
       }
     },
     changeColor () {
@@ -85,7 +88,6 @@ export default {
       }
       localStorage.color = this.color
       this.$store.state.color = localStorage.color
-
     }
   },
   computed: {
