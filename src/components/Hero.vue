@@ -1,6 +1,6 @@
 <!-- TODO: Unfuck this -->
 <template lang="html">
-  <div style="height: 100vh" class="gradient absolute">
+  <div style="height: 100vh" :class="(color == 5 || color == null) ? 'gradient' : '', absolute" :style="color == 5 ? '' : ('background: ' + colors[color] )">
     <v-container grid-list-md text-xs-center fill-height align-center class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
       <v-layout row wrap align-center>
         <v-flex md12 >
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import SubjectButtons from '@/components/SubjectButtons'
 export default {
   components: {
@@ -30,6 +31,12 @@ export default {
   },
   created () {
     this.ensureLocalStorage()
+  },
+  computed: {
+    ...mapState([
+      'color',
+      'colors'
+    ])
   },
   methods: {
     ensureLocalStorage () {
@@ -63,6 +70,5 @@ export default {
   background: #45aaf2; /* fallback for old browsers */
   background: -webkit-linear-gradient(to bottom, #45aaf2, #2d98da); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to bottom, #45aaf2, #2d98da); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
   }
 </style>

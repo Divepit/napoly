@@ -14,7 +14,10 @@ export default new Vuex.Store({
     subjects: [],
     dark: false,
     userField: parseInt(localStorage.userField, 10),
-    loadingSubjects: false
+    loadingSubjects: false,
+    color: localStorage.color,
+    colors: ['#fc5c65', '#fd9644', '#fed330', '#26de81', '#2bcbba', '#45aaf2', '#4b7bec', '#a55eea', '#d1d8e0', '#778ca3', '#4b6584', '#3d3d3d'],
+
   },
   mutations: {
     updateSemester (state, semester) {
