@@ -19,6 +19,7 @@
               <v-card-text class="py-0 px-2 grey--text">
                 Verantwortlich für dieses Fach: <span v-for="(e, index) in editors"><span v-if="index < editors.length && index > 0 && e != null">, </span>{{e}}</span>
               </v-card-text>
+              <br>
               <v-card-actions>
                 <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
                 <v-btn  v-if="showEditCtrls && admin"  color="error" class="font-weight-bold" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
