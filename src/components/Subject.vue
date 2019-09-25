@@ -8,7 +8,7 @@
               <v-card-title class="hidden-sm-and-down accent--text pl-1 display-2 font-weight-thin responsive-text" @click="editTitle()">
                 <p class="my-0" v-if="!editingTitle">{{subjectName}}</p>
                 <v-text-field v-if="editingTitle" label="Hit enter to submit" :rules="[rules.min]" v-on:keyup.enter="updateTitle()" required v-model="editedTitle"></v-text-field>
-              <v-card-title v-if="showEditCtrls" class="hidden-sm-and-down grey--text pl-1 subheading font-weight-thin responsive-text">(Subject ID: {{subject}})
+              <v-card-title v-if="showEditCtrls" class="hidden-sm-and-down grey--text pl-1 py-0 subheading font-weight-thin responsive-text">(Subject ID: {{subject}})
               </v-card-title>
 
                 <v-spacer />
@@ -19,7 +19,7 @@
 
               <v-card-actions>
                 <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
-                <v-btn  v-if="showEditCtrls"  color="error" class="font-weight-bold" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
+                <v-btn  v-if="showEditCtrls && admin"  color="error" class="font-weight-bold" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
               </v-card-actions>
 
             <div :class="[showEditCtrls ? 'edit-mode' : 'view-mode', 'card-table']">
@@ -366,6 +366,7 @@ export default {
       }
     },
     authorize () {
+      this.$store.state.admin = parseInt(localStorage.admin, 10)
       // eslint-disable-next-line
       if (this.signer && (localStorage.admin == 1 || this.userField == this.field)) { return true }
       return false
