@@ -17,7 +17,7 @@
               <p class="hidden-md-and-up accent--text pl-1 mb-4 pb-4 font-weight-thin center-text responsive-text">{{subjectName}}</p>
               <SubjectButtons class="hidden-md-and-up" :subject="subject" :showEditCtrls="showEditCtrls"/>
               <v-card-text class="py-0 px-2 grey--text">
-                Verantwortlich für dieses Fach: <span v-for="(e, index) in editors"><span v-if="index < editors.length && index > 0 && e != null">, </span>{{e}}</span>
+                Verantwortlich für dieses Fach: <span v-for="(e, index) in editors" v-bind:key="e.id"><span v-if="index < editors.length && index > 0 && e != null">, </span>{{e}}</span>
               </v-card-text>
               <br>
               <v-card-actions>
