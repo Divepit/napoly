@@ -8,7 +8,7 @@
     >
     <SidebarContent />
   </v-navigation-drawer>
-  <v-toolbar app fixed dark color="main" >
+  <v-toolbar app fixed dark :color="color ? colors[color] : 'main'" >
     <v-toolbar-side-icon @click.stop="primaryDrawer.model = !primaryDrawer.model" />
     <p class="pt-3" @click.stop="primaryDrawer.model = !primaryDrawer.model" style="cursor: pointer;">
       Filter anpassen
@@ -17,6 +17,7 @@
     <v-spacer/>
     <v-toolbar-items >
       <!-- <v-btn flat to="/" class="titlebartext--text subheading font-weight-regular text-capitalize">Links</v-btn> -->
+      <v-icon v-if="signer" class="mr-3 nonselectable" @click="changeColor">blur_on</v-icon>
       <v-btn flat v-if="signer" to="/admin" class="titlebartext--text subheading font-weight-regular text-capitalize">Admin</v-btn>
       <v-btn flat v-if="signer" @click="signOut()" class="titlebartext--text subheading font-weight-regular text-capitalize">Sign Out</v-btn>
     </v-toolbar-items>
@@ -39,10 +40,13 @@ export default {
   data: () => ({
     primaryDrawer: {
       model: null
-    }
+    },
+    colors: ['#fc5c65', '#fd9644', '#fed330', '#26de81', '#2bcbba', '#45aaf2', '#4b7bec', '#a55eea', '#d1d8e0', '#778ca3', '#4b6584', '#3d3d3d', 'none'],
+    color: ''
   }),
   created () {
     this.signedIn()
+    this.setColor()
   },
   methods: {
     signedIn () {
@@ -61,6 +65,22 @@ export default {
           delete localStorage.username
           this.$forceUpdate()
         })
+    },
+    setColor () {
+      if (localStorage.color != null) {
+        this.color = parseInt(localStorage.color, 10)
+      } else {
+        localStorage.color = 1
+        this.color = 1
+      }
+    },
+    changeColor () {
+      if (this.color < this.colors.length - 1) {
+        this.color += 1
+      } else {
+        this.color = 0
+      }
+      localStorage.color = this.color
     }
   },
   computed: {
