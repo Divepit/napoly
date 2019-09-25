@@ -16,7 +16,9 @@
               </v-card-title>
               <p class="hidden-md-and-up accent--text pl-1 mb-4 pb-4 font-weight-thin center-text responsive-text">{{subjectName}}</p>
               <SubjectButtons class="hidden-md-and-up" :subject="subject" :showEditCtrls="showEditCtrls"/>
-
+              <v-card-text class="py-0 px-2 grey--text">
+                Verantwortlich für dieses Fach: <span v-for="(e, index) in editors"><span v-if="index < editors.length && index > 0 && e != null">, </span>{{e}}</span>
+              </v-card-text>
               <v-card-actions>
                 <v-switch v-if="authorize()" color="success" v-model="editorMode" label="Edit Mode" ></v-switch>
                 <v-btn  v-if="showEditCtrls && admin"  color="error" class="font-weight-bold" dark @click.stop="showDeleteDialog=true">Delete Subject</v-btn>
@@ -153,6 +155,7 @@ export default {
   data () {
     return {
       links: [],
+      editors: [],
       startWeek: 1,
       newStartWeek: 1,
       weekCount: 1,
@@ -176,7 +179,8 @@ export default {
       editedTitle: '',
       rules: {
         min: v => v.length >= 1 || 'Cannot be empty'
-      }
+      },
+      comma: ''
     }
   },
   created () {
@@ -362,6 +366,9 @@ export default {
         return speclink
       })
       if (answer) {
+        if (!this.editors.includes(answer.creator)) {
+          this.editors.push(answer.creator)
+        }
         return answer.linkUrl
       }
     },
