@@ -367,7 +367,7 @@ export default {
         return speclink
       })
       if (answer) {
-        if (!this.editors.includes(answer.creator)) {
+        if (answer.creator != null && !this.editors.includes(answer.creator)) {
           this.editors.push(answer.creator)
         }
         return answer.linkUrl
