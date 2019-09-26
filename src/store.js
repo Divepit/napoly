@@ -15,7 +15,7 @@ export default new Vuex.Store({
     dark: false,
     userField: parseInt(localStorage.userField, 10),
     loadingSubjects: false,
-    color: parseInt(localStorage.color, 10),
+    color: localStorage.color ? parseInt(localStorage.color, 10) : 5,
     colors: ['#fc5c65', '#fd9644', '#fed330', '#26de81', '#2bcbba', '#45aaf2', '#4b7bec', '#a55eea', '#d1d8e0', '#778ca3', '#4b6584', '#3d3d3d']
 
   },
