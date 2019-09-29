@@ -1,5 +1,5 @@
 <template>
-    <v-container justify-center my-4 :id="subjectName">
+    <v-container justify-center my-4 :id="subjectName" style="padding-top: 100px; margin-top: -100px;">
       <v-layout>
         <v-flex>
           <v-card class="py-4 px-4 rounded" hover> <!-- TODO: Add rounded corners -->
