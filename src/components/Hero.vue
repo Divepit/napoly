@@ -1,24 +1,22 @@
 <!-- TODO: Unfuck this -->
 <template lang="html">
-  <div style="height: 100vh" :class="(color == 5 || color == null) ? 'gradient absolute' : 'absolute'" :style="(color == 5 || color == null) ? '' : ('background: ' + colors[color] )">
-    <v-container grid-list-md text-xs-center fill-height align-center class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
-      <v-layout row wrap align-center>
-        <v-flex md12 >
-          <!-- <v-avatar tile size="200" >
-            <img src="https://www.svgrepo.com/show/229523/volcano.svg" alt="avatar" style="border-radius: 0px 0px 75px 75px;">
-          </v-avatar>
-          <br> -->
+  <div style="height: 94vh" :class="(color == 5 || color == null) ? 'gradient absolute' : 'absolute'" :style="(color == 5 || color == null) ? '' : ('background: ' + colors[color] )">
+    <v-container grid-list-xl text-xs-center fill-height  class=" fixed " style="height: 95vh; width:100vw; max-width: 100vw !important; " >
+      <v-layout  wrap align-center>
+        <v-flex md12>
           <span class="muli display-3 white--text font-weight-thin ">napoly.ch</span>
           <br>
           <span class="headline white--text font-weight-thin">Student Document Repository</span>
-          <v-flex md12 height="10" mt-5 >
+          <v-flex md12 mt-5 >
             <v-progress-circular v-if="this.$store.state.loadingSubjects" indeterminate color="white" :size="50" width="2" ></v-progress-circular>
           </v-flex>
-
         </v-flex>
-
       </v-layout >
     </v-container>
+    <div class="hidden-sm-and-down" style="position: fixed; right: 2vw; bottom: 1vh;">
+      <span class="title white--text font-weight-thin mb-4" style="position: absolute; left: -125px; bottom: -5px">Supported by</span>
+      <a href="https://sph.ethz.ch"> <img :src="require('@/assets/sph.png')" height="70"></img></a>
+    </div>
   </div>
 </template>
 

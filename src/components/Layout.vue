@@ -8,10 +8,10 @@
     >
     <SidebarContent />
   </v-navigation-drawer>
-  <v-toolbar app fixed dark :color="colors[color]" >
+  <v-toolbar app fixed dark :color="colors[color]" height="60vh">
     <v-toolbar-side-icon @click.stop="primaryDrawer.model = !primaryDrawer.model" />
-    <p class="pt-3 hidden-sm-and-down" @click.stop="primaryDrawer.model = !primaryDrawer.model" style="cursor: pointer;">
-      Filter anpassen
+    <p class="pt-3" @click.stop="primaryDrawer.model = !primaryDrawer.model" style="cursor: pointer;">
+      Semester wählen
     </p>
     <!-- <v-toolbar-title class=" hidden-sm-and-down titlebartext--text headline font-weight-bold muli"> napoly </v-toolbar-title> -->
     <v-spacer/>
