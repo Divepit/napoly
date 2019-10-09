@@ -16,6 +16,7 @@
 - Node
 - npm
 - Redis
+- Napoly API
 ---
 ## Install
 
@@ -31,10 +32,6 @@ To start the application run
 ```sh
 npm run dev
 ```
-or if you want to use yarn
-```sh
-yarn dev
-```
 make sure the [Napoly API](https://github.com/Divepit/napolyAPI) server as well as your [Redis server](https://redis.io) are running and are set up correctly. More info on Redis can be found in the NapolyAPI repository.
 
 visit [localhost:8080](http://localhost:8080) to view the app.
@@ -42,12 +39,6 @@ visit [localhost:8080](http://localhost:8080) to view the app.
 > Username: testuser@example.com
 
 > Password: password
----
-## Support the Project!
-
-Would you like to support the Napoly Team by chipping in for a coffee, a beer or even parts of the server and domain fee? We're happy about any help we can get!
-
-### [Donate](https://donorbox.org/napoly)
 ---
 ## License
 
