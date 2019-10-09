@@ -13,10 +13,9 @@
 ---
 ## Prerequisites
 
-- Node
-- npm
-- Redis
-- Napoly API
+- [VueJS](https://vuejs.org/)
+- [Redis](https://redis.io)
+- [Napoly API](https://github.com/Divepit/napolyAPI)
 ---
 ## Install
 
