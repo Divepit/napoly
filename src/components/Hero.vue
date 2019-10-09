@@ -15,7 +15,7 @@
     </v-container>
     <div class="hidden-sm-and-down" style="position: fixed; right: 2vw; bottom: 1vh;">
       <span class="title white--text font-weight-thin mb-4" style="position: absolute; left: -125px; bottom: -5px">Supported by</span>
-      <a href="https://sph.ethz.ch"> <img :src="require('@/assets/sph.png')" height="70"></img></a>
+      <a href="https://sph.ethz.ch" target="_blank"> <img :src="require('@/assets/sph.png')" height="70"></img></a>
     </div>
   </div>
 </template>
