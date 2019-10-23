@@ -41,7 +41,7 @@
         </v-list>
         <v-divider></v-divider>
         <v-list dense>
-          <v-list-tile v-bind:class="[field == f.id ? 'selected' : '']" v-for="f in fields" :key="f.id" @click="setField(f.id)">
+          <v-list-tile v-bind:class="[field == f.id ? 'selected' : '']" v-for="f in fields" :key="f.id" @click="setField(f.id);">
             <v-list-tile-action>
               <v-icon>school</v-icon>
             </v-list-tile-action>
@@ -107,14 +107,12 @@
 
 <script>
 import {mapState} from 'vuex'
-
 export default {
   name: 'SidebarContent',
   created () {
     this.getSemesters()
     this.getSemesterName()
     this.getFields()
-    this.getFieldName()
     this.year = this.$store.state.year
   },
   data () {
@@ -162,10 +160,29 @@ export default {
     }
   },
   methods: {
+    fieldSwitch (e) {
+      this.$ga.event({
+        eventCategory: this.fieldName,
+        eventAction: 'Select',
+        eventValue: 1,
+        eventLabel: 'Switch to ' + this.fieldName
+
+      })
+    },
+    fieldLoad () {
+      this.$ga.event({
+        eventCategory: this.fieldName,
+        eventAction: 'Load',
+        eventValue: 1,
+        eventLabel: 'Loaded ' + this.fieldName
+      })
+    },
     setField (id) {
       // eslint-disable-next-line
       if (this.editId == '') {
         this.field = id
+        this.getFieldName()
+        this.fieldSwitch()
       }
     },
     authorize () {
@@ -181,11 +198,11 @@ export default {
       this.convertRawSemester()
     },
     getFieldName () {
-      let field = this.semesters.filter(obj => {
-        return obj.id === this.field
-      })
-      this.rawField = field
-      this.fieldName = field.fieldName
+      let field = this.fields.filter((obj) => obj.id === this.field)
+      // this.rawField = field[0]
+      if (field[0]) {
+        this.fieldName = field[0].fieldName
+      }
     },
     getSemesters () {
       this.$http.secured.get('/api/v1/semesters/')
@@ -197,6 +214,8 @@ export default {
       this.$http.secured.get('/api/v1/fields/')
         .then(response => {
           this.fields = response.data
+          this.getFieldName()
+          this.fieldLoad()
         })
     },
     exitAdding () {

@@ -7,11 +7,17 @@ import store from './store'
 import VueAxios from 'vue-axios'
 import { securedAxiosInstance, plainAxiosInstance } from './backend/axios'
 import Vuetify from 'vuetify'
+import VueAnalytics from 'vue-analytics'
 
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import './assets/styles/main.less'
 import './stylus/main.styl'
 
+Vue.use(VueAnalytics, {
+  id: 'UA-146054838-1',
+  router,
+  ignoreRoutes: ['admin', 'signin']
+})
 Vue.use(Vuetify, {
   theme: {
     main: '#45aaf2',
