@@ -1,7 +1,7 @@
 <template>
   <v-list>
-    <v-subheader>Field {{currentFieldId}}</v-subheader>
-    <v-list-item-group>
+    <v-subheader>{{currentFieldName}} <v-spacer/> <v-icon small @click="changeField">mdi-pencil</v-icon></v-subheader>
+    <v-list-item-group v-if="changingField">
       <v-list-item v-for="field in fields.data" :key="field.id" @click="setCurrentField(field.id)">{{field.fieldName}}</v-list-item>
     </v-list-item-group>
   </v-list>
@@ -15,10 +15,13 @@ export default {
     this.getFields()
   },
   computed: {
-    ...mapState(['fields', 'currentFieldId'])
+    ...mapState('napolyApiModule', ['fields', 'currentFieldId', 'currentFieldName', 'changingField'])
   },
   methods: {
-    ...mapActions(['getFields', 'setCurrentField'])
+    ...mapActions('napolyApiModule', ['getFields', 'setCurrentField']),
+    changeField () {
+      this.$store.state.napolyApiModule.changingField = !this.changingField
+    }
   }
 }
 </script>

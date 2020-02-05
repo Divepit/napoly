@@ -1,6 +1,6 @@
 <template>
 <v-list>
-  <v-subheader>Subject {{currentSubjectId}}</v-subheader>
+  <v-subheader>Subjects</v-subheader>
   <v-list-item-group>
     <v-list-item v-for="subject in subjects" :key="subject.id">{{subject.subjectName}}</v-list-item>
   </v-list-item-group>
@@ -11,11 +11,14 @@
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'SubjectList',
+  created () {
+    this.getSubjects()
+  },
   computed: {
-    ...mapState(['subjects', 'currentSubjectId', 'currentSemesterId'])
+    ...mapState('napolyApiModule', ['subjects', 'currentSubjectId', 'currentSemesterId'])
   },
   methods: {
-    ...mapActions(['getSubjects'])
+    ...mapActions('napolyApiModule', ['getSubjects'])
   }
 }
 </script>

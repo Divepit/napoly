@@ -1,7 +1,7 @@
 <template>
 <v-list>
-  <v-subheader>Semester {{currentSemesterId}}</v-subheader>
-  <v-list-item-group>
+  <v-subheader>{{currentSemesterName}} <v-spacer/> <v-icon small @click="changeSemester">mdi-pencil</v-icon></v-subheader>
+  <v-list-item-group v-if="changingSemester">
     <v-list-item v-for="semester in semesters.data" :key="semester.id" @click="setCurrentSemester(semester.id)">{{semester.semesterHalf === 1 ? 'FS ' : 'HS '}}{{semester.semesterYear}}</v-list-item>
   </v-list-item-group>
 </v-list>
@@ -15,10 +15,13 @@ export default {
     this.getSemesters()
   },
   computed: {
-    ...mapState(['semesters', 'currentSemesterId'])
+    ...mapState('napolyApiModule', ['semesters', 'currentSemesterId', 'currentSemesterName', 'changingSemester'])
   },
   methods: {
-    ...mapActions(['getSemesters', 'setCurrentSemester'])
+    ...mapActions('napolyApiModule', ['getSemesters', 'setCurrentSemester']),
+    changeSemester () {
+      this.$store.state.napolyApiModule.changingSemester = !this.changingSemester
+    }
   }
 }
 </script>
