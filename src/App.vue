@@ -7,6 +7,10 @@
 <script>
 import Home from './views/Home'
 export default {
-  components: { Home }
+  components: { Home },
+  created () {
+    this.$vuetify.theme.dark = false
+  }
 }
+
 </script>

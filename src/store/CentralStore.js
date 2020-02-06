@@ -7,5 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     napolyApiModule
+  },
+  state: {
+    loading: false,
+    noresult: false
   }
 })

@@ -1,6 +1,9 @@
 <template>
   <v-list>
-    <v-subheader>{{currentYear}}. Studienjahr <v-spacer/> <v-icon small @click="changeYear">mdi-pencil</v-icon></v-subheader>
+    <v-subheader @click="changeYear" style="cursor: pointer">{{currentYear}}. Studienjahr
+      <v-spacer/>
+      <v-icon small>mdi-pencil</v-icon>
+    </v-subheader>
     <v-list-item-group v-if="changingYear">
         <v-list-item v-for="year in years" :key="year.id" @click="setCurrentYear(year)">{{year}}. Studienjahr</v-list-item>
     </v-list-item-group>
@@ -9,6 +12,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'YearList',
   data () {

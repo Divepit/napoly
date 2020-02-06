@@ -18,12 +18,13 @@ import SemesterList from '../API/SemesterList'
 import SubjectList from '../API/SubjectList'
 import FieldList from '../API/FieldList'
 import YearList from '../API/YearList'
+
 export default {
   name: 'Toolbar',
   components: { YearList, FieldList, SubjectList, SemesterList },
   data: () => ({
     primaryDrawer: {
-      model: false
+      model: true
     }
   })
 }

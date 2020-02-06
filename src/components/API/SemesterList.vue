@@ -1,6 +1,9 @@
 <template>
 <v-list>
-  <v-subheader>{{currentSemesterName}} <v-spacer/> <v-icon small @click="changeSemester">mdi-pencil</v-icon></v-subheader>
+  <v-subheader @click="changeSemester" style="cursor: pointer">{{currentSemesterName}}
+    <v-spacer/>
+    <v-icon @click="changeSemester" small>mdi-pencil</v-icon>
+  </v-subheader>
   <v-list-item-group v-if="changingSemester">
     <v-list-item v-for="semester in semesters.data" :key="semester.id" @click="setCurrentSemester(semester.id)">{{semester.semesterHalf === 1 ? 'FS ' : 'HS '}}{{semester.semesterYear}}</v-list-item>
   </v-list-item-group>
@@ -9,6 +12,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'SemesterList',
   created () {

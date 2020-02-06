@@ -1,6 +1,9 @@
 <template>
   <v-list>
-    <v-subheader>{{currentFieldName}} <v-spacer/> <v-icon small @click="changeField">mdi-pencil</v-icon></v-subheader>
+    <v-subheader @click="changeField" style="cursor: pointer">{{currentFieldName}}
+      <v-spacer/>
+      <v-icon @click="changeField" small>mdi-pencil</v-icon>
+    </v-subheader>
     <v-list-item-group v-if="changingField">
       <v-list-item v-for="field in fields.data" :key="field.id" @click="setCurrentField(field.id)">{{field.fieldName}}</v-list-item>
     </v-list-item-group>
@@ -9,6 +12,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'FieldList',
   created () {
