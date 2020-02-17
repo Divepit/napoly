@@ -51,19 +51,22 @@ const napolyApiModule = {
       napolyApiModule.state.changingField = false
     },
     getSemesters ({ commit }) {
-      plainAxiosInstance.get('https://api.napoly.ch/api/v1/semesters').then(response => {
+      napolyApiModule.state.semesters = []
+      plainAxiosInstance.get('/api/v1/semesters').then(response => {
         napolyApiModule.state.semesters = response
         commit('changeSemesterName')
       })
     },
     getFields () {
-      plainAxiosInstance.get('https://api.napoly.ch/api/v1/fields').then(response => {
+      napolyApiModule.state.fields = []
+      plainAxiosInstance.get('/api/v1/fields').then(response => {
         napolyApiModule.state.fields = response
         napolyApiModule.state.currentFieldName = response.data[napolyApiModule.state.currentFieldId - 1].fieldName
       })
     },
     getTypes () {
-      plainAxiosInstance.get('https://api.napoly.ch/api/v1/types').then(response => {
+      napolyApiModule.state.types = []
+      plainAxiosInstance.get('/api/v1/types').then(response => {
         response.data.forEach(type => {
           napolyApiModule.state.types.push(type.typeName)
         })
@@ -73,7 +76,7 @@ const napolyApiModule = {
       napolyApiModule.state.subjects = []
       this.state.loading = true
       this.state.noresult = false
-      plainAxiosInstance.get('https://api.napoly.ch/api/v1/subjects')
+      plainAxiosInstance.get('/api/v1/subjects')
         .then(response => {
           response.data.forEach((subject) => {
             let sem = subject.semester_id.toString() === napolyApiModule.state.currentSemesterId.toString()

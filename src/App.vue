@@ -1,13 +1,14 @@
 <template>
   <v-app id="sandbox">
-    <Home/>
+    <GlobalNotification/>
+    <router-view/>
   </v-app>
 </template>
 
 <script>
-import Home from './views/Home'
+import GlobalNotification from './components/UI/GlobalNotification'
 export default {
-  components: { Home },
+  components: { GlobalNotification },
   created () {
     this.$vuetify.theme.dark = false
   }

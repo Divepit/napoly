@@ -2,9 +2,7 @@
   <div class="home">
     <Toolbar/>
     <v-content>
-      <v-container fluid>
-        <SubjectCard/>
-      </v-container>
+      <SubjectCard/>
     </v-content>
   </div>
 </template>

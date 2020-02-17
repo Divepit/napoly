@@ -1,36 +1,122 @@
+<!-- Generates the buttons in each subject, pulled from the API -->
 <template>
   <div>
-    <v-btn :href="btn.buttonUrl" :key="btn.id" class="mx-2" target="_blank" v-for="btn in buttons">{{btn.buttonLabel}}
-    </v-btn>
+    <!-- Display the buttons regularly -->
+    <div v-if="editMode !== subject.id">
+      <v-btn color="primary" :href="btn.buttonUrl" :key="btn.id" class="mx-2" target="_blank" v-for="btn in buttons">
+        {{btn.buttonLabel}}
+      </v-btn>
+    </div>
+    <!-- Make the buttons editable in editMode -->
+    <div v-else>
+      <v-btn :key="btn.id" class="mx-2" target="_blank" v-for="btn in buttons" outlined color="info" tile
+             @click="editButton(btn)">{{btn.buttonLabel}}
+      </v-btn>
+      <v-btn outlined color="info" tile @click="editButton({buttonUrl: '', buttonLabel: '', subject_id: subject.id})">
+        +
+      </v-btn>
+    </div>
+    <ObjectEditor :objectToEdit="newButton" :forbidden-attributes="forbiddenAttributes" :active="editingButton"
+                  @updateObject="updateButton($event)" @cancel="editingButton = false"
+                  @delete="removeButton(newButton)"/>
   </div>
 </template>
 
 <script>
-import { plainAxiosInstance } from '../../backend/axios'
+// plainAxiosInstance and securedAxiosInstance are defined in the axios wrapper and is used to access API values which do not require authentication
+import { plainAxiosInstance, securedAxiosInstance } from '../../backend/axios'
+import ObjectEditor from '../UI/ObjectEditor'
+// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
+import { mapState } from 'vuex'
 
 export default {
   name: 'SubjectButtons',
+  components: { ObjectEditor },
   data () {
     return {
-      buttons: []
+      buttons: [],
+      editingButton: false,
+      newButton: {},
+      // Refer to the ObjectEditor component for an explanation of the forbiddenAttributes prop
+      forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'subject_id', 'type_id']
     }
   },
   created () {
     this.getButtons()
   },
   props: {
-    subject: null
+    subject: null,
+    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
+    editMode: null
+  },
+  computed: {
+    ...mapState(['message'])
   },
   methods: {
     getButtons () {
-      plainAxiosInstance.get(`https://api.napoly.ch/api/v1/buttons?subject_id=${this.subject.id}`).then(response => {
+      plainAxiosInstance.get(`/api/v1/buttons?subject_id=${this.subject.id}`).then(response => {
         this.buttons = response.data
       })
+    },
+    editButton (button) {
+      if (this.editMode === this.subject.id) {
+        this.editingButton = true
+        this.newButton = button
+      }
+    },
+    // updateButton() will also serve as createButton() in case the button object passed has an undefined id
+    updateButton (button) {
+      this.editingButton = false
+      for (var i in button.objectKeys) {
+        this.newButton[button.objectKeys[i]] = button.objectValues[i]
+      }
+      console.log(this.newButton)
+      if (this.newButton.buttonUrl.length !== 0 && this.newButton.buttonLabel.length !== 0 && this.newButton.id === undefined) {
+        securedAxiosInstance.post('/api/v1/buttons', this.newButton)
+          .then(response => {
+            // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
+            this.message.text = `Button ${response.data.id} added`
+            this.message.color = 'info'
+            this.message.active = true
+            this.buttons.push(response.data)
+          })
+          .catch(error => {
+            // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
+            this.message.text = error
+            this.message.color = 'error'
+            this.message.active = true
+          })
+      } else if (this.newButton.buttonUrl.length !== 0 && this.newButton.buttonLabel.length !== 0 && this.newButton.id !== undefined) {
+        securedAxiosInstance.patch(`/api/v1/buttons/${this.newButton.id}`, this.newButton)
+          .then(response => {
+            // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
+            this.message.text = `Button ${response.data.id} updated`
+            this.message.color = 'info'
+            this.message.active = true
+          })
+          .catch(error => {
+            // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
+            this.message.text = error
+            this.message.color = 'error'
+            this.message.active = true
+          })
+      } else {
+        // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
+        this.message.text = `Invalid Button`
+        this.message.color = 'error'
+        this.message.active = true
+      }
+    },
+    removeButton (button) {
+      securedAxiosInstance.delete(`/api/v1/buttons/${button.id}`)
+        .then(
+          this.editingButton = false,
+          this.buttons.splice(this.buttons.indexOf(button), 1),
+          this.message.text = `Button ${button.id} removed`,
+          this.message.color = 'warning',
+          this.message.active = true
+        )
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

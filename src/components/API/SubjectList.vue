@@ -1,13 +1,18 @@
+<!-- Generates a list of subjects for the sidebar with the current selection of year, semester and field -->
 <template>
-<v-list>
-  <v-subheader>Subjects</v-subheader>
-  <v-list-item-group>
-    <v-list-item v-for="subject in subjects" :key="subject.id">{{subject.subjectName}}</v-list-item>
-  </v-list-item-group>
-</v-list>
+  <v-list v-if="subjects.length">
+    <v-subheader>Subjects</v-subheader>
+    <v-list-item-group>
+      <v-list-item v-for="subject in subjects" :key="subject.id" :href="'#'+subject.subjectName">
+        {{subject.subjectName}}
+      </v-list-item>
+    </v-list-item-group>
+    <v-divider/>
+  </v-list>
 </template>
 
 <script>
+// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -16,9 +21,11 @@ export default {
     this.getSubjects()
   },
   computed: {
+    // Note that all the API States are defined a separate vuex module at src/store/modules/napolyApi.js
     ...mapState('napolyApiModule', ['subjects', 'currentSubjectId', 'currentSemesterId'])
   },
   methods: {
+    // Note that all the API Actions are defined a separate vuex module at src/store/modules/napolyApi.js
     ...mapActions('napolyApiModule', ['getSubjects'])
   }
 }

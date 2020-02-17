@@ -1,16 +1,19 @@
+<!-- Generates a list of Years for the sidebar-->
 <template>
   <v-list>
     <v-subheader @click="changeYear" style="cursor: pointer">{{currentYear}}. Studienjahr
       <v-spacer/>
-      <v-icon small>mdi-pencil</v-icon>
+      <v-icon small>{{changingYear ? 'mdi-chevron-up':'mdi-chevron-down'}}</v-icon>
     </v-subheader>
     <v-list-item-group v-if="changingYear">
-        <v-list-item v-for="year in years" :key="year.id" @click="setCurrentYear(year)">{{year}}. Studienjahr</v-list-item>
+      <v-list-item v-for="year in years" :key="year.id" @click="setCurrentYear(year)">{{year}}. Studienjahr
+      </v-list-item>
     </v-list-item-group>
   </v-list>
 </template>
 
 <script>
+// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -21,9 +24,11 @@ export default {
     }
   },
   computed: {
+    // Note that all the API States are defined a separate vuex module at src/store/modules/napolyApi.js
     ...mapState('napolyApiModule', ['currentYear', 'changingYear'])
   },
   methods: {
+    // Note that all the API Actions are defined a separate vuex module at src/store/modules/napolyApi.js
     ...mapActions('napolyApiModule', ['setCurrentYear']),
     changeYear () {
       this.$store.state.napolyApiModule.changingYear = !this.changingYear
