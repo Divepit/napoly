@@ -16,25 +16,25 @@
         </thead>
         <tbody>
         <!-- The amount of weeks created is equal to the highest linkWeek integer present in the links associated to the subject-->
-        <tr :key="week" v-for="week in subjectWeeks.length">
-          <!-- Create the week column -->
-          <td>{{week}}</td>
-          <td style="cursor: pointer" :key="type" v-for="type in typeIds">
-            <!-- Create the links in case we are not in edit mode-->
-            <a class="primary--text" style="text-decoration: none;" :href="findLinkFromTypeAndWeek(type, week).linkUrl"
-               target="_blank"
-               v-if="typeWeekCombos.includes(`${type}/${week}`) && editMode !== subject.id">{{types[type-1] + ' ' +
-              week}}</a>
-            <span v-else/>
-            <!-- Create the editing buttons in case we are in edit mode-->
-            <v-btn outlined tile small color="primary" @click="editLink(type,week)" v-if="editMode === subject.id">
-              {{typeWeekCombos.includes(`${type}/${week}`) ? types[type-1] + ' ' + week : '+'}}
-            </v-btn>
-            <span v-else/>
-          </td>
-          <!-- We need another row in edit mode for the add-week button -->
-          <td v-if="editMode === subject.id"/>
-        </tr>
+          <tr :key="week" v-for="week in subjectWeeks">
+            <!-- Create the week column -->
+            <td>{{week}}</td>
+            <td style="cursor: pointer" :key="type" v-for="type in typeIds">
+              <!-- Create the links in case we are not in edit mode-->
+              <a class="primary--text" style="text-decoration: none;" :href="findLinkFromTypeAndWeek(type, week).linkUrl"
+                 target="_blank"
+                 v-if="typeWeekCombos.includes(`${type}/${week}`) && editMode !== subject.id">{{types[type-1] + ' ' +
+                week}}</a>
+              <span v-else/>
+              <!-- Create the editing buttons in case we are in edit mode-->
+              <v-btn outlined tile small color="primary" @click="editLink(type,week)" v-if="editMode === subject.id">
+                {{typeWeekCombos.includes(`${type}/${week}`) ? types[type-1] + ' ' + week : '+'}}
+              </v-btn>
+              <span v-else/>
+            </td>
+            <!-- We need another row in edit mode for the add-week button -->
+            <td v-if="editMode === subject.id"/>
+          </tr>
         <!-- Add week button -->
         <tr v-if="editMode === subject.id">
           <td class="pl-1">
@@ -99,11 +99,11 @@ export default {
             this.typeIds.push(link.type_id)
           }
           while (!this.subjectWeeks.includes(link.linkWeek)) {
-            this.subjectWeeks.push(this.subjectWeeks.length)
+            this.subjectWeeks.push(link.linkWeek)
           }
           this.typeWeekCombos.push(`${link.type_id}/${link.linkWeek}`)
         })
-        this.subjectWeeks.pop()
+        this.subjectWeeks.sort()
       })
     },
     // Unfortunately this is the only way of identifying a link currently
@@ -126,6 +126,8 @@ export default {
         this.newLink[link.objectKeys[i]] = link.objectValues[i]
       }
       if (this.newLink.linkUrl.length !== 0 && this.newLink.id === undefined) {
+        this.newLink.creator = 'not defined'
+        this.newLink.editor = 'not defined'
         securedAxiosInstance.post('/api/v1/links', this.newLink)
           .then(response => {
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
