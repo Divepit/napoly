@@ -4,7 +4,7 @@ var API_URL = 'https://staging.api.napoly.ch' // Development
 // var API_URL = 'http://localhost:3000' // Development
 
 if (process.env.NODE_ENV === 'production') {
-  API_URL = 'https://api.napoly.ch' //  Production
+  API_URL = 'https://staging.api.napoly.ch' //  Production
 }
 
 const securedAxiosInstance = axios.create({

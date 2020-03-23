@@ -99,7 +99,6 @@ export default {
         this.editedUser[user.objectKeys[i]] = user.objectValues[i]
       }
       if (this.editedUser.email.length !== 0 && this.editedUser.field_id !== null && this.editedUser.id === undefined) {
-        console.log(this.editedUser)
         securedAxiosInstance.post('/signup', this.editedUser)
           .then(response => {
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
