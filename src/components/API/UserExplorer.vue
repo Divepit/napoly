@@ -6,7 +6,7 @@
       <template v-slot:header>
         <v-toolbar flat>
           <v-text-field v-model="search" flat solo-inverted hide-details
-                        prepend-inner-icon="mdi-file-document-box-search-outline" label="Search"/>
+                        prepend-inner-icon="mdi-account-search" label="Search User"/>
           <v-btn class="ml-4" text outlined
                  @click="editUser({email: '', field_id: 1, role: 1, password: '', password_confirmation: ''})">
             <v-icon left>mdi-account-plus</v-icon>
@@ -20,10 +20,10 @@
             <div v-for="user in props.items" :key="user.id">
               <v-list-item three-line color="primary" @click="editUser(user)">
                 <v-list-item-content>
-                  <v-list-item-title >{{user.email}}</v-list-item-title>
+                  <v-list-item-title>{{user.email}}</v-list-item-title>
                   <v-list-item-subtitle>Role: {{user.role === 1 ? 'Admin' : 'Moderator'}}
                     <v-spacer/>
-                    Field: {{user.field_id}}
+                    Field: {{fields.data[user.field_id-1].fieldName}}
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -65,6 +65,7 @@ export default {
   },
   computed: {
     ...mapState(['message']),
+    ...mapState('napolyApiModule', ['fields']),
     numberOfPages () {
       return Math.ceil(this.searchedArray.length / this.itemsPerPage)
     },

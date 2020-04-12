@@ -1,7 +1,7 @@
 <!-- Sidebar used in the admin interface -->
 <template>
   <div>
-    <v-navigation-drawer app overflow permanent>
+    <v-navigation-drawer dark app overflow permanent color="primary">
       <v-list>
         <v-list-item>
           <v-list-item-content>
