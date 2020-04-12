@@ -73,7 +73,7 @@ export default {
       addingType: false,
       newLink: {},
       // Refer to the ObjectEditor component for an explanation of the forbiddenAttributes prop
-      forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'subject_id', 'type_id']
+      forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'type_id', 'subject_id']
     }
   },
   created () {
@@ -111,6 +111,12 @@ export default {
       return this.subjectLinks.find(link => (link.type_id === type && link.linkWeek === week))
     },
     editLink (type, week) {
+      if (this.findLinkFromTypeAndWeek(type, week)) {
+        this.newLink.id = this.findLinkFromTypeAndWeek(type, week).id
+      }
+      this.newLink.type_id = type
+      this.newLink.linkWeek = week
+      this.newLink.subject_id = this.subject.id
       this.editedLink = this.findLinkFromTypeAndWeek(type, week)
       this.editingLink = true
       if (this.editMode === this.subject.id && this.editedLink === undefined) {
@@ -125,9 +131,10 @@ export default {
       for (var i in link.objectKeys) {
         this.newLink[link.objectKeys[i]] = link.objectValues[i]
       }
+      // Creating a new Link
       if (this.newLink.linkUrl.length !== 0 && this.newLink.id === undefined) {
-        this.newLink.creator = 'not defined'
-        this.newLink.editor = 'not defined'
+        this.newLink.creator = localStorage.username
+        this.newLink.editor = ''
         securedAxiosInstance.post('/api/v1/links', this.newLink)
           .then(response => {
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
@@ -136,9 +143,10 @@ export default {
             this.message.active = true
             this.subjectLinks.push(response.data)
             this.typeWeekCombos.push(`${response.data.type_id}/${response.data.linkWeek}`)
-          }
-          )
+          })
+      // Updating an existing Link
       } else if (this.newLink.linkUrl.length !== 0 && this.newLink.id !== undefined) {
+        this.newLink.editor = localStorage.username
         securedAxiosInstance.patch(`/api/v1/links/${this.newLink.id}`, this.newLink)
           .then(response => {
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
@@ -166,7 +174,6 @@ export default {
     },
     addType (typename) {
       this.addingType = false
-      console.log(this.types.indexOf(typename))
       this.typeIds.push(this.types.indexOf(typename) + 1)
     }
   }

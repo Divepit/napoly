@@ -70,7 +70,6 @@ export default {
       for (var i in button.objectKeys) {
         this.newButton[button.objectKeys[i]] = button.objectValues[i]
       }
-      console.log(this.newButton)
       if (this.newButton.buttonUrl.length !== 0 && this.newButton.buttonLabel.length !== 0 && this.newButton.id === undefined) {
         securedAxiosInstance.post('/api/v1/buttons', this.newButton)
           .then(response => {

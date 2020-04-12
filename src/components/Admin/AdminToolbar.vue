@@ -23,13 +23,13 @@
             <v-list-item-title>Homepage</v-list-item-title>
           </v-list-item>
           <v-divider/>
-          <v-list-item to="/account">
+          <v-list-item to="/account" v-if="userRole === '1'">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Account Management</v-list-item-title>
           </v-list-item>
-          <v-divider/>
+          <v-divider v-if="userRole === '1'"/>
           <v-list-item @click="signOut()">
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
@@ -44,7 +44,7 @@
 
 </template>
 <script>
-import { securedAxiosInstance } from '../../../../napoly/src/backend/axios'
+import { securedAxiosInstance } from '@/backend/axios'
 
 export default {
   name: 'AdminToolbar',
@@ -52,6 +52,13 @@ export default {
     // Redirects user to homepage in case he is not signed in
     if (localStorage.signedIn !== 'true') {
       this.$router.replace('/')
+    }
+    this.userRole = localStorage.userRole
+  },
+  data () {
+    return {
+      username: null,
+      userRole: null
     }
   },
   methods: {
@@ -62,6 +69,10 @@ export default {
         .then(response => {
           delete localStorage.csrf
           delete localStorage.signedIn
+          delete localStorage.username
+          delete localStorage.uid
+          delete localStorage.userRole
+          delete localStorage.userField
           this.$store.state.signedIn = false
           this.$router.replace('/')
         })

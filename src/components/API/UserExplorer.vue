@@ -2,7 +2,7 @@
      Note that this component is quite specific for users but I suggest a TODO: Refactor this component into an Object-Array Explorer-->
 <template>
   <v-container fluid>
-    <v-data-iterator :items="searchedArray" single-select :items-per-page="5" :page="page">
+    <v-data-iterator :items="searchedArray" single-select :items-per-page="100" :page="page" hide-default-footer>
       <template v-slot:header>
         <v-toolbar flat>
           <v-text-field v-model="search" flat solo-inverted hide-details
@@ -18,17 +18,14 @@
         <v-list>
           <v-list-item-group v-model="props.items">
             <div v-for="user in props.items" :key="user.id">
-              <v-list-item three-line>
+              <v-list-item three-line color="primary" @click="editUser(user)">
                 <v-list-item-content>
-                  <v-list-item-title>{{user.email}}</v-list-item-title>
-                  <v-list-item-subtitle>Role: {{user.role}}
+                  <v-list-item-title >{{user.email}}</v-list-item-title>
+                  <v-list-item-subtitle>Role: {{user.role === 1 ? 'Admin' : 'Moderator'}}
                     <v-spacer/>
                     Field: {{user.field_id}}
                   </v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
-                  <v-icon @click="editUser(user)">mdi-account-edit</v-icon>
-                </v-list-item-action>
               </v-list-item>
               <v-divider/>
             </div>

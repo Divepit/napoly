@@ -67,6 +67,10 @@ export default {
         .then(response => {
           if (response.data.csrf) {
             localStorage.csrf = response.data.csrf
+            localStorage.username = response.data.username
+            localStorage.uid = response.data.id
+            localStorage.userRole = response.data.role
+            localStorage.userField = response.data.field_id
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
             this.message.text = 'Signin Successful'
             this.message.color = 'success'

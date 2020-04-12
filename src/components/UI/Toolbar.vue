@@ -14,10 +14,10 @@
       <v-list-item-group v-if="signedIn" >
         <v-divider/>
         <v-list-item to="/admin">
-          <v-list-item-icon>
-            <v-icon>mdi-key</v-icon>
+          <v-list-item-icon class="mr-2">
+            <v-icon>mdi-face</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>Admin Interface</v-list-item-title>
+          <v-list-item-title>{{username}}</v-list-item-title>
         </v-list-item>
       </v-list-item-group>
       <v-divider/>
@@ -51,9 +51,15 @@ import { mapState } from 'vuex'
 export default {
   name: 'Toolbar',
   components: { YearList, FieldList, SubjectList, SemesterList },
+  created () {
+    if (localStorage.username) {
+      this.username = localStorage.username
+    }
+  },
   data: () => ({
     primaryDrawer: {
-      model: true
+      model: true,
+      username: ''
     }
   }),
   computed: {
