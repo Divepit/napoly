@@ -103,7 +103,12 @@ export default {
           }
           this.typeWeekCombos.push(`${link.type_id}/${link.linkWeek}`)
         })
-        this.subjectWeeks.sort()
+        function sorter (a, b) {
+          if (a < b) return -1
+          if (a > b) return 1
+          return 0
+        }
+        this.subjectWeeks.sort(sorter)
       })
     },
     // Unfortunately this is the only way of identifying a link currently

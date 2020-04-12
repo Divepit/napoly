@@ -39,8 +39,13 @@
             <LinkTable :subject="subject" :editMode="editMode"/>
           </v-container>
           <SubjectInfos :subject="subject" :editMode="editMode"/>
-          <v-card-subtitle v-if="signedIn && userRole == 1" style="cursor: pointer"><span class="error--text" @click="deleteSubject(subject.id, subject.subjectName)">Delete Subject</span></v-card-subtitle>
+          <v-card-subtitle v-if="signedIn && userRole == 1" style="cursor: pointer"><span class="error--text" @click="confirmDelete = subject.id">Delete Subject</span></v-card-subtitle>
         </v-card>
+        <v-snackbar color="primary" v-model="confirmDelete" v-if="confirmDelete === subject.id">
+          Do you really want to delete "{{subject.subjectName}}" ?
+          <v-btn color="success" @click="deleteSubject(subject.id, subject.subjectName)">Yes</v-btn>
+          <v-btn color="error" @click="confirmDelete = null">No</v-btn>
+        </v-snackbar>
       </v-container>
       <v-container v-if="signedIn">
         <v-card outlined style="cursor: pointer" @click="newSubject = { subjectName: '' }">
@@ -71,6 +76,7 @@ export default {
   },
   data () {
     return {
+      confirmDelete: null,
       editMode: null,
       firstTimeUse: false,
       newSubject: null,
@@ -104,6 +110,7 @@ export default {
         })
     },
     deleteSubject (id, name) {
+      this.confirmDelete = false
       securedAxiosInstance.delete('/api/v1/subjects/' + id)
         .then(
           this.getSubjects,
