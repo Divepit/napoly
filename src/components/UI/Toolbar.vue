@@ -5,10 +5,10 @@
       <v-list>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title style="font-size: 1.5rem">
+            <v-list-item-title style="font-size: 1.5rem" class="font-weight-light">
               napoly
             </v-list-item-title>
-            <v-list-item-subtitle>
+            <v-list-item-subtitle class="font-weight-light">
               Student Document Repository
             </v-list-item-subtitle>
           </v-list-item-content>

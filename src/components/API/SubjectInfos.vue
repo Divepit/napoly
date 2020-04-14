@@ -1,29 +1,26 @@
 <!-- Generates the infos in each subject, pulled from the API -->
 <template>
   <v-container fluid>
-    <v-divider/>
-
     <div v-for="info in infos"  :key="info.id">
-      <v-card elevation="0" class="mx-4 my-2">
-        <v-card-title style="font-family: Open Sans" class="pt-1 pb-1 primary--text" >{{info.infoTitle}}
-          <v-spacer/>
+      <v-card :outlined="editMode === subject.id" elevation="0" class="mx-4 mb-10">
+        <v-card-title style="font-family: Open Sans" class="pt-1 pb-4 primary--text font-weight-light" >
+          <v-btn v-if="editMode === subject.id" x-small outlined tile color="primary" class="mr-2" @click="editInfo(info, info.id)"><v-icon small>mdi-pencil</v-icon></v-btn>
+          {{info.infoTitle}}
+          <v-divider class="mx-6"/>
           <!-- All we need to add in editMode is an edit icon -->
-          <v-icon v-if="editMode === subject.id" @click="editInfo(info)">mdi-pencil</v-icon>
+          <span class="body-2 grey--text">Editiert am {{convertDate(info.updated_at.substring(0,10))}}</span>
         </v-card-title>
         <v-card-text class="pb-0">
           <vue-markdown>{{info.infoText}}</vue-markdown>
         </v-card-text>
       </v-card>
-      <v-card v-if="editMode === subject.id" style="cursor: pointer" outlined class="mx-4 my-2 text-center"
-              @click="editInfo({infoTitle: '', infoText: '', subject_id: subject.id})">
-        <v-card-text>
-          <v-icon color="primary">mdi-plus</v-icon>
-        </v-card-text>
-      </v-card>
-      <v-divider/>
-
     </div>
-
+    <v-card v-if="editMode === subject.id" style="cursor: pointer" outlined class="mx-4 my-2 text-center"
+            @click="editInfo({infoTitle: '', infoText: '', subject_id: subject.id})">
+      <v-card-text>
+        <v-icon>mdi-plus</v-icon>
+      </v-card-text>
+    </v-card>
     <ObjectEditor :objectToEdit="editedInfo" :active="editingInfo" :forbidden-attributes="forbiddenAttributes"
                   @updateObject="updateInfo($event)" @cancel="editingInfo = false" @delete="removeInfo(editedInfo)"/>
   </v-container>
@@ -69,7 +66,8 @@ export default {
         this.infos = response.data
       })
     },
-    editInfo (info) {
+    editInfo (info, id) {
+      this.newInfo.id = id
       if (this.editMode === this.subject.id) {
         this.editingInfo = true
         this.editedInfo = info
@@ -88,6 +86,7 @@ export default {
             this.message.text = `Info ${response.data.id} added`
             this.message.color = 'info'
             this.message.active = true
+            this.getInfos()
           })
           .catch(error => {
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
@@ -127,6 +126,12 @@ export default {
           this.message.color = 'warning',
           this.message.active = true
         )
+    },
+    convertDate (date) {
+      var year = date.substring(0, 4)
+      var month = date.substring(5, 7)
+      var day = date.substring(8, 10)
+      return day + '.' + month + '.' + year
     }
   }
 }

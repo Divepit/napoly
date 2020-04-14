@@ -1,7 +1,7 @@
 <!-- Lists the fields present on the API to display in the sidebar -->
 <template>
   <v-list>
-    <v-subheader @click="changeField" style="cursor: pointer">{{currentFieldName ? currentFieldName : 'Departement wählen'}}
+    <v-subheader @click="changeField" style="cursor: pointer" class="font-weight-light">{{currentFieldName ? currentFieldName : 'Departement wählen'}}
       <v-spacer/>
       <v-icon @click="changeField" small>{{changingField ? 'mdi-chevron-up':'mdi-chevron-down'}}</v-icon>
     </v-subheader>

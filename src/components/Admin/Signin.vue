@@ -4,20 +4,23 @@
     <v-container class="fill-height">
       <v-row align="center" justify="center">
         <v-col cols="6">
-          <v-card class="elevation-12">
-            <v-toolbar dark flat>
-              <v-toolbar-title>Login form</v-toolbar-title>
+          <v-card flat>
+            <v-toolbar flat>
+              <v-spacer/>
+              <v-toolbar-title class="grey--text">Sign in to napoly.ch</v-toolbar-title>
+              <v-spacer/>
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field label="Login" name="login" prepend-icon="mdi-face" type="text" v-model="email"/>
-                <v-text-field id="password" label="Password" name="password" prepend-icon="mdi-lock" type="password"
+                <v-text-field solo label="Username" name="Username" prepend-inner-icon="mdi-account"  type="text" v-model="email"/>
+                <v-text-field solo id="password" label="Password" name="password" prepend-inner-icon="mdi-lock" type="password"
                               v-model="password"/>
               </v-form>
             </v-card-text>
             <v-card-actions>
               <v-spacer/>
-              <v-btn @click="signin">Login</v-btn>
+              <v-btn outlined color="primary" @click="signin">Sign in</v-btn>
+              <v-spacer/>
             </v-card-actions>
           </v-card>
         </v-col>

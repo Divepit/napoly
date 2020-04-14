@@ -3,15 +3,16 @@
     <AdminToolbar/>
     <v-content>
       <v-container>
-        <v-row class="headline mb-6 mt-6">Hello, {{username}}</v-row>
-        <v-card>
-          <v-card-title>Change Password</v-card-title>
+        <v-card flat>
+          <v-card-title class="grey--text"><v-spacer/>Change Password<v-spacer/></v-card-title>
           <v-card-text>
-            <v-text-field label="New Password" type="password" v-model="password"></v-text-field>
-            <v-text-field label="Password Confirmation" type="password" v-model="password_confirmation"></v-text-field>
+            <v-text-field  class="mb-6" outlined label="New Password" color="primary" type="password" prepend-inner-icon="mdi-lock" v-model="password" hide-details></v-text-field>
+            <v-text-field label="Password Confirmation" color="primary" outlined type="password" prepend-inner-icon="mdi-lock" v-model="password_confirmation" hide-details></v-text-field>
           </v-card-text>
           <v-card-actions>
+            <v-spacer/>
             <v-btn tile outlined color="primary" @click="changePassword">Submit</v-btn>
+            <v-spacer/>
           </v-card-actions>
         </v-card>
       </v-container>

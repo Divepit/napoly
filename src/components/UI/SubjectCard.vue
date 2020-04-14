@@ -26,13 +26,14 @@
           <v-skeleton-loader class="mx-auto my-5" max-width="300" type="card"/>
         </v-card>
       </div>
-      <v-container :key="subject.id" v-else v-for="subject in subjects" class="pt-8" :id="subject.subjectName">
-        <v-card elevation="8">
-          <v-card-title class="primary--text" style="font-size: 1.75rem; font-family: 'Open Sans'">
+      <v-container :key="subject.id" v-else v-for="subject in subjects" class="pt-12" :id="subject.subjectName">
+        <v-card elevation="4">
+          <v-card-title class="primary--text font-weight-thin" style="font-size: 1.75rem; font-family: 'Open Sans'">
             <v-btn v-if="authenticate(subject) && editMode !== subject.id" @click="editMode = subject.id" class="mr-4" tile outlined color="info" small> <v-icon small>mdi-pencil</v-icon></v-btn>
             <v-btn v-if="authenticate(subject) && editMode === subject.id" @click="editMode = null" class="mr-4" tile outlined color="error" small ><v-icon small>mdi-pencil-off</v-icon></v-btn>
             {{subject.subjectName}}
-            <v-divider vertical class="mx-4 hidden-sm-and-down"></v-divider>
+<!--            <v-divider vertical class="mx-4 hidden-sm-and-down"></v-divider>-->
+            <v-spacer/>
             <SubjectButtons class="hidden-sm-and-down" :subject="subject" :editMode="editMode"/>
           </v-card-title>
           <SubjectButtons class="hidden-md-and-up mx-4" :subject="subject" :editMode="editMode"/>

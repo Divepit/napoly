@@ -21,7 +21,7 @@
             <td>{{week}}</td>
             <td style="cursor: pointer" :key="type" v-for="type in typeIds">
               <!-- Create the links in case we are not in edit mode-->
-              <a class="primary--text" style="text-decoration: none;" :href="findLinkFromTypeAndWeek(type, week).linkUrl"
+              <a class="primary--text font-weight-light" style="text-decoration: none;" :href="findLinkFromTypeAndWeek(type, week).linkUrl"
                  target="_blank"
                  v-if="typeWeekCombos.includes(`${type}/${week}`) && editMode !== subject.id"><span class="hidden-sm-and-down">{{types[type-1]}}</span> {{week}}</a>
               <span v-else/>

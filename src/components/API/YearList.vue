@@ -1,7 +1,7 @@
 <!-- Generates a list of Years for the sidebar-->
 <template>
   <v-list>
-    <v-subheader v-if="currentYear" @click="changeYear" style="cursor: pointer">{{currentYear}}. Studienjahr
+    <v-subheader v-if="currentYear" @click="changeYear" style="cursor: pointer" class="font-weight-light">{{currentYear}}. Studienjahr
       <v-spacer/>
       <v-icon small>{{changingYear ? 'mdi-chevron-up':'mdi-chevron-down'}}</v-icon>
     </v-subheader>
@@ -10,7 +10,7 @@
       <v-icon small>{{changingYear ? 'mdi-chevron-up':'mdi-chevron-down'}}</v-icon>
     </v-subheader>
     <v-list-item-group v-if="changingYear">
-      <v-list-item v-for="year in years" :key="year.id" @click="setCurrentYear(year)">{{year}}. Studienjahr
+      <v-list-item v-for="year in years" :key="year.id" @click="setCurrentYear(year)" class="font-weight-light">{{year}}. Studienjahr
       </v-list-item>
     </v-list-item-group>
   </v-list>

@@ -1,7 +1,7 @@
 <!-- Lists the semesters present on the API to display in the sidebar -->
 <template>
   <v-list>
-    <v-subheader @click="changeSemester" style="cursor: pointer">{{currentSemesterName ? currentSemesterName : 'Semester wählen'}}
+    <v-subheader @click="changeSemester" style="cursor: pointer" class="font-weight-light">{{currentSemesterName ? currentSemesterName : 'Semester wählen'}}
       <v-spacer/>
       <v-icon @click="changeSemester" small>{{changingSemester ? 'mdi-chevron-up':'mdi-chevron-down'}}</v-icon>
     </v-subheader>

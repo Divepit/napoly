@@ -1,14 +1,14 @@
 <!-- Sidebar used in the admin interface -->
 <template>
   <div>
-    <v-navigation-drawer v-model="showDrawer" app dark overflow color="primary">
+    <v-navigation-drawer v-model="showDrawer" dark app overflow color="primary">
       <v-list>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title">
-              Napoly.ch
+            <v-list-item-title style="font-size: 1.5rem" class="font-weight-light">
+              napoly
             </v-list-item-title>
-            <v-list-item-subtitle>
+            <v-list-item-subtitle class="font-weight-light">
               Student Document Repository
             </v-list-item-subtitle>
           </v-list-item-content>
@@ -17,24 +17,31 @@
         <!-- List of links to different functions / pages available to admins-->
         <v-list-item-group>
           <v-list-item to="/">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-home</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Homepage</v-list-item-title>
+            <v-list-item-title class="font-weight-light">Homepage</v-list-item-title>
+          </v-list-item>
+          <v-divider/>
+          <v-list-item to="/admin">
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-account-cowboy-hat</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="font-weight-light">My Account</v-list-item-title>
           </v-list-item>
           <v-divider/>
           <v-list-item to="/account" v-if="userRole === '1'">
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-account-multiple-plus</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Account Management</v-list-item-title>
+            <v-list-item-title class="font-weight-light">User Management</v-list-item-title>
           </v-list-item>
           <v-divider v-if="userRole === '1'"/>
-          <v-list-item @click="signOut()">
-            <v-list-item-icon>
-              <v-icon>mdi-logout</v-icon>
+          <v-list-item @click="signOut()" >
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-logout</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Log Out</v-list-item-title>
+            <v-list-item-title class="font-weight-light">Log Out</v-list-item-title>
           </v-list-item>
           <v-divider/>
         </v-list-item-group>

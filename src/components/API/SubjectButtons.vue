@@ -18,10 +18,10 @@
       <v-btn :key="btn.id" class="my-1 hidden-md-and-up" small target="_blank" v-for="btn in buttons" outlined color="info" tile block
              @click="editButton(btn)">{{btn.buttonLabel}}
       </v-btn>
-      <v-btn color="primary" class="pa-0 hidden-sm-and-down" small tile @click="editButton({buttonUrl: '', buttonLabel: '', subject_id: subject.id})">
+      <v-btn color="primary" outlined class="pa-0 hidden-sm-and-down ml-4" small tile @click="editButton({buttonUrl: '', buttonLabel: '', subject_id: subject.id})">
         +
       </v-btn>
-      <v-btn color="primary" class="hidden-md-and-up" small tile @click="editButton({buttonUrl: '', buttonLabel: '', subject_id: subject.id})" block>
+      <v-btn color="primary" outlined class="hidden-md-and-up mt-4" small tile @click="editButton({buttonUrl: '', buttonLabel: '', subject_id: subject.id})" block>
         +
       </v-btn>
     </div>
