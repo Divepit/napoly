@@ -1,5 +1,5 @@
 <template>
-  <v-app id="sandbox">
+  <v-app id="app">
     <GlobalNotification/>
     <router-view/>
   </v-app>
@@ -13,5 +13,9 @@ export default {
     this.$vuetify.theme.dark = false
   }
 }
-
 </script>
+<style>
+  #app {
+    font-family: Muli;
+  }
+</style>

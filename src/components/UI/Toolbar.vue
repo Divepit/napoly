@@ -1,12 +1,12 @@
 <!-- Sidebar used in the main interface -->
 <template>
   <div>
-    <v-navigation-drawer dark app overflow color="primary">
+    <v-navigation-drawer v-model="showDrawer" dark app overflow color="primary">
       <v-list>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title">
-              Napoly.ch
+            <v-list-item-title style="font-size: 1.5rem">
+              napoly
             </v-list-item-title>
             <v-list-item-subtitle>
               Student Document Repository
@@ -15,10 +15,10 @@
         </v-list-item>
         <v-list-item-group v-if="signedIn">
           <v-divider/>
-          <v-list-item to="/admin">
-            <v-list-item-icon class="mr-2">
-              <v-icon>mdi-face</v-icon>
-            </v-list-item-icon>
+          <v-list-item to="/admin" style="background: #2d98da">
+<!--            <v-list-item-icon class="mr-2">-->
+<!--              <v-icon>mdi-face</v-icon>-->
+<!--            </v-list-item-icon>-->
             <v-list-item-title>{{username}}</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -32,17 +32,10 @@
         <SubjectList/>
       </v-list>
     </v-navigation-drawer>
-<!--    <v-app-bar app>-->
-<!--      <v-spacer/>-->
-<!--      <v-toolbar-items>-->
-<!--        <v-btn text flat class="text-none">Ilias</v-btn>-->
-<!--        <v-btn text flat class="text-none">Moodle</v-btn>-->
-<!--        <v-btn text flat class="text-none">myStudies</v-btn>-->
-<!--        <v-btn text flat class="text-none">About</v-btn>-->
-<!--      </v-toolbar-items>-->
-<!--    </v-app-bar>-->
+    <v-app-bar app hide-on-scroll flat dense color="white">
+      <v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"></v-app-bar-nav-icon>
+    </v-app-bar>
   </div>
-
 </template>
 <script>
 import SemesterList from '../API/SemesterList'
@@ -60,10 +53,7 @@ export default {
     }
   },
   data: () => ({
-    primaryDrawer: {
-      model: true,
-      username: ''
-    }
+    showDrawer: true
   }),
   computed: {
     ...mapState(['signedIn'])

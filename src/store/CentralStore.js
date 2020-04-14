@@ -12,6 +12,7 @@ export default new Vuex.Store({
     loading: false,
     noresult: false,
     signedIn: localStorage.signedIn,
+    showToolbar: true,
     message: {
       active: false,
       timeout: 4000,

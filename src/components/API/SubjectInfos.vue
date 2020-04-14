@@ -1,22 +1,29 @@
 <!-- Generates the infos in each subject, pulled from the API -->
 <template>
   <v-container fluid>
-    <v-card v-for="info in infos" outlined :key="info.id" class="mx-4 my-2">
-      <v-card-title>{{info.infoTitle}}
-        <v-spacer/>
-        <!-- All we need to add in editMode is an edit icon -->
-        <v-icon v-if="editMode === subject.id" @click="editInfo(info)">mdi-pencil</v-icon>
-      </v-card-title>
-      <v-card-text>
-        <vue-markdown>{{info.infoText}}</vue-markdown>
-      </v-card-text>
-    </v-card>
-    <v-card v-if="editMode === subject.id" style="cursor: pointer" outlined class="mx-4 my-2 text-center"
-            @click="editInfo({infoTitle: '', infoText: '', subject_id: subject.id})">
-      <v-card-text>
-        <v-icon color="primary">mdi-plus</v-icon>
-      </v-card-text>
-    </v-card>
+    <v-divider/>
+
+    <div v-for="info in infos"  :key="info.id">
+      <v-card elevation="0" class="mx-4 my-2">
+        <v-card-title style="font-family: Open Sans" class="pt-1 pb-1 primary--text" >{{info.infoTitle}}
+          <v-spacer/>
+          <!-- All we need to add in editMode is an edit icon -->
+          <v-icon v-if="editMode === subject.id" @click="editInfo(info)">mdi-pencil</v-icon>
+        </v-card-title>
+        <v-card-text class="pb-0">
+          <vue-markdown>{{info.infoText}}</vue-markdown>
+        </v-card-text>
+      </v-card>
+      <v-card v-if="editMode === subject.id" style="cursor: pointer" outlined class="mx-4 my-2 text-center"
+              @click="editInfo({infoTitle: '', infoText: '', subject_id: subject.id})">
+        <v-card-text>
+          <v-icon color="primary">mdi-plus</v-icon>
+        </v-card-text>
+      </v-card>
+      <v-divider/>
+
+    </div>
+
     <ObjectEditor :objectToEdit="editedInfo" :active="editingInfo" :forbidden-attributes="forbiddenAttributes"
                   @updateObject="updateInfo($event)" @cancel="editingInfo = false" @delete="removeInfo(editedInfo)"/>
   </v-container>

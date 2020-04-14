@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div v-if="!(currentFieldId && currentSemesterId && currentYear)">
-      <v-card class="mt-12 grey--text">
+      <v-card class="grey--text">
         <v-card-title>
           <v-spacer/>
           Bitte wähle dein Semester
@@ -27,14 +27,16 @@
         </v-card>
       </div>
       <v-container :key="subject.id" v-else v-for="subject in subjects" class="pt-8" :id="subject.subjectName">
-        <v-card>
-          <v-card-title class="primary--text">
+        <v-card elevation="8">
+          <v-card-title class="primary--text" style="font-size: 1.75rem; font-family: 'Open Sans'">
+            <v-btn v-if="authenticate(subject) && editMode !== subject.id" @click="editMode = subject.id" class="mr-4" tile outlined color="info" small> <v-icon small>mdi-pencil</v-icon></v-btn>
+            <v-btn v-if="authenticate(subject) && editMode === subject.id" @click="editMode = null" class="mr-4" tile outlined color="error" small ><v-icon small>mdi-pencil-off</v-icon></v-btn>
             {{subject.subjectName}}
-            <v-btn v-if="authenticate(subject) && editMode !== subject.id" @click="editMode = subject.id" class="ml-4" tile outlined color="info"> <v-icon left small>mdi-pencil</v-icon> Edit</v-btn>
-            <v-btn v-if="authenticate(subject) && editMode === subject.id" @click="editMode = null" class="ml-4" tile outlined color="error" > <v-icon left small>mdi-cancel</v-icon> Stop Editing</v-btn>
-            <v-spacer/>
-            <SubjectButtons :subject="subject" :editMode="editMode"/>
+            <v-divider vertical class="mx-4 hidden-sm-and-down"></v-divider>
+            <SubjectButtons class="hidden-sm-and-down" :subject="subject" :editMode="editMode"/>
           </v-card-title>
+          <SubjectButtons class="hidden-md-and-up mx-4" :subject="subject" :editMode="editMode"/>
+
           <v-container fluid>
             <LinkTable :subject="subject" :editMode="editMode"/>
           </v-container>

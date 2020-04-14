@@ -23,11 +23,10 @@
               <!-- Create the links in case we are not in edit mode-->
               <a class="primary--text" style="text-decoration: none;" :href="findLinkFromTypeAndWeek(type, week).linkUrl"
                  target="_blank"
-                 v-if="typeWeekCombos.includes(`${type}/${week}`) && editMode !== subject.id">{{types[type-1] + ' ' +
-                week}}</a>
+                 v-if="typeWeekCombos.includes(`${type}/${week}`) && editMode !== subject.id"><span class="hidden-sm-and-down">{{types[type-1]}}</span> {{week}}</a>
               <span v-else/>
               <!-- Create the editing buttons in case we are in edit mode-->
-              <v-btn outlined tile small color="primary" @click="editLink(type,week)" v-if="editMode === subject.id">
+              <v-btn outlined tile x-small color="primary" @click="editLink(type,week)" v-if="editMode === subject.id">
                 {{typeWeekCombos.includes(`${type}/${week}`) ? types[type-1] + ' ' + week : '+'}}
               </v-btn>
               <span v-else/>

@@ -1,7 +1,7 @@
 <!-- Sidebar used in the admin interface -->
 <template>
   <div>
-    <v-navigation-drawer dark app overflow permanent color="primary">
+    <v-navigation-drawer v-model="showDrawer" app dark overflow color="primary">
       <v-list>
         <v-list-item>
           <v-list-item-content>
@@ -40,6 +40,9 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+    <v-app-bar app hide-on-scroll flat dense color="white">
+      <v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"></v-app-bar-nav-icon>
+    </v-app-bar>
   </div>
 
 </template>
@@ -57,6 +60,7 @@ export default {
   },
   data () {
     return {
+      showDrawer: true,
       username: null,
       userRole: null
     }
