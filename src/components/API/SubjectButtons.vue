@@ -3,19 +3,19 @@
   <div>
     <!-- Display the buttons regularly -->
     <div v-if="editMode !== subject.id">
-      <v-btn depressed color="primary" :href="btn.buttonUrl" :key="btn.id" class="mx-1 hidden-sm-and-down" small target="_blank" v-for="btn in buttons">
+      <v-btn depressed color="primary" :href="btn.buttonUrl" :key="'inline'+btn.id" class="mx-1 hidden-sm-and-down white--text" small target="_blank" v-for="btn in buttons">
         {{btn.buttonLabel}}
       </v-btn>
-      <v-btn depressed color="primary" :href="btn.buttonUrl" :key="btn.id" class="my-2 hidden-md-and-up" small target="_blank" v-for="btn in buttons" block>
+      <v-btn depressed color="primary" :href="btn.buttonUrl" :key="'block'+btn.id" class="my-2 hidden-md-and-up white--text" small target="_blank" v-for="btn in buttons" block>
         {{btn.buttonLabel}}
       </v-btn>
     </div>
     <!-- Make the buttons editable in editMode -->
     <div v-else>
-      <v-btn :key="btn.id" class="mx-1 px-1 hidden-sm-and-down" small target="_blank" v-for="btn in buttons" outlined color="info" tile
+      <v-btn :key="'inline'+btn.id" class="mx-1 px-1 hidden-sm-and-down" small target="_blank" v-for="btn in buttons" outlined color="info" tile
              @click="editButton(btn)">{{btn.buttonLabel}}
       </v-btn>
-      <v-btn :key="btn.id" class="my-1 hidden-md-and-up" small target="_blank" v-for="btn in buttons" outlined color="info" tile block
+      <v-btn :key="'block'+btn.id" class="my-1 hidden-md-and-up" small target="_blank" v-for="btn in buttons" outlined color="info" tile block
              @click="editButton(btn)">{{btn.buttonLabel}}
       </v-btn>
       <v-btn color="primary" outlined class="pa-0 hidden-sm-and-down ml-4" small tile @click="editButton({buttonUrl: '', buttonLabel: '', subject_id: subject.id})">

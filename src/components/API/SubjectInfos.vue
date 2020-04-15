@@ -3,14 +3,16 @@
   <v-container fluid>
     <div v-for="info in infos"  :key="info.id">
       <v-card :outlined="editMode === subject.id" elevation="0" class="mx-4 mb-10">
-        <v-card-title style="font-family: Open Sans" class="pt-1 pb-4 primary--text font-weight-light" >
+        <v-card-title style="font-family: Open Sans; word-break: keep-all" :class="editMode === subject.id ? 'pt-4 primary--text font-weight-light pb-0' : 'pt-1 primary--text font-weight-light px-0 pb-0'" >
           <v-btn v-if="editMode === subject.id" x-small outlined tile color="primary" class="mr-2" @click="editInfo(info, info.id)"><v-icon small>mdi-pencil</v-icon></v-btn>
           {{info.infoTitle}}
-          <v-divider class="mx-6"/>
+          <v-divider class="mx-6 hidden-sm-and-down"/>
+
           <!-- All we need to add in editMode is an edit icon -->
-          <span class="body-2 grey--text">Editiert am {{convertDate(info.updated_at.substring(0,10))}}</span>
         </v-card-title>
-        <v-card-text class="pb-0">
+        <v-card-title :class="editMode === subject.id ? 'body-2 grey--text font-weight-light pt-0 pb-4' : 'body-2 grey--text font-weight-light pa-0 pb-4 px-0'" style="font-family: Open Sans;">Editiert am {{convertDate(info.updated_at.substring(0,10))}}</v-card-title>
+
+        <v-card-text :class="editMode === subject.id ? 'pb-0 pb-4' : 'pb-0 px-0'">
           <vue-markdown>{{info.infoText}}</vue-markdown>
         </v-card-text>
       </v-card>
@@ -68,6 +70,7 @@ export default {
     },
     editInfo (info, id) {
       this.newInfo.id = id
+      this.newInfo.subject_id = this.subject.id
       if (this.editMode === this.subject.id) {
         this.editingInfo = true
         this.editedInfo = info

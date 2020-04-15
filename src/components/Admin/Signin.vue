@@ -12,8 +12,8 @@
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field solo label="Username" name="Username" prepend-inner-icon="mdi-account"  type="text" v-model="email"/>
-                <v-text-field solo id="password" label="Password" name="password" prepend-inner-icon="mdi-lock" type="password"
+                <v-text-field solo label="Username" name="Username" prepend-inner-icon="mdi-account"  type="text" v-model="email" @keydown.enter="signin"/>
+                <v-text-field solo id="password" label="Password" name="password" prepend-inner-icon="mdi-lock" type="password" @keydown.enter="signin"
                               v-model="password"/>
               </v-form>
             </v-card-text>
@@ -80,7 +80,7 @@ export default {
             this.message.active = true
             localStorage.signedIn = true
             this.$store.state.signedIn = true
-            this.$router.replace('/admin')
+            this.$router.replace('/')
           }
         })
         .catch(error => {

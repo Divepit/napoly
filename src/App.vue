@@ -17,5 +17,14 @@ export default {
 <style>
   #app {
     font-family: Muli;
+    overflow-x: hidden;
+  }
+
+  #app a {
+    text-decoration: none;
+    color: #3da4ea;
+  }
+  #app a:visited {
+    color: #3da4ea;
   }
 </style>

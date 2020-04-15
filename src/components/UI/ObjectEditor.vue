@@ -15,10 +15,11 @@
               </v-card>
             </div>
             <!-- SPECIAL CASE ROLE -->
-            <!-- SPECIAL CASE ROLE -->
             <v-select v-else-if="objectKeys[index].includes('role')" :items="[{ value: 1, text: 'Admin' },{ value: 0, text: 'Moderator' }]" hide-details class="ma-0 pb-0 pt-2" outlined :label="objectKeys[index]" v-model="objectValues[index]"/>
             <!-- SPECIAL CASE FIELD ID -->
             <v-select v-else-if="objectKeys[index].includes('field_id')" :items="fields.data" item-text="fieldName" item-value="id" hide-details class="ma-0 pb-0 pt-2" outlined :label="objectKeys[index]" v-model="objectValues[index]"/>
+            <!-- SPECIAL CASE PASSWORD -->
+            <v-text-field v-else-if="objectKeys[index].includes('password')" :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'" v-on:click:append="showPassword = !showPassword" hide-details outlined class="ma-0 pb-0 pt-2" :label="objectKeys[index]" v-model="objectValues[index]" :type="!showPassword ? 'password' : 'text'"/>
             <v-text-field v-else hide-details outlined class="ma-0 pb-0 pt-2" :label="objectKeys[index]" v-model="objectValues[index]" :type="typeof objectValue"/>
         </v-card-text>
       <v-card-actions class="mt-0 pt-0">
@@ -55,7 +56,8 @@ export default {
     return {
       objectKeys: [],
       objectValues: [],
-      newField: null
+      newField: null,
+      showPassword: false
     }
   },
   props: {

@@ -18,30 +18,30 @@
         <v-list-item-group>
           <v-list-item to="/">
             <v-list-item-icon class="mr-2">
-              <v-icon small>mdi-home</v-icon>
+              <v-icon small color="white">mdi-home</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="font-weight-light">Homepage</v-list-item-title>
+            <v-list-item-title class="font-weight-light white--text">Homepage</v-list-item-title>
           </v-list-item>
           <v-divider/>
           <v-list-item to="/admin">
             <v-list-item-icon class="mr-2">
-              <v-icon small>mdi-account-cowboy-hat</v-icon>
+              <v-icon small color="white">mdi-account-cowboy-hat</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="font-weight-light">My Account</v-list-item-title>
+            <v-list-item-title class="font-weight-light white--text">My Account</v-list-item-title>
           </v-list-item>
           <v-divider/>
           <v-list-item to="/account" v-if="userRole === '1'">
             <v-list-item-icon class="mr-2">
-              <v-icon small>mdi-account-multiple-plus</v-icon>
+              <v-icon small color="white">mdi-account-multiple-plus</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="font-weight-light">User Management</v-list-item-title>
+            <v-list-item-title class="font-weight-light white--text">User Management</v-list-item-title>
           </v-list-item>
           <v-divider v-if="userRole === '1'"/>
           <v-list-item @click="signOut()" >
             <v-list-item-icon class="mr-2">
-              <v-icon small>mdi-logout</v-icon>
+              <v-icon small color="white">mdi-logout</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="font-weight-light">Log Out</v-list-item-title>
+            <v-list-item-title class="font-weight-light white--text">Log Out</v-list-item-title>
           </v-list-item>
           <v-divider/>
         </v-list-item-group>

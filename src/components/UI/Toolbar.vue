@@ -31,9 +31,12 @@
         <v-divider/>
         <SubjectList/>
       </v-list>
+<!--      <v-footer color="primary" absolute>© Marco Trentini, 2020</v-footer>-->
     </v-navigation-drawer>
-    <v-app-bar app hide-on-scroll flat dense color="white">
+    <v-app-bar app flat dense color="white">
       <v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"></v-app-bar-nav-icon>
+      <v-spacer/>
+      <v-toolbar-title class="primary--text font-weight-light" v-if="!showDrawer">napoly.ch</v-toolbar-title>
     </v-app-bar>
   </div>
 </template>

@@ -6,19 +6,19 @@
         <!-- Creates headers based on the types which occur in the links associated to the subject-->
         <thead>
         <tr>
-          <th>Week</th>
-          <th :key="type" v-for="type in typeIds">{{types[type-1]}}</th>
+          <th class="font-weight-light text-center">Week</th>
+          <th class="font-weight-light text-center" :key="type" v-for="type in typeIds">{{types[type-1]}}</th>
           <!-- Add type button -->
           <th v-if="editMode === subject.id">
             <v-btn text small color="primary" @click="addingType = true">+</v-btn>
           </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody align="center">
         <!-- The amount of weeks created is equal to the highest linkWeek integer present in the links associated to the subject-->
           <tr :key="week" v-for="week in subjectWeeks">
             <!-- Create the week column -->
-            <td>{{week}}</td>
+            <td class="font-weight-light">{{week}}</td>
             <td style="cursor: pointer" :key="type" v-for="type in typeIds">
               <!-- Create the links in case we are not in edit mode-->
               <a class="primary--text font-weight-light" style="text-decoration: none;" :href="findLinkFromTypeAndWeek(type, week).linkUrl"
@@ -36,7 +36,7 @@
           </tr>
         <!-- Add week button -->
         <tr v-if="editMode === subject.id">
-          <td class="pl-1">
+          <td class="text-center">
             <v-btn text x-small color="primary" class="pa-0 ma-0" @click="subjectWeeks.push(subjectWeeks.length)">+
             </v-btn>
           </td>

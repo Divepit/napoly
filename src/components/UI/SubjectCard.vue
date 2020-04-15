@@ -1,12 +1,21 @@
 <template>
   <v-container>
     <div v-if="!(currentFieldId && currentSemesterId && currentYear)">
-      <v-card class="grey--text">
-        <v-card-title>
-          <v-spacer/>
-          Bitte wähle dein Semester
-          <v-spacer/>
-        </v-card-title>
+      <v-container style="height: 30vh; width: 100vw" class="fill-height">
+        <v-row>
+          <v-col cols="12" class="text-center font-weight-light primary--text pb-0" style="font-size: 3rem">
+            napoly.ch
+          </v-col><v-col cols="12" class="text-center font-weight-light primary--text pt-0" style="font-size: 1.25rem; font-family: Open Sans">
+          Student Document Repository
+        </v-col>
+        </v-row>
+      </v-container>
+      <v-card class="grey--text" flat>
+<!--        <v-card-title>-->
+<!--          <v-spacer/>-->
+<!--          Bitte wähle dein Semester-->
+<!--          <v-spacer/>-->
+<!--        </v-card-title>-->
         <year-list/>
         <field-list/>
         <semester-list/>
@@ -14,13 +23,22 @@
     </div>
     <div v-else>
       <v-card class="mt-12 grey--text" flat v-if="noresult">
-        <v-card-title>
+        <v-card-title style="font-family: Open Sans">
           <v-spacer/>
           In diesem Semester existieren noch keine Links!
           <v-spacer/>
         </v-card-title>
-        <v-card-actions><v-spacer/><v-btn>Wie kann ich das ändern?</v-btn><v-spacer/></v-card-actions>
+        <v-card-actions><v-spacer/><v-btn outlined color="primary" class="mx-2" href="mailto:marcotr@ethz.ch">Schreib uns eine Mail</v-btn> falls du die Unterlagen dieses Semesters verwalten willst!<v-spacer/></v-card-actions>
       </v-card>
+      <v-container style="height: 90vh; width: 110vw" class="fill-height">
+        <v-row>
+          <v-col cols="12" class="text-center font-weight-light primary--text pb-0" style="font-size: 3rem">
+            napoly.ch
+          </v-col><v-col cols="12" class="text-center font-weight-light primary--text pt-0" style="font-size: 1.25rem; font-family: Open Sans">
+          Student Document Repository
+        </v-col>
+        </v-row>
+      </v-container>
       <div v-if="loading">
         <v-card :key="x" class="my-2" v-for="x in 4">
           <v-skeleton-loader class="mx-auto my-5" max-width="300" type="card"/>
@@ -42,7 +60,7 @@
             <LinkTable :subject="subject" :editMode="editMode"/>
           </v-container>
           <SubjectInfos :subject="subject" :editMode="editMode"/>
-          <v-card-subtitle v-if="signedIn && userRole == 1" style="cursor: pointer"><span class="error--text" @click="confirmDelete = subject.id">Delete Subject</span></v-card-subtitle>
+          <v-card-subtitle v-if="signedIn && userRole == 1 && editMode === subject.id" style="cursor: pointer"><span class="error--text" @click="confirmDelete = subject.id">Delete Subject</span></v-card-subtitle>
         </v-card>
         <v-snackbar color="primary" v-model="confirmDelete" v-if="confirmDelete === subject.id">
           Do you really want to delete "{{subject.subjectName}}" ?
