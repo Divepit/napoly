@@ -47,7 +47,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app hide-on-scroll flat dense color="white">
+    <v-app-bar app flat dense color="white">
       <v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"></v-app-bar-nav-icon>
     </v-app-bar>
   </div>

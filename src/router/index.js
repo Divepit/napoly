@@ -27,6 +27,11 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: AccountManagement
+  },
+  {
+    path: '/*',
+    name: 'redirect',
+    component: Home
   }
 ]
 

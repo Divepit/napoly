@@ -3,7 +3,7 @@
   <v-list v-if="subjects.length">
     <v-subheader class="font-weight-light">Subjects</v-subheader>
     <v-list-item-group>
-      <v-list-item v-for="subject in subjects" :key="subject.id" :href="'#'+subject.subjectName" class="font-weight-light">
+      <v-list-item v-for="subject in subjects" :key="subject.id" :href="'#'+subject.subjectName" class="font-weight-light white--text">
         {{subject.subjectName}}
       </v-list-item>
     </v-list-item-group>

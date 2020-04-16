@@ -3,7 +3,7 @@
   <v-content fluid>
     <v-container class="fill-height">
       <v-row align="center" justify="center">
-        <v-col cols="6">
+        <v-col sm="12" md="6">
           <v-card flat>
             <v-toolbar flat>
               <v-spacer/>
