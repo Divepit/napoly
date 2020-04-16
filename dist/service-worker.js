@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.2897c02e3f39bdbca90daa45d1a067db.js"
+  "/precache-manifest.0aea428361b02ea2c867af1a276189fd.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "napoly-frontend-2"});
