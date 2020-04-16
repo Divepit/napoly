@@ -9,6 +9,13 @@
 import GlobalNotification from './components/UI/GlobalNotification'
 export default {
   components: { GlobalNotification },
+  beforeCreate () {
+    if (localStorage.status !== 'cleared') {
+      localStorage.clear()
+      localStorage.status = 'cleared'
+      this.$router.go()
+    }
+  },
   created () {
     this.$vuetify.theme.dark = false
   }
