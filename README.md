@@ -2,13 +2,16 @@
 
 ## Project setup
 
-
-If you would like to run the Napoly page locally, you must either install the Napoly 
-API Ruby application or edit the axios configuration file to run the app on the 
-live API. You will need an admin account on https://napoly.ch to fully access the API.
+To install all node dependencies make sure to run
+``` bash
+$ npm run dev
+```
+on the root directory of the cloned project.
 
 ---
-To make use of the live API, change the following line
+
+## API Access
+To make use of the live API locally, change the following line
 
 ``` javascript
 // src/backend/axios/index.js
@@ -27,17 +30,8 @@ to the value:
 var API_URL = 'http://api.napoly.ch' // Development
 ```
 ---
-To install all dependencies locally make sure to run
-``` bash
-npm run dev
-```
-on the root directory of the cloned project.
 
----
-
-## API Access
-
-The API json directories that can be indexed without authentication are available via
+The API json directories that can be indexed without authentication (which requires an admin account on napoly.ch) are available via
 the following links:
 
 - https://api.napoly.ch/api/v1/fields

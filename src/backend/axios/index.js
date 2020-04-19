@@ -1,10 +1,15 @@
+// This file is here to define and handle the secure contact to our API
+// We have to import axios from the node module directory
 import axios from 'axios'
 
-// var API_URL = 'https://staging.api.napoly.ch' // Development
+// If we are not on production, we want to contact the API which is running locally on our host machine. In case you do
+// not want to run the database locally, replace 'http://localhost:3000' in the following line with 'https://api.napoly.ch'
+// to use the live API
+
 var API_URL = 'http://localhost:3000' // Development
 
 if (process.env.NODE_ENV === 'production') {
-  API_URL = 'https://staging.api.napoly.ch' //  Production
+  API_URL = 'https://api.napoly.ch' //  Production
 }
 
 const securedAxiosInstance = axios.create({
