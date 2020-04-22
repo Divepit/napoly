@@ -8,7 +8,7 @@
         <tr>
           <th class="font-weight-light text-center">Week</th>
           <th class="font-weight-light text-center" :key="type" v-for="type in typeIds">{{types[type-1]}}</th>
-          <!-- Add type button -->
+          <!-- Button which opens a window to select a new type to add -->
           <th v-if="editMode === subject.id">
             <v-btn text small color="primary" @click="addingType = true">+</v-btn>
           </th>
@@ -25,7 +25,7 @@
                  target="_blank"
                  v-if="typeWeekCombos.includes(`${type}/${week}`) && editMode !== subject.id"><span class="hidden-sm-and-down">{{types[type-1]}}</span> {{week}}</a>
               <span v-else/>
-              <!-- Create the editing buttons in case we are in edit mode-->
+              <!-- Create the link-editing-buttons in case we are in edit mode-->
               <v-btn outlined tile x-small color="primary" @click="editLink(type,week)" v-if="editMode === subject.id">
                 {{typeWeekCombos.includes(`${type}/${week}`) ? types[type-1] + ' ' + week : '+'}}
               </v-btn>
@@ -37,7 +37,7 @@
         <!-- Add week button -->
         <tr v-if="editMode === subject.id">
           <td class="text-center">
-            <v-btn text x-small color="primary" class="pa-0 ma-0" @click="subjectWeeks.push(subjectWeeks.length+1)">+
+            <v-btn text x-small color="primary" class="pa-0 ma-0" @click="subjectWeeks.push(subjectWeeks[subjectWeeks.length-1]+1)">+
             </v-btn>
           </td>
         </tr>
@@ -46,14 +46,13 @@
     </v-card>
     <ObjectEditor :objectToEdit="editedLink" :forbidden-attributes="forbiddenAttributes" :active="editingLink"
                   @updateObject="updateLink($event)" @cancel="editingLink = false" @delete="removeLink(editedLink)"/>
+    <!-- Array Selector is a derivative of ObjectEditor. It lets you select an element from an array and returns it -->
     <ArraySelector :arrayToSelectFrom="types" :active="addingType" @returnSelection="addType($event)"
                    @cancel="addingType = false"/>
   </v-container>
 </template>
 <script>
-// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapMutations, mapState } from 'vuex'
-// plainAxiosInstance and securedAxiosInstance are defined in the axios wrapper and is used to access API values which do not require authentication
 import { plainAxiosInstance, securedAxiosInstance } from '../../backend/axios'
 import ObjectEditor from '../UI/ObjectEditor'
 import ArraySelector from '../UI/ArraySelector'
@@ -61,6 +60,14 @@ import ArraySelector from '../UI/ArraySelector'
 export default {
   name: 'LinkTable',
   components: { ArraySelector, ObjectEditor },
+  created () {
+    this.getSubjectLinks()
+  },
+  props: {
+    subject: null,
+    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
+    editMode: null
+  },
   data () {
     return {
       subjectWeeks: [],
@@ -75,18 +82,10 @@ export default {
       forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'type_id', 'subject_id']
     }
   },
-  created () {
-    this.getSubjectLinks()
-  },
   computed: {
     // Note that all the API States are defined a separate vuex module at src/store/modules/napolyApi.js
     ...mapState('napolyApiModule', ['types', 'subjects']),
     ...mapState(['signedIn', 'message'])
-  },
-  props: {
-    subject: null,
-    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
-    editMode: null
   },
   methods: {
     ...mapMutations(['setMessage']),

@@ -1,4 +1,4 @@
-<!-- Generic Sign-in page -->
+<!-- Generic sign-in page -->
 <template>
   <v-content fluid>
     <v-container class="fill-height">
@@ -30,22 +30,11 @@
 </template>
 
 <script>
-// plainAxiosInstance is defined in the axios wrapper and is used to access API values which do not require authentication
 import { plainAxiosInstance } from '../../backend/axios'
-// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapState } from 'vuex'
 
 export default {
   name: 'Signin',
-  data () {
-    return {
-      email: '',
-      password: ''
-    }
-  },
-  computed: {
-    ...mapState(['message'])
-  },
   created () {
     // If user is already signed in, we redirect him to the Admin Interface
     if (localStorage.signedIn) {
@@ -56,8 +45,18 @@ export default {
       this.$router.replace('/admin')
     }
   },
+  data () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  computed: {
+    ...mapState(['message', 'signedIn'])
+  },
   methods: {
     signin () {
+      // Error in case user forgets to enter username or password
       if (!this.email || !this.password) {
         // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
         this.message.text = 'Invalid e-mail or password'
@@ -69,18 +68,21 @@ export default {
       plainAxiosInstance.post('/signin', { email: this.email, password: this.password })
         .then(response => {
           if (response.data.csrf) {
+            // We extract all the provided information about the user and store them in localStorage
             localStorage.csrf = response.data.csrf
             localStorage.username = response.data.username
             localStorage.uid = response.data.id
             localStorage.userRole = response.data.role
             localStorage.userField = response.data.field_id
+            localStorage.signedIn = true
+            // Let the application know globally that we are logged in now
+            this.signedIn = true
+            // Redirect
+            this.$router.replace('/')
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
             this.message.text = 'Signin Successful'
             this.message.color = 'success'
             this.message.active = true
-            localStorage.signedIn = true
-            this.$store.state.signedIn = true
-            this.$router.replace('/')
           }
         })
         .catch(error => {
@@ -93,7 +95,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -39,6 +39,14 @@ import VueMarkdown from 'vue-markdown'
 export default {
   name: 'SubjectInfos',
   components: { ObjectEditor, VueMarkdown },
+  created () {
+    this.getInfos()
+  },
+  props: {
+    subject: null,
+    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
+    editMode: null
+  },
   data () {
     return {
       infos: [],
@@ -49,14 +57,6 @@ export default {
       forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'subject_id', 'type_id']
 
     }
-  },
-  created () {
-    this.getInfos()
-  },
-  props: {
-    subject: null,
-    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
-    editMode: null
   },
   computed: {
     ...mapState(['message'])

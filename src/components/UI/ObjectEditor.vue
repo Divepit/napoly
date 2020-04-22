@@ -45,12 +45,10 @@ import VueMarkdown from 'vue-markdown'
 export default {
   name: 'ObjectEditor',
   components: { VueMarkdown },
-  watch: {
-    objectToEdit: function () {
-      if (this.active) {
-        this.initializeObject()
-      }
-    }
+  props: {
+    objectToEdit: {},
+    active: null,
+    forbiddenAttributes: null
   },
   data () {
     return {
@@ -60,13 +58,15 @@ export default {
       showPassword: false
     }
   },
-  props: {
-    objectToEdit: {},
-    active: null,
-    forbiddenAttributes: null
-  },
   computed: {
     ...mapState('napolyApiModule', ['fields'])
+  },
+  watch: {
+    objectToEdit: function () {
+      if (this.active) {
+        this.initializeObject()
+      }
+    }
   },
   methods: {
     initializeObject () {

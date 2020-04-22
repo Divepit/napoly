@@ -41,6 +41,14 @@ import { mapState } from 'vuex'
 export default {
   name: 'SubjectButtons',
   components: { ObjectEditor },
+  created () {
+    this.getButtons()
+  },
+  props: {
+    subject: null,
+    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
+    editMode: null
+  },
   data () {
     return {
       buttons: [],
@@ -49,14 +57,6 @@ export default {
       // Refer to the ObjectEditor component for an explanation of the forbiddenAttributes prop
       forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'subject_id', 'type_id']
     }
-  },
-  created () {
-    this.getButtons()
-  },
-  props: {
-    subject: null,
-    // Note that editMode is NOT used as a boolean but actually as an integer which is set to the currently edited subject's ID
-    editMode: null
   },
   computed: {
     ...mapState(['message'])

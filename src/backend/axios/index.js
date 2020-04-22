@@ -6,12 +6,16 @@ import axios from 'axios'
 // not want to run the database locally, replace 'http://localhost:3000' in the following line with 'https://api.napoly.ch'
 // to use the live API
 
-var API_URL = 'http://localhost:3000' // Development
+// var API_URL = 'http://localhost:3000' // Development
+var API_URL = 'https://api.napoly.ch' //  Production
 
+// This url is only used in production
 if (process.env.NODE_ENV === 'production') {
   API_URL = 'https://api.napoly.ch' //  Production
 }
 
+// The securedAxiosInstance variable will be often used to access data from the API which requires authentication. This
+// applies to all post, update and delete requests
 const securedAxiosInstance = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -20,6 +24,8 @@ const securedAxiosInstance = axios.create({
   }
 })
 
+// The plainAxiosInstance can always be used when accessing non-encrypted data from the API, which applies to most get
+// requests
 const plainAxiosInstance = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -28,6 +34,7 @@ const plainAxiosInstance = axios.create({
   }
 })
 
+// CSRF Tokens get saved in the localStorage upon sign-up, here they are injected into the request
 securedAxiosInstance.interceptors.request.use(config => {
   const method = config.method.toUpperCase()
   if (method !== 'OPTIONS' && method !== 'GET') {

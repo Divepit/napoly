@@ -1,4 +1,5 @@
-<!-- Sidebar used in the admin interface -->
+<!-- This sidebar is used in the admin interface, its title should always be the same as the title in the frontpage -->
+<!-- TODO: Merge the frontpage toolbar and the admin toolbar so they are not two components-->
 <template>
   <div>
     <v-navigation-drawer v-model="showDrawer" dark app overflow color="primary">
@@ -59,10 +60,11 @@ import { securedAxiosInstance } from '@/backend/axios'
 export default {
   name: 'AdminToolbar',
   created () {
-    // Redirects user to homepage in case he is not signed in
+    // Redirect user to homepage in case he is not signed in
     if (localStorage.signedIn !== 'true') {
       this.$router.replace('/')
     }
+    // Get user role, to display conditional menu-items
     this.userRole = localStorage.userRole
   },
   data () {

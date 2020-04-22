@@ -44,6 +44,10 @@
 <script>
 export default {
   name: 'ArraySelector',
+  props: {
+    arrayToSelectFrom: null,
+    active: null
+  },
   data () {
     return {
       elementToReturn: null,
@@ -53,15 +57,6 @@ export default {
       sortDesc: false,
       page: 1,
       itemsPerPage: 6
-    }
-  },
-  props: {
-    arrayToSelectFrom: null,
-    active: null
-  },
-  watch: {
-    numberOfPages: function () {
-      this.page = 1
     }
   },
   computed: {
@@ -74,6 +69,11 @@ export default {
       } else {
         return this.arrayToSelectFrom
       }
+    }
+  },
+  watch: {
+    numberOfPages: function () {
+      this.page = 1
     }
   },
   methods: {

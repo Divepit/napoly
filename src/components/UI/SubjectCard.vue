@@ -91,9 +91,13 @@ import { securedAxiosInstance } from '../../backend/axios'
 
 export default {
   name: 'SubjectCard',
+  components: { ObjectEditor, SemesterList, YearList, FieldList, SubjectInfos, SubjectButtons, LinkTable },
   created () {
     this.userRole = localStorage.userRole
     this.userField = localStorage.userField
+  },
+  props: {
+    subjectId: null
   },
   data () {
     return {
@@ -103,10 +107,6 @@ export default {
       newSubject: null,
       userField: null
     }
-  },
-  components: { ObjectEditor, SemesterList, YearList, FieldList, SubjectInfos, SubjectButtons, LinkTable },
-  props: {
-    subjectId: null
   },
   computed: {
     ...mapState('napolyApiModule', ['subjects', 'currentFieldId', 'currentSemesterId', 'currentYear']),

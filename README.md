@@ -1,5 +1,9 @@
 # Napoly Frontend
 
+## Requirements
+- In order to access the API, knowledge of Axios is essential
+- In order to make use of global variables through the store, knowledge of vuex is essential 
+
 ## Project setup
 
 To install all node dependencies make sure to run

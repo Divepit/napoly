@@ -48,6 +48,10 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'UserExplorer',
   components: { ObjectEditor },
+  created () {
+    this.getUsers()
+    this.getFields()
+  },
   data () {
     return {
       users: [],
@@ -58,10 +62,6 @@ export default {
       itemsPerPage: 4,
       forbiddenAttributes: ['password_digest', 'created_at', 'updated_at', 'id']
     }
-  },
-  created () {
-    this.getUsers()
-    this.getFields()
   },
   computed: {
     ...mapState(['message']),
