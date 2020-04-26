@@ -32,11 +32,12 @@
       </v-card>
       <v-container style="height: 90vh; width: 110vw" class="fill-height">
         <v-row>
-          <v-col cols="12" class="text-center font-weight-light primary--text pb-0" style="font-size: 3rem">
+          <v-col class="font-weight-regular primary--text pb-0" cols="12" style="font-size: 2.5rem">
             napoly.ch
-          </v-col><v-col cols="12" class="text-center font-weight-light primary--text pt-0" style="font-size: 1.25rem; font-family: Open Sans">
-          Student Document Repository
-        </v-col>
+          </v-col>
+          <v-col class="font-weight-thin primary--text pt-0" cols="12" style="font-size: 1rem; font-family: Open Sans">
+            Student Document Repository
+          </v-col>
         </v-row>
       </v-container>
       <div v-if="loading">
@@ -45,12 +46,18 @@
         </v-card>
       </div>
       <v-container :key="subject.id" v-else v-for="subject in subjects" class="pt-12" :id="subject.subjectName">
-        <v-card elevation="4">
-          <v-card-title class="primary--text font-weight-thin" style="font-size: 1.75rem; font-family: 'Open Sans'">
-            <v-btn v-if="authenticate(subject) && editMode !== subject.id" @click="editMode = subject.id" class="mr-4" tile outlined color="info" small> <v-icon small>mdi-pencil</v-icon></v-btn>
-            <v-btn v-if="authenticate(subject) && editMode === subject.id" @click="editMode = null" class="mr-4" tile outlined color="error" small ><v-icon small>mdi-pencil-off</v-icon></v-btn>
+        <v-card elevation="2">
+          <v-card-title class="primary--text font-weight-light" style="font-size: 1.75rem; font-family: 'Open Sans'">
+            <v-btn v-if="authenticate(subject) && editMode !== subject.id" @click="editMode = subject.id" class="mr-4"
+                   tile outlined color="info" small>
+              <v-icon small>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn v-if="authenticate(subject) && editMode === subject.id" @click="editMode = null" class="mr-4" tile
+                   outlined color="error" small>
+              <v-icon small>mdi-pencil-off</v-icon>
+            </v-btn>
             {{subject.subjectName}}
-<!--            <v-divider vertical class="mx-4 hidden-sm-and-down"></v-divider>-->
+            <!--            <v-divider vertical class="mx-4 hidden-sm-and-down"></v-divider>-->
             <v-spacer/>
             <SubjectButtons class="hidden-sm-and-down" :subject="subject" :editMode="editMode"/>
           </v-card-title>
@@ -79,27 +86,35 @@
 </template>
 
 <script>
-import LinkTable from '../API/LinkTable'
-import { mapState, mapActions } from 'vuex'
-import SubjectButtons from '../API/SubjectButtons'
-import SubjectInfos from '../API/SubjectInfos'
-import FieldList from '../API/FieldList'
-import YearList from '../API/YearList'
-import SemesterList from '../API/SemesterList'
-import ObjectEditor from './ObjectEditor'
-import { securedAxiosInstance } from '../../backend/axios'
+  import LinkTable from '../API/LinkTable'
+  import { mapActions, mapState } from 'vuex'
+  import SubjectButtons from '../API/SubjectButtons'
+  import SubjectInfos from '../API/SubjectInfos'
+  import FieldList from '../API/FieldList'
+  import YearList from '../API/YearList'
+  import SemesterList from '../API/SemesterList'
+  import ObjectEditor from './ObjectEditor'
+  import { securedAxiosInstance } from '../../backend/axios'
 
-export default {
-  name: 'SubjectCard',
-  components: { ObjectEditor, SemesterList, YearList, FieldList, SubjectInfos, SubjectButtons, LinkTable },
-  created () {
-    this.userRole = localStorage.userRole
-    this.userField = localStorage.userField
-  },
-  props: {
-    subjectId: null
-  },
-  data () {
+  export default {
+    name: 'SubjectCard',
+    components: {
+      ObjectEditor,
+      SemesterList,
+      YearList,
+      FieldList,
+      SubjectInfos,
+      SubjectButtons,
+      LinkTable
+    },
+    created () {
+      this.userRole = localStorage.userRole
+      this.userField = localStorage.userField
+    },
+    props: {
+      subjectId: null
+    },
+    data () {
     return {
       confirmDelete: null,
       editMode: null,

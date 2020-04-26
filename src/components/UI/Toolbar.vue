@@ -15,10 +15,10 @@
         </v-list-item>
         <v-list-item-group v-if="signedIn">
           <v-divider/>
-          <v-list-item to="/admin" style="background: #2d98da">
-<!--            <v-list-item-icon class="mr-2">-->
-<!--              <v-icon>mdi-face</v-icon>-->
-<!--            </v-list-item-icon>-->
+          <v-list-item dense style="background: #2d98da" to="/admin">
+            <!--            <v-list-item-icon class="mr-2">-->
+            <!--              <v-icon>mdi-face</v-icon>-->
+            <!--            </v-list-item-icon>-->
             <v-list-item-title>{{username}}</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -41,23 +41,28 @@
   </div>
 </template>
 <script>
-import SemesterList from '../API/SemesterList'
-import SubjectList from '../API/SubjectList'
-import FieldList from '../API/FieldList'
-import YearList from '../API/YearList'
-import { mapState } from 'vuex'
+  import SemesterList from '../API/SemesterList'
+  import SubjectList from '../API/SubjectList'
+  import FieldList from '../API/FieldList'
+  import YearList from '../API/YearList'
+  import { mapState } from 'vuex'
 
-export default {
-  name: 'Toolbar',
-  components: { YearList, FieldList, SubjectList, SemesterList },
-  created () {
-    if (localStorage.username) {
-      this.username = localStorage.username
-    }
-  },
-  data: () => ({
-    showDrawer: true
-  }),
+  export default {
+    name: 'Toolbar',
+    components: {
+      YearList,
+      FieldList,
+      SubjectList,
+      SemesterList
+    },
+    created () {
+      if (localStorage.username) {
+        this.username = localStorage.username
+      }
+    },
+    data: () => ({
+      showDrawer: true
+    }),
   computed: {
     ...mapState(['signedIn'])
   }
