@@ -78,6 +78,7 @@ export default {
       editedLink: {},
       addingType: false,
       newLink: {},
+      creators: [],
       // Refer to the ObjectEditor component for an explanation of the forbiddenAttributes prop
       forbiddenAttributes: ['id', 'created_at', 'updated_at', 'creator', 'editor', 'linkWeek', 'type_id', 'subject_id']
     }
@@ -93,6 +94,9 @@ export default {
       plainAxiosInstance.get(`/api/v1/links?subject_id=${this.subject.id}`).then(response => {
         this.subjectLinks = response.data
         response.data.forEach(link => {
+          if (!this.creators.includes(link.creator)) {
+            this.creators.push(link.creator)
+          }
           if (!this.typeIds.includes(link.type_id)) {
             this.typeIds.push(link.type_id)
           }
@@ -107,6 +111,7 @@ export default {
           return 0
         }
         this.subjectWeeks.sort(sorter)
+        this.$emit('linksLoaded', { subject: this.subject.id, creators: this.creators })
       })
     },
     // Unfortunately this is the only way of identifying a link currently

@@ -41,28 +41,28 @@
   </div>
 </template>
 <script>
-  import SemesterList from '../API/SemesterList'
-  import SubjectList from '../API/SubjectList'
-  import FieldList from '../API/FieldList'
-  import YearList from '../API/YearList'
-  import { mapState } from 'vuex'
+import SemesterList from '../API/SemesterList'
+import SubjectList from '../API/SubjectList'
+import FieldList from '../API/FieldList'
+import YearList from '../API/YearList'
+import { mapState } from 'vuex'
 
-  export default {
-    name: 'Toolbar',
-    components: {
-      YearList,
-      FieldList,
-      SubjectList,
-      SemesterList
-    },
-    created () {
-      if (localStorage.username) {
-        this.username = localStorage.username
-      }
-    },
-    data: () => ({
-      showDrawer: true
-    }),
+export default {
+  name: 'Toolbar',
+  components: {
+    YearList,
+    FieldList,
+    SubjectList,
+    SemesterList
+  },
+  created () {
+    if (localStorage.username) {
+      this.username = localStorage.username
+    }
+  },
+  data: () => ({
+    showDrawer: true
+  }),
   computed: {
     ...mapState(['signedIn'])
   }

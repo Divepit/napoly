@@ -32,10 +32,10 @@
       </v-card>
       <v-container style="height: 90vh; width: 110vw" class="fill-height">
         <v-row>
-          <v-col class="font-weight-regular primary--text pb-0" cols="12" style="font-size: 2.5rem">
+          <v-col class="font-weight-light primary--text pb-0 text-center" cols="12" style="font-size: 2.75rem">
             napoly.ch
           </v-col>
-          <v-col class="font-weight-thin primary--text pt-0" cols="12" style="font-size: 1rem; font-family: Open Sans">
+          <v-col class="font-weight-thin primary--text pt-0 text-center" cols="12" style="font-size: 1.25rem; font-family: Open Sans">
             Student Document Repository
           </v-col>
         </v-row>
@@ -61,10 +61,11 @@
             <v-spacer/>
             <SubjectButtons class="hidden-sm-and-down" :subject="subject" :editMode="editMode"/>
           </v-card-title>
+          <v-card-subtitle class="ml-2 font-weight-light">Verantwortlich: <span v-for="r in responsible" :key="r"><href v-if="r.subject == subject.id">{{r.creators.slice(0, 3).join(', ')}}</href></span></v-card-subtitle>
           <SubjectButtons class="hidden-md-and-up mx-4" :subject="subject" :editMode="editMode"/>
 
           <v-container fluid>
-            <LinkTable :subject="subject" :editMode="editMode"/>
+            <LinkTable :subject="subject" :editMode="editMode" @linksLoaded="responsible.push($event)"/>
           </v-container>
           <SubjectInfos :subject="subject" :editMode="editMode"/>
           <v-card-subtitle v-if="signedIn && userRole == 1 && editMode === subject.id" style="cursor: pointer"><span class="error--text" @click="confirmDelete = subject.id">Delete Subject</span></v-card-subtitle>
@@ -86,41 +87,42 @@
 </template>
 
 <script>
-  import LinkTable from '../API/LinkTable'
-  import { mapActions, mapState } from 'vuex'
-  import SubjectButtons from '../API/SubjectButtons'
-  import SubjectInfos from '../API/SubjectInfos'
-  import FieldList from '../API/FieldList'
-  import YearList from '../API/YearList'
-  import SemesterList from '../API/SemesterList'
-  import ObjectEditor from './ObjectEditor'
-  import { securedAxiosInstance } from '../../backend/axios'
+import LinkTable from '../API/LinkTable'
+import { mapActions, mapState } from 'vuex'
+import SubjectButtons from '../API/SubjectButtons'
+import SubjectInfos from '../API/SubjectInfos'
+import FieldList from '../API/FieldList'
+import YearList from '../API/YearList'
+import SemesterList from '../API/SemesterList'
+import ObjectEditor from './ObjectEditor'
+import { securedAxiosInstance } from '../../backend/axios'
 
-  export default {
-    name: 'SubjectCard',
-    components: {
-      ObjectEditor,
-      SemesterList,
-      YearList,
-      FieldList,
-      SubjectInfos,
-      SubjectButtons,
-      LinkTable
-    },
-    created () {
-      this.userRole = localStorage.userRole
-      this.userField = localStorage.userField
-    },
-    props: {
-      subjectId: null
-    },
-    data () {
+export default {
+  name: 'SubjectCard',
+  components: {
+    ObjectEditor,
+    SemesterList,
+    YearList,
+    FieldList,
+    SubjectInfos,
+    SubjectButtons,
+    LinkTable
+  },
+  created () {
+    this.userRole = localStorage.userRole
+    this.userField = localStorage.userField
+  },
+  props: {
+    subjectId: null
+  },
+  data () {
     return {
       confirmDelete: null,
       editMode: null,
       firstTimeUse: false,
       newSubject: null,
-      userField: null
+      userField: null,
+      responsible: []
     }
   },
   computed: {
