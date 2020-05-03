@@ -8,7 +8,7 @@
 
 To install all node dependencies make sure to run
 ``` bash
-$ npm run dev
+$ npm run serve
 ```
 on the root directory of the cloned project.
 
@@ -35,7 +35,7 @@ var API_URL = 'http://api.napoly.ch' // Development
 ```
 ---
 
-The API json directories that can be indexed without authentication (which requires an admin account on napoly.ch) are available via
+The API json directories that can be indexed without authentication are available via
 the following links:
 
 - https://api.napoly.ch/api/v1/fields
@@ -54,6 +54,4 @@ can be accessed via:
 - https://api.napoly.ch/api/v1/subjectButtons?subject_id=1
 - https://api.napoly.ch/api/v1/infos?subject_id=1
 
-Userdata cannot be accessed unless logged in. If a user does not have administrator 
-rights, (which are obtained by setting the value user.role = 1) the API will only
-return reduced data of the logged in user.
+Userdata cannot be accessed unless logged in.
