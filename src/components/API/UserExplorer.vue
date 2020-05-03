@@ -39,10 +39,8 @@
 </template>
 
 <script>
-// plainAxiosInstance and securedAxiosInstance are defined in the axios wrapper and is used to access API values which do not require authentication
 import { securedAxiosInstance } from '../../backend/axios'
 import ObjectEditor from '../UI/ObjectEditor'
-// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -65,6 +63,7 @@ export default {
   },
   computed: {
     ...mapState(['message']),
+    // Note that all the API States are defined a separate vuex module at src/store/modules/napolyApi.js
     ...mapState('napolyApiModule', ['fields']),
     numberOfPages () {
       return Math.ceil(this.searchedArray.length / this.itemsPerPage)

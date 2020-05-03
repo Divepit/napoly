@@ -29,10 +29,8 @@
 </template>
 
 <script>
-// plainAxiosInstance and securedAxiosInstance are defined in the axios wrapper and is used to access API values which do not require authentication
 import { plainAxiosInstance, securedAxiosInstance } from '../../backend/axios'
 import ObjectEditor from '../UI/ObjectEditor'
-// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapState } from 'vuex'
 import VueMarkdown from 'vue-markdown'
 

@@ -12,7 +12,6 @@
 </template>
 
 <script>
-// For the functionality of mapState, mapActions and mapMutations please refer to the vuex documentation
 import { mapActions, mapState } from 'vuex'
 
 export default {

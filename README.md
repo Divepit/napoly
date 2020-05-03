@@ -33,6 +33,12 @@ to the value:
 ``` javascript
 var API_URL = 'http://api.napoly.ch' // Development
 ```
+or, in case you are an authenticated user and would like to safely edit data, use:
+``` javascript
+var API_URL = 'http://staging.api.napoly.ch' // Development
+```
+which will connect you to the staging API which has a separate database that can be edited however you please.
+
 ---
 
 The API json directories that can be indexed without authentication are available via
