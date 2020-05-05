@@ -45,7 +45,7 @@
       </v-simple-table>
     </v-card>
     <ObjectEditor :objectToEdit="editedLink" :forbidden-attributes="forbiddenAttributes" :active="editingLink"
-                  @updateObject="updateLink($event)" @cancel="editingLink = false" @delete="removeLink(editedLink)"/>
+                  @updateObject="updateLink($event)" @cancel="editingLink = false; editedLink = null" @delete="removeLink(editedLink)"/>
     <!-- Array Selector is a derivative of ObjectEditor. It lets you select an element from an array and returns it -->
     <ArraySelector :arrayToSelectFrom="types" :active="addingType" @returnSelection="addType($event)"
                    @cancel="addingType = false"/>
@@ -75,7 +75,7 @@ export default {
       subjectLinks: [],
       typeWeekCombos: [],
       editingLink: false,
-      editedLink: {},
+      editedLink: null,
       addingType: false,
       newLink: {},
       creators: [],
@@ -120,31 +120,22 @@ export default {
     },
     editLink (type, week) {
       if (this.findLinkFromTypeAndWeek(type, week)) {
-        this.newLink.id = this.findLinkFromTypeAndWeek(type, week).id
-      }
-      this.newLink.type_id = type
-      this.newLink.linkWeek = week
-      this.newLink.subject_id = this.subject.id
-      this.editedLink = this.findLinkFromTypeAndWeek(type, week)
-      this.editingLink = true
-      if (this.editMode === this.subject.id && this.editedLink === undefined) {
-        var link = { linkWeek: week, type_id: type, linkUrl: '', subject_id: this.subject.id }
-        this.editedLink = link
+        this.editedLink = this.findLinkFromTypeAndWeek(type, week)
+        this.editingLink = true
+      } else if (this.editedLink === null) {
+        this.editedLink = { linkWeek: week, type_id: type, linkUrl: '', subject_id: this.subject.id, creator: localStorage.username, editor: '' }
         this.editingLink = true
       }
     },
     // updateLink() will also serve as createLink() in case the link object passed has an undefined id
     updateLink (link) {
       this.editingLink = false
-      for (var i in link.objectKeys) {
-        this.newLink[link.objectKeys[i]] = link.objectValues[i]
-      }
+      this.editedLink.linkUrl = link.objectValues[0]
       // Creating a new Link
-      if (this.newLink.linkUrl.length !== 0 && this.newLink.id === undefined) {
-        this.newLink.creator = localStorage.username
-        this.newLink.editor = ''
-        securedAxiosInstance.post('/api/v1/links', this.newLink)
+      if (this.editedLink.linkUrl.length !== 0 && this.editedLink.id === undefined) {
+        securedAxiosInstance.post('/api/v1/links', this.editedLink)
           .then(response => {
+            this.editedLink = null
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
             this.message.text = `Link ${response.data.id} added`
             this.message.color = 'info'
@@ -153,16 +144,17 @@ export default {
             this.typeWeekCombos.push(`${response.data.type_id}/${response.data.linkWeek}`)
           })
       // Updating an existing Link
-      } else if (this.newLink.linkUrl.length !== 0 && this.newLink.id !== undefined) {
-        this.newLink.editor = localStorage.username
-        securedAxiosInstance.patch(`/api/v1/links/${this.newLink.id}`, this.newLink)
+      } else if (this.editedLink.linkUrl.length !== 0 && this.editedLink.id !== undefined) {
+        securedAxiosInstance.patch(`/api/v1/links/${this.editedLink.id}`, this.editedLink)
           .then(response => {
+            this.editedLink = null
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
             this.message.text = `Link ${response.data.id} updated`
             this.message.color = 'info'
             this.message.active = true
           })
       } else {
+        this.editedLink = null
         // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
         this.message.text = `Invalid link`
         this.message.color = 'error'

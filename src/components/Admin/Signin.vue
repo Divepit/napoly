@@ -76,7 +76,7 @@ export default {
             localStorage.userField = response.data.field_id
             localStorage.signedIn = true
             // Let the application know globally that we are logged in now
-            this.signedIn = true
+            this.$store.state.signedIn = true
             // Redirect
             this.$router.replace('/')
             // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object

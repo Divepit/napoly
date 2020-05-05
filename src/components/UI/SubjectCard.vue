@@ -61,7 +61,7 @@
             <v-spacer/>
             <SubjectButtons class="hidden-sm-and-down" :subject="subject" :editMode="editMode"/>
           </v-card-title>
-          <v-card-subtitle class="ml-2 mt-0 font-weight-light">Verantwortlich: <span v-for="r in responsible" :key="r"><href v-if="r.subject == subject.id">{{r.creators.slice(0, 3).join(', ')}}</href></span></v-card-subtitle>
+          <v-card-subtitle class="ml-2 mt-0 font-weight-light">Verantwortlich: <span v-for="(r,index) in responsible" :key="index"><span v-if="r.subject == subject.id">{{r.creators.slice(0, 3).join(', ')}}</span></span></v-card-subtitle>
           <SubjectButtons class="hidden-md-and-up mx-4" :subject="subject" :editMode="editMode"/>
 
           <v-container fluid>
