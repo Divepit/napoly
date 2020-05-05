@@ -165,7 +165,11 @@ export default {
       securedAxiosInstance.delete(`/api/v1/links/${link.id}`)
         .then(
           this.editingLink = false,
+          this.editedLink = null,
           this.typeWeekCombos.splice(this.typeWeekCombos.indexOf(`${link.type_id}/${link.linkWeek}`), 1),
+          this.subjectLinks = this.subjectLinks.filter(subjectLink => {
+            return subjectLink.id !== link.id
+          }),
           // TODO: Fix the non DRY way of activating the global message. Using a vuex mutation seems to cause a circular object
           this.message.text = `Link ${link.id} removed`,
           this.message.color = 'warning',

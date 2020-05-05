@@ -21,13 +21,5 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    messageSetter (value) {
-      this.state.message.active = value
-    },
-    setMessage (text, color) {
-      this.state.message.text = text
-      this.state.message.color = color
-      this.state.message.active = true
-    }
   }
 })
