@@ -38,7 +38,7 @@
               <v-card-title class="primary--text font-weight-light">Marco Trentini
                 <v-spacer/><a href="mailto:marcotr@ethz.ch"><v-icon color="primary">mdi-mail</v-icon></a>
               </v-card-title>
-              <v-card-text>- Frontend & Backend Code<br> - Serveradministration <br> - Mitgliederadministration <br> - Organisation</v-card-text>
+              <v-card-text>- Frontend & Backend Code<br> - Serveradministration <br> - Mitgliederadministration</v-card-text>
             </v-card>
           </v-col>
           <v-col>
@@ -46,7 +46,7 @@
               <v-card-title class="primary--text font-weight-light">Micha Bosshart
                 <v-spacer/><a href="mailto:bmicha@ethz.ch"><v-icon color="primary">mdi-mail</v-icon></a>
               </v-card-title>
-              <v-card-text>- Mitgliederadministration <br> - Organisation <br> - Kommunikation <br> <br> </v-card-text>
+              <v-card-text>- Mitgliederadministration <br> - Kommunikation <br> <br> </v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -74,7 +74,7 @@
             </v-row>
             <v-row>
               <v-card style="width: 100%" class="text-center mb-4">
-                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Siddharta Lakkakula<v-spacer/></v-card-title>
+                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Siddhartha Lakkakula<v-spacer/></v-card-title>
                 <v-card-text>- Semesterverantwortlicher</v-card-text>
               </v-card>
             </v-row>
