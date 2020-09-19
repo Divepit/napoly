@@ -5,9 +5,10 @@
         <v-row>
           <v-col cols="12" class="text-center font-weight-light primary--text pb-0" style="font-size: 3rem">
             napoly.ch
-          </v-col><v-col cols="12" class="text-center font-weight-light primary--text pt-0" style="font-size: 1.25rem; font-family: Open Sans">
-          Student Document Repository
-        </v-col>
+          </v-col>
+          <v-col cols="12" class="text-center font-weight-light primary--text pt-0" style="font-size: 1.25rem; font-family: Open Sans">
+            Student Document Repository
+          </v-col>
         </v-row>
       </v-container>
       <v-card class="grey--text" flat>

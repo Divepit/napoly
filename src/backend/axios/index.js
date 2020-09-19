@@ -7,7 +7,7 @@ import axios from 'axios'
 // to use the live API
 
 // var API_URL = 'http://localhost:3000' // Development
-var API_URL = 'https://staging.api.napoly.ch' //  Production
+var API_URL = 'https://api.napoly.ch' //  Production
 
 // This url is only used in production
 if (process.env.NODE_ENV === 'production') {

@@ -1,6 +1,6 @@
 <!-- Sidebar used in the main interface -->
 <template>
-  <div>
+  <div class="d-flex">
     <v-navigation-drawer v-model="showDrawer" dark app overflow color="primary">
       <v-list>
         <v-list-item>
@@ -11,6 +11,10 @@
             <v-list-item-subtitle class="font-weight-light">
               Student Document Repository
             </v-list-item-subtitle>
+            <v-divider class="my-3"/>
+            <v-list-item-action-text>
+              Created by Marco Trentini
+            </v-list-item-action-text>
           </v-list-item-content>
         </v-list-item>
         <v-list-item-group v-if="signedIn">
@@ -30,6 +34,16 @@
         <SemesterList/>
         <v-divider/>
         <SubjectList/>
+        <v-list-item-group style="position: absolute; bottom: 0; width: 100%">
+          <v-divider/>
+          <v-list-item two-line to="/about">
+            <v-list-item-icon><v-icon class="pt-5 pl-2">mdi-face</v-icon></v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>About</v-list-item-title>
+              <v-list-item-subtitle>Who is behind Napoly</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
       </v-list>
 <!--      <v-footer color="primary" absolute>© Marco Trentini, 2020</v-footer>-->
     </v-navigation-drawer>

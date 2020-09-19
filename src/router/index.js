@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import About from '../views/About.vue'
 import AdminInterface from '../views/AdminInterface'
 import Signin from '../components/Admin/Signin'
 import AccountManagement from '../views/AccountManagement'
@@ -27,6 +28,11 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: AccountManagement
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
   },
   {
     path: '/*',
