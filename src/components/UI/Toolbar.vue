@@ -34,8 +34,17 @@
         <SemesterList/>
         <v-divider/>
         <SubjectList/>
-        <v-list-item-group style="position: absolute; bottom: 0; width: 100%">
+        <v-list-item-group style="position: absolute; bottom: 0; width: 100%" class="hidden-xs-only">
           <v-divider/>
+          <v-list-item two-line to="/about">
+            <v-list-item-icon><v-icon class="pt-5 pl-2">mdi-face</v-icon></v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>About</v-list-item-title>
+              <v-list-item-subtitle>Who is behind Napoly</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+        <v-list-item-group class="hidden-sm-and-up">
           <v-list-item two-line to="/about">
             <v-list-item-icon><v-icon class="pt-5 pl-2">mdi-face</v-icon></v-list-item-icon>
             <v-list-item-content>
