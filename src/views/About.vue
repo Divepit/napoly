@@ -191,8 +191,7 @@
           </v-col>
         </v-row>
         <v-divider/>
-
-        <!--        D-BAUG-->
+<!--        D-BAUG-->
         <v-row justify="center" class="text-center">
           <v-col cols="12" class="pb-0">
             <v-row justify="center">
@@ -224,6 +223,12 @@
                 </v-row>
               </v-col>
             </v-row>
+            <v-row>
+              <v-card style="width: 100%" class="text-center mb-4">
+                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Jonathan Wilp<v-spacer/></v-card-title>
+                <v-card-text>- Semesterverantwortlicher</v-card-text>
+              </v-card>
+            </v-row>
           </v-col>
           <v-col class="mx-2">
             <v-row justify="center" class="text-center">
@@ -244,7 +249,7 @@
           </v-col>
         </v-row>
         <v-divider/>
-        <!--        D-ARCH-->
+<!--        D-ARCH-->
         <v-row justify="center" class="text-center">
           <v-col cols="12" class="pb-0">
             <v-row justify="center">
@@ -296,7 +301,7 @@
           </v-col>
         </v-row>
         <v-divider/>
-        <!--        D-BIOL-->
+<!--        D-BIOL-->
         <v-row justify="center" class="text-center">
           <v-col cols="12" class="pb-0">
             <v-row justify="center">
@@ -330,7 +335,7 @@
             </v-row>
             <v-row>
               <v-card style="width: 100%" class="text-center mb-4">
-                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Julian Weber<v-spacer/></v-card-title>
+                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Elina Jansone<v-spacer/></v-card-title>
                 <v-card-text>- Semesterverantwortlicher</v-card-text>
               </v-card>
             </v-row>
