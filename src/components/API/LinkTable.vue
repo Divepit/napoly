@@ -37,7 +37,7 @@
         <!-- Add week button -->
         <tr v-if="editMode === subject.id">
           <td class="text-center">
-            <v-btn text x-small color="primary" class="pa-0 ma-0" @click="subjectWeeks.push(subjectWeeks[subjectWeeks.length-1]+1)">+
+            <v-btn text x-small color="primary" class="pa-0 ma-0" @click="addWeek()">+
             </v-btn>
           </td>
         </tr>
@@ -175,6 +175,13 @@ export default {
           this.message.color = 'warning',
           this.message.active = true
         )
+    },
+    addWeek () {
+      if (this.subjectWeeks.length === 0) {
+        this.subjectWeeks.push(1)
+      } else {
+        this.subjectWeeks.push(this.subjectWeeks[this.subjectWeeks.length - 1] + 1)
+      }
     },
     addType (typename) {
       this.addingType = false
