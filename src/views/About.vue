@@ -342,7 +342,6 @@
             <v-row>
               <v-card style="width: 100%" class="text-center mb-4">
                 <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Colin Scheurer<v-spacer/></v-card-title>
-                <v-card-text>- Semesterverantwortliche</v-card-text>
               </v-card>
             </v-row>
           </v-col>
