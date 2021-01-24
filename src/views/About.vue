@@ -230,6 +230,11 @@
                 <v-card-text>- Semesterverantwortlicher</v-card-text>
               </v-card>
             </v-row>
+            <v-row>
+              <v-card style="width: 100%" class="text-center mb-4">
+                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Miguel Vitali<v-spacer/></v-card-title>
+              </v-card>
+            </v-row>
           </v-col>
           <v-col class="mx-2">
             <v-row justify="center" class="text-center">
@@ -338,11 +343,6 @@
               <v-card style="width: 100%" class="text-center mb-4">
                 <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Elina Jansone<v-spacer/></v-card-title>
                 <v-card-text>- Semesterverantwortliche</v-card-text>
-              </v-card>
-            </v-row>
-            <v-row>
-              <v-card style="width: 100%" class="text-center mb-4">
-                <v-card-title class="primary--text font-weight-light"><v-spacer/>Colin Scheurer<v-spacer/></v-card-title>
               </v-card>
             </v-row>
           </v-col>
