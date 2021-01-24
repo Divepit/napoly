@@ -232,7 +232,7 @@
             </v-row>
             <v-row>
               <v-card style="width: 100%" class="text-center mb-4">
-                <v-card-title class="primary--text font-weight-light pb-0"><v-spacer/>Miguel Vitali<v-spacer/></v-card-title>
+                <v-card-title class="primary--text font-weight-light pb-4"><v-spacer/>Miguel Vitali<v-spacer/></v-card-title>
               </v-card>
             </v-row>
           </v-col>
