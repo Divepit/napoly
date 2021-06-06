@@ -34,7 +34,7 @@
         <SemesterList/>
         <v-divider/>
         <SubjectList/>
-        <v-list-item-group style="position: absolute; bottom: 0; width: 100%" class="hidden-xs-only">
+        <v-list-item-group style="bottom: 0; width: 100%" class="hidden-xs-only">
           <v-divider/>
           <v-list-item two-line to="/about">
             <v-list-item-icon><v-icon class="pt-5 pl-2">mdi-face</v-icon></v-list-item-icon>
@@ -56,7 +56,7 @@
       </v-list>
 <!--      <v-footer color="primary" absolute>© Marco Trentini, 2020</v-footer>-->
     </v-navigation-drawer>
-    <v-app-bar app flat dense color="white">
+    <v-app-bar app flat dense color="background">
       <v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"></v-app-bar-nav-icon>
       <v-spacer/>
       <v-toolbar-title class="primary--text font-weight-light" v-if="!showDrawer">napoly.ch</v-toolbar-title>

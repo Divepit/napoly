@@ -7,7 +7,6 @@
         {{subject.subjectName}}
       </v-list-item>
     </v-list-item-group>
-    <v-divider/>
   </v-list>
 </template>
 
